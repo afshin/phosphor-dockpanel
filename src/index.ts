@@ -19,8 +19,12 @@ import {
 } from 'phosphor-disposable';
 
 import {
-  boxSizing, overrideCursor
+  boxSizing, overrideCursor, getDragData, setDragData, clearDragData
 } from 'phosphor-domutil';
+
+import {
+Message
+} from 'phosphor-messaging';
 
 import {
   NodeWrapper
@@ -141,6 +145,11 @@ var EDGE_SIZE = 30;
  */
 export
 class DockPanel extends BoxPanel {
+  /**
+   * The MIME type for draggable items that can be dropped on a dock panel.
+   */
+  static DROP_MIME_TYPE = 'application/x-phosphor-widget-factory';
+
   /**
    * The property descriptor for the `tab` attached property.
    *
@@ -333,7 +342,39 @@ class DockPanel extends BoxPanel {
     case 'contextmenu':
       this._evtContextMenu(event as MouseEvent);
       break;
+    case 'dragenter':
+      this._evtDragEnter(event as DragEvent);
+      return;
+    case 'dragleave':
+      this._evtDragLeave(event as DragEvent);
+      return;
+    case 'dragover':
+      this._evtDragOver(event as DragEvent);
+      return;
+    case 'drop':
+      this._evtDrop(event as DragEvent);
+      return;
     }
+  }
+
+  /**
+   * A message handler invoked on an `'after-attach'` message.
+   */
+  protected onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
+      this.node.addEventListener(event, this);
+    };
+  }
+
+  /**
+   * A message handler invoked on a `'before-detach'` message.
+   */
+  protected onBeforeDetach(msg: Message): void {
+    super.onBeforeDetach(msg);
+    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
+      this.node.removeEventListener(event, this);
+    };
   }
 
   /**
@@ -465,6 +506,85 @@ class DockPanel extends BoxPanel {
     arrays.insert(sizes, after ? sizes.length : 0, 0.5);
     this._root.insertChild(after ? this._root.childCount : 0, panel);
     this._root.setSizes(sizes);
+  }
+
+  /**
+   * Handle the `'dragenter'` event for the dock panel.
+   */
+  private _evtDragEnter(event: DragEvent): void {
+    let factory = getDragData(event, DockPanel.DROP_MIME_TYPE);
+    event.dataTransfer.dropEffect = factory ? 'copy' : 'none';
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
+   * Handle the `'dragleave'` event for the dock panel.
+   */
+  private _evtDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
+   * Handle the `'dragover'` event for the dock panel.
+   */
+  private _evtDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    let factory = getDragData(event, DockPanel.DROP_MIME_TYPE);
+    if (factory) {
+      this._showOverlay(event.clientX, event.clientY);
+    }
+  }
+
+  /**
+   * Handle the `'drop'` event for the dock panel.
+   */
+  private _evtDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this._overlay.hide();
+    let factory = getDragData(event, DockPanel.DROP_MIME_TYPE);
+    if (!factory) {
+      return;
+    }
+    let data = findDockTarget(this._root, event.clientX, event.clientY);
+    if (data.zone === DockZone.Invalid) {
+      return;
+    }
+    let widget = factory();
+
+    // Dock the panel according to the indicated zone.
+    switch (data.zone) {
+    case DockZone.EdgeTop:
+      this._addPanel(widget, Orientation.Vertical, false);
+      break;
+    case DockZone.EdgeLeft:
+      this._addPanel(widget, Orientation.Horizontal, false);
+      break;
+    case DockZone.EdgeRight:
+      this._addPanel(widget, Orientation.Horizontal, true);
+      break;
+    case DockZone.EdgeBottom:
+      this._addPanel(widget, Orientation.Vertical, true);
+      break;
+    case DockZone.PanelTop:
+      this._splitPanel(data.panel, widget, Orientation.Vertical, false);
+      break;
+    case DockZone.PanelLeft:
+      this._splitPanel(data.panel, widget, Orientation.Horizontal, false);
+      break;
+    case DockZone.PanelRight:
+      this._splitPanel(data.panel, widget, Orientation.Horizontal, true);
+      break;
+    case DockZone.PanelBottom:
+      this._splitPanel(data.panel, widget, Orientation.Vertical, true);
+      break;
+    case DockZone.PanelCenter:
+      this._tabifyPanel(data.panel, widget);
+      break;
+    }
   }
 
   /**

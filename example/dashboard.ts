@@ -33,8 +33,6 @@ import {
 
 import './dashboard.css';
 
-const MIME_TYPE = 'application/x-phosphor-draggable';
-
 
 class DraggableWidget extends Widget {
 
@@ -76,79 +74,11 @@ class DraggableWidget extends Widget {
   }
 
   private _evtDragStart(event: DragEvent): void {
-    setDragData(event, MIME_TYPE, this._factory);
+    setDragData(event, DockPanel.DROP_MIME_TYPE, this._factory);
   }
 
   private _evtDragEnd(event: DragEvent): void {
     clearDragData(event);
-  }
-}
-
-
-class DroppableWidget extends DockPanel {
-
-  handleEvent(event: Event): void {
-    switch (event.type) {
-    case 'dragenter':
-      this._evtDragEnter(event as DragEvent);
-      return;
-    case 'dragleave':
-      this._evtDragLeave(event as DragEvent);
-      return;
-    case 'dragover':
-      this._evtDragOver(event as DragEvent);
-      return;
-    case 'drop':
-      this._evtDrop(event as DragEvent);
-      return;
-    }
-    super.handleEvent(event);
-  }
-
-  protected onAfterAttach(msg: Message): void {
-    super.onAfterAttach(msg);
-    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
-      this.node.addEventListener(event, this);
-    };
-  }
-
-  protected onBeforeDetach(msg: Message): void {
-    super.onBeforeDetach(msg);
-    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
-      this.node.removeEventListener(event, this);
-    };
-  }
-
-  private _evtDragEnter(event: DragEvent): void {
-    let factory = getDragData(event, MIME_TYPE);
-    event.dataTransfer.dropEffect = factory ? 'copy' : 'none';
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  private _evtDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  private _evtDragOver(event: DragEvent): void {
-    let factory = getDragData(event, MIME_TYPE);
-    if (!factory) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  private _evtDrop(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    let factory = getDragData(event, MIME_TYPE);
-    if (factory) {
-      let index = this.addChild(factory());
-      let ref = ~(index - 1) ? this.childAt(index - 1) : null;
-      this.tabify(ref, this.childAt(index))
-    }
   }
 }
 
@@ -167,8 +97,8 @@ function widgetFactory(color: string): () => Widget {
   }
 }
 
-function createDroppable(): DroppableWidget {
-  let widget = new DroppableWidget();
+function createDock(): DockPanel {
+  let widget = new DockPanel();
   widget.addClass('content');
   widget.addClass('green');
   return widget;
@@ -198,12 +128,12 @@ function populateList(list: Widget): void {
 
 function main(): void {
   let list = createList();
-  let droppable = createDroppable();
+  let dock = createDock();
   let panel = new SplitPanel();
   panel.orientation = SplitPanel.Horizontal;
-  panel.children = [list, droppable];
+  panel.children = [list, dock];
   SplitPanel.setStretch(list, 1);
-  SplitPanel.setStretch(droppable, 5);
+  SplitPanel.setStretch(dock, 5);
   populateList(list);
   panel.id = 'main';
   Widget.attach(panel, document.body);
