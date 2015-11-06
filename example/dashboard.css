@@ -23,15 +23,20 @@ body {
 
 
 .content {
-  border: 1px solid black;
   min-width: 50px;
   min-height: 50px;
+  font-family: FontAwesome;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 .list-item {
   margin: 1px;
   min-width: 100px;
   min-height: 50px;
+  font-family: FontAwesome;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 .toggle {
@@ -40,13 +45,16 @@ body {
   min-height: 50px;
   text-align: center;
 }
+
 .red {
   background: #E74C3C;
+  color: #3498DB;
 }
 
 
 .yellow {
   background: #F1C40F;
+  color: #4B0082;
 }
 
 
@@ -57,8 +65,13 @@ body {
 
 .blue {
   background: #3498DB;
+  color: #E74C3C;
 }
 
+.purple {
+  background: #4B0082;
+  color: #F1C40F;
+}
 
 .p-DockTabPanel {
   padding-right: 2px;

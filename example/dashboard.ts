@@ -110,7 +110,7 @@ function createDock(): DockPanel {
 function createList(): Widget {
   let widget = new Widget();
   widget.addClass('content');
-  widget.addClass('blue');
+  widget.addClass('green');
   return widget;
 }
 
@@ -130,16 +130,13 @@ function createToggle(list: Widget, dock: DockPanel): void {
 }
 
 
-function populateList(list: Widget): void {
-  let itemOne = new DraggableWidget('yellow', widgetFactory('yellow'));
-  itemOne.addClass('yellow');
-  let itemTwo = new DraggableWidget('green', widgetFactory('green'));
-  itemTwo.addClass('green');
-  let itemThree = new DraggableWidget('red', widgetFactory('red'));
-  itemThree.addClass('red');
-  list.addChild(itemOne);
-  list.addChild(itemTwo);
-  list.addChild(itemThree);
+function populateList(list: Widget, dock: DockPanel): void {
+  for (let color of ['yellow', 'blue', 'red', 'purple']) {
+    let item = new DraggableWidget(color, widgetFactory(color));
+    item.addClass(color);
+    list.addChild(item);
+  }
+  createToggle(list, dock);
 }
 
 
@@ -147,8 +144,7 @@ function main(): void {
   let list = createList();
   let dock = createDock();
   let panel = new SplitPanel();
-  populateList(list);
-  createToggle(list, dock);
+  populateList(list, dock);
   panel.orientation = SplitPanel.Horizontal;
   panel.children = [list, dock];
   SplitPanel.setStretch(list, 1);
