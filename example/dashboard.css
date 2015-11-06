@@ -34,6 +34,12 @@ body {
   min-height: 50px;
 }
 
+.toggle {
+  margin: 10px;
+  min-width: 100px;
+  min-height: 50px;
+  text-align: center;
+}
 .red {
   background: #E74C3C;
 }

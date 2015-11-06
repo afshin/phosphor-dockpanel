@@ -102,6 +102,7 @@ function createDock(): DockPanel {
   dock.addClass('content');
   dock.addClass('green');
   dock.droppable = true;
+  dock.droppable = true;
   return dock;
 }
 
@@ -111,6 +112,21 @@ function createList(): Widget {
   widget.addClass('content');
   widget.addClass('blue');
   return widget;
+}
+
+function createToggle(list: Widget, dock: DockPanel): void {
+  let toggle = new Widget();
+  let button = document.createElement('button');
+  button.textContent = `Droppable: ${dock.droppable}`;
+  button.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    dock.droppable = !dock.droppable;
+    button.textContent = `Droppable: ${dock.droppable}`;
+  });
+  toggle.node.appendChild(button);
+  toggle.addClass('toggle');
+  list.addChild(toggle);
 }
 
 
@@ -131,11 +147,12 @@ function main(): void {
   let list = createList();
   let dock = createDock();
   let panel = new SplitPanel();
+  populateList(list);
+  createToggle(list, dock);
   panel.orientation = SplitPanel.Horizontal;
   panel.children = [list, dock];
   SplitPanel.setStretch(list, 1);
   SplitPanel.setStretch(dock, 5);
-  populateList(list);
   panel.id = 'main';
   Widget.attach(panel, document.body);
   window.onresize = () => panel.update();

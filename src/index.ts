@@ -242,7 +242,11 @@ class DockPanel extends BoxPanel {
    * Set whether the dock panel is a drop target.
    */
   set droppable(droppable: boolean) {
+    if (this._droppable === droppable) {
+      return;
+    }
     this._droppable = droppable;
+    console.log('called');
     for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
       if (droppable) {
         this.node.addEventListener(event, this);
