@@ -246,7 +246,6 @@ class DockPanel extends BoxPanel {
       return;
     }
     this._droppable = droppable;
-    console.log('called');
     for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
       if (droppable) {
         this.node.addEventListener(event, this);
