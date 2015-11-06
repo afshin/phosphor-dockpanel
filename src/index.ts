@@ -243,6 +243,13 @@ class DockPanel extends BoxPanel {
    */
   set droppable(droppable: boolean) {
     this._droppable = droppable;
+    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
+      if (droppable) {
+        this.node.addEventListener(event, this);
+      } else {
+        this.node.removeEventListener(event, this);
+      }
+    };
   }
 
   /**
@@ -357,36 +364,18 @@ class DockPanel extends BoxPanel {
       this._evtContextMenu(event as MouseEvent);
       break;
     case 'dragenter':
-      if (this._droppable) {
-        this._evtDragEnter(event as DragEvent);
-      }
+      this._evtDragEnter(event as DragEvent);
       return;
     case 'dragleave':
-      if (this._droppable) {
-        this._evtDragLeave(event as DragEvent);
-      }
+      this._evtDragLeave(event as DragEvent);
       return;
     case 'dragover':
-      if (this._droppable) {
-        this._evtDragOver(event as DragEvent);
-      }
+      this._evtDragOver(event as DragEvent);
       return;
     case 'drop':
-      if (this._droppable) {
-        this._evtDrop(event as DragEvent);
-      }
+      this._evtDrop(event as DragEvent);
       return;
     }
-  }
-
-  /**
-   * A message handler invoked on an `'after-attach'` message.
-   */
-  protected onAfterAttach(msg: Message): void {
-    super.onAfterAttach(msg);
-    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
-      this.node.addEventListener(event, this);
-    };
   }
 
   /**
@@ -394,9 +383,9 @@ class DockPanel extends BoxPanel {
    */
   protected onBeforeDetach(msg: Message): void {
     super.onBeforeDetach(msg);
-    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
-      this.node.removeEventListener(event, this);
-    };
+
+    // Setting droppable to false removes the DOM listeners.
+    this.droppable = false;
   }
 
   /**
