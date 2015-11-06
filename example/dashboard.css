@@ -30,6 +30,10 @@ body {
   font-size: 1.2em;
 }
 
+.dashboard-content {
+  padding: 20px;
+}
+
 .list-item {
   margin: 1px;
   min-width: 100px;

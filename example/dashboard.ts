@@ -84,12 +84,14 @@ class DraggableWidget extends Widget {
 
 function widgetFactory(color: string): () => Widget {
   return () => {
-    var widget = new Widget();
+    let widget = new Widget();
     widget.addClass('content');
+    widget.addClass('dashboard-content');
     widget.addClass(color);
     widget.node.appendChild(document.createTextNode(`This is ${color}.`));
 
-    var tab = new Tab(color);
+    // This should become unnecessary in DockPanel instances without tabs.
+    let tab = new Tab(color);
     tab.closable = true;
     DockPanel.setTab(widget, tab);
 
