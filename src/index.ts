@@ -232,6 +232,20 @@ class DockPanel extends BoxPanel {
   }
 
   /**
+   * Get whether the dock panel is a drop target.
+   */
+  get droppable(): boolean {
+    return this._droppable;
+  }
+
+  /**
+   * Set whether the dock panel is a drop target.
+   */
+  set droppable(droppable: boolean) {
+    this._droppable = droppable;
+  }
+
+  /**
    * Get the spacing between the docked panels.
    *
    * #### Notes
@@ -343,16 +357,24 @@ class DockPanel extends BoxPanel {
       this._evtContextMenu(event as MouseEvent);
       break;
     case 'dragenter':
-      this._evtDragEnter(event as DragEvent);
+      if (this._droppable) {
+        this._evtDragEnter(event as DragEvent);
+      }
       return;
     case 'dragleave':
-      this._evtDragLeave(event as DragEvent);
+      if (this._droppable) {
+        this._evtDragLeave(event as DragEvent);
+      }
       return;
     case 'dragover':
-      this._evtDragOver(event as DragEvent);
+      if (this._droppable) {
+        this._evtDragOver(event as DragEvent);
+      }
       return;
     case 'drop':
-      this._evtDrop(event as DragEvent);
+      if (this._droppable) {
+        this._evtDrop(event as DragEvent);
+      }
       return;
     }
   }
@@ -1039,6 +1061,7 @@ class DockPanel extends BoxPanel {
     }
   }
 
+  private _droppable: boolean = false;
   private _root: DockSplitPanel;
   private _items: IDockItem[] = [];
   private _dragData: IDragData = null;

@@ -98,10 +98,11 @@ function widgetFactory(color: string): () => Widget {
 }
 
 function createDock(): DockPanel {
-  let widget = new DockPanel();
-  widget.addClass('content');
-  widget.addClass('green');
-  return widget;
+  let dock = new DockPanel();
+  dock.addClass('content');
+  dock.addClass('green');
+  dock.droppable = true;
+  return dock;
 }
 
 
