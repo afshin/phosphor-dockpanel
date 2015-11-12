@@ -8,10 +8,6 @@
 'use-strict';
 
 import {
-  getDragData, setDragData, clearDragData
-} from 'phosphor-domutil';
-
-import {
 Message
 } from 'phosphor-messaging';
 

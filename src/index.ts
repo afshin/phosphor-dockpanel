@@ -19,7 +19,7 @@ import {
 } from 'phosphor-disposable';
 
 import {
-  boxSizing, overrideCursor, getDragData, setDragData, clearDragData
+  boxSizing, overrideCursor
 } from 'phosphor-domutil';
 
 import {
@@ -551,7 +551,9 @@ class DockPanel extends BoxPanel implements IDroppable {
   }
 
   onDragLeave(event: MouseEvent, dragData: IDragDropData): void {
-    dragData.override.dispose();
+    if (dragData.override) {
+      dragData.override.dispose();
+    }
     this._overlay.hide();
   }
 
