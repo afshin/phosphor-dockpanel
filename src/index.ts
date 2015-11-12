@@ -166,8 +166,12 @@ class Droppable {
   static drag(event: MouseEvent, data: IDragDropData): void {
     let x = event.clientX;
     let y = event.clientY;
+
+    // Multiple drop targets might match. This requires thought.
     for (let id in Droppable.droppables) {
       let droppable = Droppable.droppables[id];
+
+      // Cache the bounding rectangle when the drag begins.
       if (!droppable.rect) {
         droppable.rect = droppable.widget.node.getBoundingClientRect();
       }
@@ -180,6 +184,8 @@ class Droppable {
   static drop(event: MouseEvent, data: IDragDropData): void {
     let x = event.clientX;
     let y = event.clientY;
+
+    // Multiple drop targets might match. This requires thought.
     for (let id in Droppable.droppables) {
       let droppable = Droppable.droppables[id];
       if (!droppable.rect) {
@@ -271,6 +277,8 @@ class DraggableWidget extends Widget {
         this.onDragStart(event);
       }
     }
+
+    // 10px is arbitary, this might require configuration.
     this.dragData.ghost.style.top = `${event.clientY - 10}px`;
     this.dragData.ghost.style.left = `${event.clientX - 10}px`;
     Droppable.drag(event, this.dragData);
