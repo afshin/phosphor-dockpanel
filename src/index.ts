@@ -133,6 +133,175 @@ var PANEL_CENTER_CLASS = 'p-mod-panel-center';
  */
 var EDGE_SIZE = 30;
 
+export
+class Droppable {
+
+  static id = 0;
+
+  static idProperty = new Property<IDroppable, number>({ value: null });
+
+  static droppables: {
+    [id: string]: {
+      rect: ClientRect,
+      widget: IDroppable
+    }
+  } = Object.create(null);
+
+  static register(widget: IDroppable): void {
+    let id = ++Droppable.id;
+    Droppable.idProperty.set(widget, id);
+    Droppable.droppables[id] = {
+      rect: null,
+      widget: widget
+    };
+  }
+
+  static deregister(widget: IDroppable): void {
+    let id = Droppable.idProperty.get(widget);
+    if (Droppable.droppables[id]) {
+      delete Droppable.droppables[id];
+    }
+  }
+
+  static drag(event: MouseEvent, data: IDragDropData): void {
+    let x = event.clientX;
+    let y = event.clientY;
+    for (let id in Droppable.droppables) {
+      let droppable = Droppable.droppables[id];
+      if (!droppable.rect) {
+        droppable.rect = droppable.widget.node.getBoundingClientRect();
+      }
+      if (hitTestRect(droppable.rect, x, y)) {
+        droppable.widget.onDrag.call(droppable.widget, event, data);
+      }
+    }
+  }
+
+  static drop(event: MouseEvent, data: IDragDropData): void {
+    let x = event.clientX;
+    let y = event.clientY;
+    for (let id in Droppable.droppables) {
+      let droppable = Droppable.droppables[id];
+      if (!droppable.rect) {
+        droppable.rect = droppable.widget.node.getBoundingClientRect();
+      }
+      if (hitTestRect(droppable.rect, x, y)) {
+        droppable.widget.onDrop.call(droppable.widget, event, data);
+      }
+    }
+  }
+}
+
+export
+class DraggableWidget extends Widget {
+
+  dragData: IDragDropData = null;
+
+  dragThreshold = 5;
+
+  ghost(): HTMLElement {
+    let node = this.node.cloneNode(true) as HTMLElement;
+    let rect = this.node.getBoundingClientRect();
+    node.style.height = `${rect.height}px`;
+    node.style.width = `${rect.width}px`;
+    node.style.opacity = '0.75';
+    return node;
+  }
+
+  handleEvent(event: Event): void {
+    switch (event.type) {
+    case 'mousedown':
+      this._evtMouseDown(event as MouseEvent);
+      break;
+    case 'mousemove':
+      this._evtMouseMove(event as MouseEvent);
+      break;
+    case 'mouseup':
+      this._evtMouseUp(event as MouseEvent);
+      break;
+    }
+  }
+
+  protected onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+    this.node.addEventListener('mousedown', this);
+  }
+
+  protected onBeforeDetach(msg: Message): void {
+    super.onBeforeDetach(msg);
+    this.node.removeEventListener('mousedown', this);
+  }
+
+  protected onDragStart(event: MouseEvent): void {
+    console.log('inheritors ought to override onDragStart');
+  }
+
+  protected onDragEnd(event: MouseEvent): void {
+    console.log('inheritors ought to override onDragEnd');
+  }
+
+  private _evtMouseDown(event: MouseEvent): void {
+    if (event.button !== 0) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    document.addEventListener('mousemove', this, true);
+    document.addEventListener('mouseup', this, true);
+    this.dragData = {
+      exceededThreshold: false,
+      ghost: null,
+      payload: Object.create(null),
+      startX: event.clientX,
+      startY: event.clientY
+    };
+  }
+
+  private _evtMouseMove(event: MouseEvent): void {
+    if (!this.dragData.exceededThreshold) {
+      let dx = Math.abs(event.clientX - this.dragData.startX);
+      let dy = Math.abs(event.clientY - this.dragData.startY);
+      if (!(Math.sqrt(dx * dx + dy * dy) >= this.dragThreshold)) {
+        return;
+      } else {
+        this.dragData.exceededThreshold = true;
+        this.dragData.ghost = this.ghost();
+        this.dragData.ghost.style.position = 'absolute';
+        document.body.appendChild(this.dragData.ghost);
+        this.onDragStart(event);
+      }
+    }
+    this.dragData.ghost.style.top = `${event.clientY - 10}px`;
+    this.dragData.ghost.style.left = `${event.clientX - 10}px`;
+    Droppable.drag(event, this.dragData);
+  }
+
+  private _evtMouseUp(event: MouseEvent): void {
+    document.removeEventListener('mousemove', this, true);
+    document.removeEventListener('mouseup', this, true);
+    if (this.dragData.ghost) {
+      document.body.removeChild(this.dragData.ghost);
+    }
+    Droppable.drop(event, this.dragData);
+    this.onDragEnd(event);
+    this.dragData = null;
+  }
+}
+
+export
+interface IDragDropData {
+  exceededThreshold: boolean;
+  ghost: HTMLElement,
+  payload: { [mime: string]: any };
+  startX: number;
+  startY: number;
+}
+
+export
+interface IDroppable extends Widget {
+  onDrag(event: MouseEvent, dragData: IDragDropData): void;
+  onDrop(event: MouseEvent, dragData: IDragDropData): void;
+}
 
 /**
  * A widget which provides a flexible docking area for content widgets.
@@ -144,7 +313,7 @@ var EDGE_SIZE = 30;
  * `parent` reference to `null`.
  */
 export
-class DockPanel extends BoxPanel {
+class DockPanel extends BoxPanel implements IDroppable {
   /**
    * The MIME type for draggable items that can be dropped on a dock panel.
    */
@@ -246,13 +415,11 @@ class DockPanel extends BoxPanel {
       return;
     }
     this._droppable = droppable;
-    for (let event of ['dragenter', 'dragleave', 'dragover', 'drop']) {
-      if (droppable) {
-        this.node.addEventListener(event, this);
-      } else {
-        this.node.removeEventListener(event, this);
-      }
-    };
+    if (droppable) {
+      Droppable.register(this);
+    } else {
+      Droppable.deregister(this);
+    }
   }
 
   /**
@@ -345,6 +512,66 @@ class DockPanel extends BoxPanel {
     this._tabifyWidget(ref, widget);
   }
 
+  onDragEnter(event: MouseEvent, data: IDragDropData): void {
+    console.log('onDragEnter', data);
+  }
+
+  onDrag(event: MouseEvent, dragData: IDragDropData): void {
+    let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
+    if (factory) {
+      this._showOverlay(event.clientX, event.clientY);
+    }
+  }
+
+  onDragLeave(event: MouseEvent, dragData: IDragDropData): void {
+    this._overlay.hide();
+  }
+
+  onDrop(event: MouseEvent, dragData: IDragDropData): void {
+    this._overlay.hide();
+    let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
+    if (!factory) {
+      console.log(`no appropriate data for ${DockPanel.DROP_MIME_TYPE}`);
+      return;
+    }
+    let data = findDockTarget(this._root, event.clientX, event.clientY);
+    if (data.zone === DockZone.Invalid) {
+      return;
+    }
+    let widget = factory();
+
+    // Dock the panel according to the indicated zone.
+    switch (data.zone) {
+    case DockZone.EdgeTop:
+      this._addPanel(widget, Orientation.Vertical, false);
+      break;
+    case DockZone.EdgeLeft:
+      this._addPanel(widget, Orientation.Horizontal, false);
+      break;
+    case DockZone.EdgeRight:
+      this._addPanel(widget, Orientation.Horizontal, true);
+      break;
+    case DockZone.EdgeBottom:
+      this._addPanel(widget, Orientation.Vertical, true);
+      break;
+    case DockZone.PanelTop:
+      this._splitPanel(data.panel, widget, Orientation.Vertical, false);
+      break;
+    case DockZone.PanelLeft:
+      this._splitPanel(data.panel, widget, Orientation.Horizontal, false);
+      break;
+    case DockZone.PanelRight:
+      this._splitPanel(data.panel, widget, Orientation.Horizontal, true);
+      break;
+    case DockZone.PanelBottom:
+      this._splitPanel(data.panel, widget, Orientation.Vertical, true);
+      break;
+    case DockZone.PanelCenter:
+      this._tabifyPanel(data.panel, widget);
+      break;
+    }
+  }
+
   /**
    * Handle the DOM events for the dock panel.
    *
@@ -366,18 +593,6 @@ class DockPanel extends BoxPanel {
     case 'contextmenu':
       this._evtContextMenu(event as MouseEvent);
       break;
-    case 'dragenter':
-      this._evtDragEnter(event as DragEvent);
-      return;
-    case 'dragleave':
-      this._evtDragLeave(event as DragEvent);
-      return;
-    case 'dragover':
-      this._evtDragOver(event as DragEvent);
-      return;
-    case 'drop':
-      this._evtDrop(event as DragEvent);
-      return;
     }
   }
 
@@ -520,85 +735,6 @@ class DockPanel extends BoxPanel {
     arrays.insert(sizes, after ? sizes.length : 0, 0.5);
     this._root.insertChild(after ? this._root.childCount : 0, panel);
     this._root.setSizes(sizes);
-  }
-
-  /**
-   * Handle the `'dragenter'` event for the dock panel.
-   */
-  private _evtDragEnter(event: DragEvent): void {
-    let factory = getDragData(event, DockPanel.DROP_MIME_TYPE);
-    event.dataTransfer.dropEffect = factory ? 'copy' : 'none';
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  /**
-   * Handle the `'dragleave'` event for the dock panel.
-   */
-  private _evtDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  /**
-   * Handle the `'dragover'` event for the dock panel.
-   */
-  private _evtDragOver(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    let factory = getDragData(event, DockPanel.DROP_MIME_TYPE);
-    if (factory) {
-      this._showOverlay(event.clientX, event.clientY);
-    }
-  }
-
-  /**
-   * Handle the `'drop'` event for the dock panel.
-   */
-  private _evtDrop(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this._overlay.hide();
-    let factory = getDragData(event, DockPanel.DROP_MIME_TYPE);
-    if (!factory) {
-      return;
-    }
-    let data = findDockTarget(this._root, event.clientX, event.clientY);
-    if (data.zone === DockZone.Invalid) {
-      return;
-    }
-    let widget = factory();
-
-    // Dock the panel according to the indicated zone.
-    switch (data.zone) {
-    case DockZone.EdgeTop:
-      this._addPanel(widget, Orientation.Vertical, false);
-      break;
-    case DockZone.EdgeLeft:
-      this._addPanel(widget, Orientation.Horizontal, false);
-      break;
-    case DockZone.EdgeRight:
-      this._addPanel(widget, Orientation.Horizontal, true);
-      break;
-    case DockZone.EdgeBottom:
-      this._addPanel(widget, Orientation.Vertical, true);
-      break;
-    case DockZone.PanelTop:
-      this._splitPanel(data.panel, widget, Orientation.Vertical, false);
-      break;
-    case DockZone.PanelLeft:
-      this._splitPanel(data.panel, widget, Orientation.Horizontal, false);
-      break;
-    case DockZone.PanelRight:
-      this._splitPanel(data.panel, widget, Orientation.Horizontal, true);
-      break;
-    case DockZone.PanelBottom:
-      this._splitPanel(data.panel, widget, Orientation.Vertical, true);
-      break;
-    case DockZone.PanelCenter:
-      this._tabifyPanel(data.panel, widget);
-      break;
-    }
   }
 
   /**

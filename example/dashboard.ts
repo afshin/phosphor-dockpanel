@@ -28,13 +28,13 @@ Widget
 } from 'phosphor-widget';
 
 import {
-  DockPanel
+  DockPanel, DraggableWidget
 } from '../lib/index';
 
 import './dashboard.css';
 
 
-class DraggableWidget extends Widget {
+class DraggableListItem extends DraggableWidget {
 
   static createNode(): HTMLElement {
     let node = document.createElement('div');
@@ -45,41 +45,17 @@ class DraggableWidget extends Widget {
     return node;
   }
 
-  constructor(label: string, private _factory: () => Widget) {
+  constructor(label: string, factory: () => Widget) {
     super();
+    this._factory = widgetFactory(label);
     this.node.querySelector('span').appendChild(document.createTextNode(label));
   }
 
-  handleEvent(event: Event): void {
-    switch (event.type) {
-    case 'dragstart':
-      this._evtDragStart(<DragEvent>event);
-      break;
-    case 'dragend':
-      this._evtDragEnd(<DragEvent>event);
-      break;
-    }
+  protected onDragStart(event: MouseEvent): void {
+    this.dragData.payload[DockPanel.DROP_MIME_TYPE] = this._factory;
   }
 
-  protected onAfterAttach(msg: Message): void {
-    super.onAfterAttach(msg);
-    this.node.addEventListener('dragstart', this);
-    this.node.addEventListener('dragend', this);
-  }
-
-  protected onBeforeDetach(msg: Message): void {
-    super.onBeforeDetach(msg);
-    this.node.removeEventListener('dragstart', this);
-    this.node.removeEventListener('dragend', this);
-  }
-
-  private _evtDragStart(event: DragEvent): void {
-    setDragData(event, DockPanel.DROP_MIME_TYPE, this._factory);
-  }
-
-  private _evtDragEnd(event: DragEvent): void {
-    clearDragData(event);
-  }
+  private _factory: () => Widget = null;
 }
 
 function widgetFactory(color: string): () => Widget {
@@ -134,7 +110,7 @@ function createToggle(list: Widget, dock: DockPanel): void {
 
 function populateList(list: Widget, dock: DockPanel): void {
   for (let color of ['yellow', 'blue', 'red', 'purple']) {
-    let item = new DraggableWidget(color, widgetFactory(color));
+    let item = new DraggableListItem(color, widgetFactory(color));
     item.addClass(color);
     list.addChild(item);
   }

@@ -5,5 +5,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "ES5"
-  }
+  },
+  "files": [
+    "../typings/es6-collections/es6-collections.d.ts",
+    "dashboard.ts",
+    "index.ts"
+  ]
 }
