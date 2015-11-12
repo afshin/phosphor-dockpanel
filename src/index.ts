@@ -142,6 +142,7 @@ class Droppable {
 
   static droppables: {
     [id: string]: {
+      entered: boolean,
       rect: ClientRect,
       widget: IDroppable
     }
@@ -151,6 +152,7 @@ class Droppable {
     let id = ++Droppable.id;
     Droppable.idProperty.set(widget, id);
     Droppable.droppables[id] = {
+      entered: false,
       rect: null,
       widget: widget
     };
@@ -176,7 +178,14 @@ class Droppable {
         droppable.rect = droppable.widget.node.getBoundingClientRect();
       }
       if (hitTestRect(droppable.rect, x, y)) {
+        if (!droppable.entered) {
+          droppable.entered = true;
+          droppable.widget.onDragEnter.call(droppable.widget, event, data);
+        }
         droppable.widget.onDrag.call(droppable.widget, event, data);
+      } else if (droppable.entered) {
+        droppable.entered = false;
+        droppable.widget.onDragLeave.call(droppable.widget, event, data);
       }
     }
   }
@@ -192,7 +201,14 @@ class Droppable {
         droppable.rect = droppable.widget.node.getBoundingClientRect();
       }
       if (hitTestRect(droppable.rect, x, y)) {
+        if (!droppable.entered) {
+          droppable.entered = true;
+          droppable.widget.onDragEnter.call(droppable.widget, event, data);
+        }
         droppable.widget.onDrop.call(droppable.widget, event, data);
+      } else if (droppable.entered) {
+        droppable.entered = false;
+        droppable.widget.onDragLeave.call(droppable.widget, event, data);
       }
     }
   }
@@ -300,6 +316,7 @@ export
 interface IDragDropData {
   exceededThreshold: boolean;
   ghost: HTMLElement,
+  override?: IDisposable;
   payload: { [mime: string]: any };
   startX: number;
   startY: number;
@@ -307,7 +324,9 @@ interface IDragDropData {
 
 export
 interface IDroppable extends Widget {
+  onDragEnter(event: MouseEvent, dragData: IDragDropData): void;
   onDrag(event: MouseEvent, dragData: IDragDropData): void;
+  onDragLeave(event: MouseEvent, dragData: IDragDropData): void;
   onDrop(event: MouseEvent, dragData: IDragDropData): void;
 }
 
@@ -520,8 +539,8 @@ class DockPanel extends BoxPanel implements IDroppable {
     this._tabifyWidget(ref, widget);
   }
 
-  onDragEnter(event: MouseEvent, data: IDragDropData): void {
-    console.log('onDragEnter', data);
+  onDragEnter(event: MouseEvent, dragData: IDragDropData): void {
+    dragData.override = overrideCursor('copy');
   }
 
   onDrag(event: MouseEvent, dragData: IDragDropData): void {
@@ -532,12 +551,14 @@ class DockPanel extends BoxPanel implements IDroppable {
   }
 
   onDragLeave(event: MouseEvent, dragData: IDragDropData): void {
+    dragData.override.dispose();
     this._overlay.hide();
   }
 
   onDrop(event: MouseEvent, dragData: IDragDropData): void {
-    this._overlay.hide();
     let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
+    dragData.override.dispose();
+    this._overlay.hide();
     if (!factory) {
       console.log(`no appropriate data for ${DockPanel.DROP_MIME_TYPE}`);
       return;
