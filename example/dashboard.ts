@@ -12,6 +12,10 @@ Message
 } from 'phosphor-messaging';
 
 import {
+DragHandler, IDragDropData
+} from 'phosphor-domutil';
+
+import {
 SplitPanel
 } from 'phosphor-splitpanel';
 
@@ -24,13 +28,13 @@ Widget
 } from 'phosphor-widget';
 
 import {
-  DockPanel, DraggableWidget
+  DockPanel
 } from '../lib/index';
 
 import './dashboard.css';
 
 
-class DraggableListItem extends DraggableWidget {
+class DraggableListItem extends Widget {
 
   static createNode(): HTMLElement {
     let node = document.createElement('div');
@@ -44,14 +48,22 @@ class DraggableListItem extends DraggableWidget {
   constructor(label: string, factory: () => Widget) {
     super();
     this._factory = widgetFactory(label);
+    this._dragHandler = new DragHandler(this);
+    this._dragHandler.onDragStart = this._onDragStart;
     this.node.querySelector('span').appendChild(document.createTextNode(label));
   }
 
-  protected onDragStart(event: MouseEvent): void {
-    this.dragData.payload[DockPanel.DROP_MIME_TYPE] = this._factory;
+  dispose(): void {
+    this._dragHandler.dispose();
+    super.dispose();
+  }
+
+  private _onDragStart(event: MouseEvent, dragData: IDragDropData): void {
+    dragData.payload[DockPanel.DROP_MIME_TYPE] = this._factory;
   }
 
   private _factory: () => Widget = null;
+  private _dragHandler: DragHandler = null;
 }
 
 function widgetFactory(color: string): () => Widget {

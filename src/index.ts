@@ -19,7 +19,7 @@ import {
 } from 'phosphor-disposable';
 
 import {
-  boxSizing, overrideCursor
+  boxSizing, overrideCursor, IDragDropData, DroppableHandler
 } from 'phosphor-domutil';
 
 import {
@@ -133,203 +133,6 @@ var PANEL_CENTER_CLASS = 'p-mod-panel-center';
  */
 var EDGE_SIZE = 30;
 
-export
-class Droppable {
-
-  static id = 0;
-
-  static idProperty = new Property<IDroppable, number>({ value: null });
-
-  static droppables: {
-    [id: string]: {
-      entered: boolean,
-      rect: ClientRect,
-      widget: IDroppable
-    }
-  } = Object.create(null);
-
-  static register(widget: IDroppable): void {
-    let id = ++Droppable.id;
-    Droppable.idProperty.set(widget, id);
-    Droppable.droppables[id] = {
-      entered: false,
-      rect: null,
-      widget: widget
-    };
-  }
-
-  static deregister(widget: IDroppable): void {
-    let id = Droppable.idProperty.get(widget);
-    if (Droppable.droppables[id]) {
-      delete Droppable.droppables[id];
-    }
-  }
-
-  static drag(event: MouseEvent, data: IDragDropData): void {
-    let x = event.clientX;
-    let y = event.clientY;
-
-    // Multiple drop targets might match. This requires thought.
-    for (let id in Droppable.droppables) {
-      let droppable = Droppable.droppables[id];
-
-      // Cache the bounding rectangle when the drag begins.
-      if (!droppable.rect) {
-        droppable.rect = droppable.widget.node.getBoundingClientRect();
-      }
-      if (hitTestRect(droppable.rect, x, y)) {
-        if (!droppable.entered) {
-          droppable.entered = true;
-          droppable.widget.onDragEnter.call(droppable.widget, event, data);
-        }
-        droppable.widget.onDrag.call(droppable.widget, event, data);
-      } else if (droppable.entered) {
-        droppable.entered = false;
-        droppable.widget.onDragLeave.call(droppable.widget, event, data);
-      }
-    }
-  }
-
-  static drop(event: MouseEvent, data: IDragDropData): void {
-    let x = event.clientX;
-    let y = event.clientY;
-
-    // Multiple drop targets might match. This requires thought.
-    for (let id in Droppable.droppables) {
-      let droppable = Droppable.droppables[id];
-      if (!droppable.rect) {
-        droppable.rect = droppable.widget.node.getBoundingClientRect();
-      }
-      if (hitTestRect(droppable.rect, x, y)) {
-        if (!droppable.entered) {
-          droppable.entered = true;
-          droppable.widget.onDragEnter.call(droppable.widget, event, data);
-        }
-        droppable.widget.onDrop.call(droppable.widget, event, data);
-      } else if (droppable.entered) {
-        droppable.entered = false;
-        droppable.widget.onDragLeave.call(droppable.widget, event, data);
-      }
-    }
-  }
-}
-
-export
-class DraggableWidget extends Widget {
-
-  dragData: IDragDropData = null;
-
-  dragThreshold = 5;
-
-  ghost(): HTMLElement {
-    let node = this.node.cloneNode(true) as HTMLElement;
-    let rect = this.node.getBoundingClientRect();
-    node.style.height = `${rect.height}px`;
-    node.style.width = `${rect.width}px`;
-    node.style.opacity = '0.75';
-    return node;
-  }
-
-  handleEvent(event: Event): void {
-    switch (event.type) {
-    case 'mousedown':
-      this._evtMouseDown(event as MouseEvent);
-      break;
-    case 'mousemove':
-      this._evtMouseMove(event as MouseEvent);
-      break;
-    case 'mouseup':
-      this._evtMouseUp(event as MouseEvent);
-      break;
-    }
-  }
-
-  protected onAfterAttach(msg: Message): void {
-    super.onAfterAttach(msg);
-    this.node.addEventListener('mousedown', this);
-  }
-
-  protected onBeforeDetach(msg: Message): void {
-    super.onBeforeDetach(msg);
-    this.node.removeEventListener('mousedown', this);
-  }
-
-  protected onDragStart(event: MouseEvent): void {
-    console.log('inheritors ought to override onDragStart');
-  }
-
-  protected onDragEnd(event: MouseEvent): void {
-    console.log('inheritors ought to override onDragEnd');
-  }
-
-  private _evtMouseDown(event: MouseEvent): void {
-    if (event.button !== 0) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-    document.addEventListener('mousemove', this, true);
-    document.addEventListener('mouseup', this, true);
-    this.dragData = {
-      exceededThreshold: false,
-      ghost: null,
-      payload: Object.create(null),
-      startX: event.clientX,
-      startY: event.clientY
-    };
-  }
-
-  private _evtMouseMove(event: MouseEvent): void {
-    if (!this.dragData.exceededThreshold) {
-      let dx = Math.abs(event.clientX - this.dragData.startX);
-      let dy = Math.abs(event.clientY - this.dragData.startY);
-      if (!(Math.sqrt(dx * dx + dy * dy) >= this.dragThreshold)) {
-        return;
-      } else {
-        this.dragData.exceededThreshold = true;
-        this.dragData.ghost = this.ghost();
-        this.dragData.ghost.style.position = 'absolute';
-        document.body.appendChild(this.dragData.ghost);
-        this.onDragStart(event);
-      }
-    }
-
-    // 10px is arbitary, this might require configuration.
-    this.dragData.ghost.style.top = `${event.clientY - 10}px`;
-    this.dragData.ghost.style.left = `${event.clientX - 10}px`;
-    Droppable.drag(event, this.dragData);
-  }
-
-  private _evtMouseUp(event: MouseEvent): void {
-    document.removeEventListener('mousemove', this, true);
-    document.removeEventListener('mouseup', this, true);
-    if (this.dragData.ghost) {
-      document.body.removeChild(this.dragData.ghost);
-    }
-    Droppable.drop(event, this.dragData);
-    this.onDragEnd(event);
-    this.dragData = null;
-  }
-}
-
-export
-interface IDragDropData {
-  exceededThreshold: boolean;
-  ghost: HTMLElement,
-  override?: IDisposable;
-  payload: { [mime: string]: any };
-  startX: number;
-  startY: number;
-}
-
-export
-interface IDroppable extends Widget {
-  onDragEnter(event: MouseEvent, dragData: IDragDropData): void;
-  onDrag(event: MouseEvent, dragData: IDragDropData): void;
-  onDragLeave(event: MouseEvent, dragData: IDragDropData): void;
-  onDrop(event: MouseEvent, dragData: IDragDropData): void;
-}
-
 /**
  * A widget which provides a flexible docking area for content widgets.
  *
@@ -340,7 +143,7 @@ interface IDroppable extends Widget {
  * `parent` reference to `null`.
  */
 export
-class DockPanel extends BoxPanel implements IDroppable {
+class DockPanel extends BoxPanel {
   /**
    * The MIME type for draggable items that can be dropped on a dock panel.
    */
@@ -443,9 +246,14 @@ class DockPanel extends BoxPanel implements IDroppable {
     }
     this._droppable = droppable;
     if (droppable) {
-      Droppable.register(this);
+      this._droppableHandler = new DroppableHandler(this);
+      this._droppableHandler.onDragEnter = this._onDragEnter;
+      this._droppableHandler.onDragLeave = this._onDragLeave;
+      this._droppableHandler.onDrag = this._onDrag;
+      this._droppableHandler.onDrop = this._onDrop;
     } else {
-      Droppable.deregister(this);
+      this._droppableHandler.dispose();
+      this._droppableHandler = null;
     }
   }
 
@@ -539,25 +347,59 @@ class DockPanel extends BoxPanel implements IDroppable {
     this._tabifyWidget(ref, widget);
   }
 
-  onDragEnter(event: MouseEvent, dragData: IDragDropData): void {
+  /**
+   * Handle the DOM events for the dock panel.
+   *
+   * @param event - The DOM event sent to the dock panel.
+   *
+   * #### Notes
+   * This method implements the DOM `EventListener` interface and is
+   * called in response to events on the dock panel's DOM node. It
+   * should not be called directly by user code.
+   */
+  handleEvent(event: Event): void {
+    switch (event.type) {
+    case 'mousemove':
+      this._evtMouseMove(event as MouseEvent);
+      break;
+    case 'mouseup':
+      this._evtMouseUp(event as MouseEvent);
+      break;
+    case 'contextmenu':
+      this._evtContextMenu(event as MouseEvent);
+      break;
+    }
+  }
+
+  /**
+   * A message handler invoked on a `'before-detach'` message.
+   */
+  protected onBeforeDetach(msg: Message): void {
+    super.onBeforeDetach(msg);
+
+    // Setting droppable to false removes the DOM listeners.
+    this.droppable = false;
+  }
+
+  private _onDragEnter(event: MouseEvent, dragData: IDragDropData): void {
     dragData.override = overrideCursor('copy');
   }
 
-  onDrag(event: MouseEvent, dragData: IDragDropData): void {
+  private _onDrag(event: MouseEvent, dragData: IDragDropData): void {
     let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
     if (factory) {
       this._showOverlay(event.clientX, event.clientY);
     }
   }
 
-  onDragLeave(event: MouseEvent, dragData: IDragDropData): void {
+  private _onDragLeave(event: MouseEvent, dragData: IDragDropData): void {
     if (dragData.override) {
       dragData.override.dispose();
     }
     this._overlay.hide();
   }
 
-  onDrop(event: MouseEvent, dragData: IDragDropData): void {
+  private _onDrop(event: MouseEvent, dragData: IDragDropData): void {
     let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
     dragData.override.dispose();
     this._overlay.hide();
@@ -601,40 +443,6 @@ class DockPanel extends BoxPanel implements IDroppable {
       this._tabifyPanel(data.panel, widget);
       break;
     }
-  }
-
-  /**
-   * Handle the DOM events for the dock panel.
-   *
-   * @param event - The DOM event sent to the dock panel.
-   *
-   * #### Notes
-   * This method implements the DOM `EventListener` interface and is
-   * called in response to events on the dock panel's DOM node. It
-   * should not be called directly by user code.
-   */
-  handleEvent(event: Event): void {
-    switch (event.type) {
-    case 'mousemove':
-      this._evtMouseMove(event as MouseEvent);
-      break;
-    case 'mouseup':
-      this._evtMouseUp(event as MouseEvent);
-      break;
-    case 'contextmenu':
-      this._evtContextMenu(event as MouseEvent);
-      break;
-    }
-  }
-
-  /**
-   * A message handler invoked on a `'before-detach'` message.
-   */
-  protected onBeforeDetach(msg: Message): void {
-    super.onBeforeDetach(msg);
-
-    // Setting droppable to false removes the DOM listeners.
-    this.droppable = false;
   }
 
   /**
@@ -1221,6 +1029,7 @@ class DockPanel extends BoxPanel implements IDroppable {
   }
 
   private _droppable: boolean = false;
+  private _droppableHandler: DroppableHandler = null;
   private _root: DockSplitPanel;
   private _items: IDockItem[] = [];
   private _dragData: IDragData = null;
