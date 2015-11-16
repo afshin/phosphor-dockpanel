@@ -40,7 +40,6 @@ class DraggableListItem extends Widget {
     let node = document.createElement('div');
     let span = document.createElement('span');
     node.className = 'list-item';
-    node.setAttribute('draggable', 'true');
     node.appendChild(span);
     return node;
   }
@@ -87,7 +86,6 @@ function createDock(): DockPanel {
   let dock = new DockPanel();
   dock.addClass('content');
   dock.addClass('green');
-  dock.droppable = true;
   dock.droppable = true;
   return dock;
 }

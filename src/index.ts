@@ -19,7 +19,7 @@ import {
 } from 'phosphor-disposable';
 
 import {
-  boxSizing, overrideCursor, IDragDropData, DroppableHandler
+  boxSizing, overrideCursor, IDragDropData, DropHandler
 } from 'phosphor-domutil';
 
 import {
@@ -246,14 +246,14 @@ class DockPanel extends BoxPanel {
     }
     this._droppable = droppable;
     if (droppable) {
-      this._droppableHandler = new DroppableHandler(this);
-      this._droppableHandler.onDragEnter = this._onDragEnter;
-      this._droppableHandler.onDragLeave = this._onDragLeave;
-      this._droppableHandler.onDrag = this._onDrag;
-      this._droppableHandler.onDrop = this._onDrop;
+      this._dropHandler = new DropHandler(this);
+      this._dropHandler.onDragEnter = this._onDragEnter;
+      this._dropHandler.onDragLeave = this._onDragLeave;
+      this._dropHandler.onDrag = this._onDrag;
+      this._dropHandler.onDrop = this._onDrop;
     } else {
-      this._droppableHandler.dispose();
-      this._droppableHandler = null;
+      this._dropHandler.dispose();
+      this._dropHandler = null;
     }
   }
 
@@ -1029,7 +1029,7 @@ class DockPanel extends BoxPanel {
   }
 
   private _droppable: boolean = false;
-  private _droppableHandler: DroppableHandler = null;
+  private _dropHandler: DropHandler = null;
   private _root: DockSplitPanel;
   private _items: IDockItem[] = [];
   private _dragData: IDragData = null;
