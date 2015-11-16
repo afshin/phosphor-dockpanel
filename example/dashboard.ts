@@ -47,7 +47,7 @@ class DraggableListItem extends Widget {
   constructor(label: string, factory: () => Widget) {
     super();
     this._factory = widgetFactory(label);
-    this._dragHandler = new DragHandler(this);
+    this._dragHandler = new DragHandler(this.node, this);
     this._dragHandler.onDragStart = this._onDragStart;
     this.node.querySelector('span').appendChild(document.createTextNode(label));
   }

@@ -246,7 +246,7 @@ class DockPanel extends BoxPanel {
     }
     this._droppable = droppable;
     if (droppable) {
-      this._dropHandler = new DropHandler(this);
+      this._dropHandler = new DropHandler(this.node, this);
       this._dropHandler.onDragEnter = this._onDragEnter;
       this._dropHandler.onDragLeave = this._onDragLeave;
       this._dropHandler.onDrag = this._onDrag;
