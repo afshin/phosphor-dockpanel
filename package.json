@@ -8,7 +8,7 @@
     "phosphor-arrays": "^1.0.5",
     "phosphor-boxpanel": "^0.9.6",
     "phosphor-disposable": "^1.0.4",
-    "phosphor-domutil": "git+ssh://git@github.com/afshin/phosphor-domutil#60b77ef4a7b79ca38cdf3c6769cfa3abde68a5e0",
+    "phosphor-domutil": "git+ssh://git@github.com/afshin/phosphor-domutil#053d7d2d5643abcfd7c90a34978b4338923acc3e",
     "phosphor-nodewrapper": "^1.0.4",
     "phosphor-properties": "^1.2.0",
     "phosphor-splitpanel": "^0.9.8",
