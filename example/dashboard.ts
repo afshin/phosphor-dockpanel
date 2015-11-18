@@ -34,7 +34,7 @@ import {
 import './dashboard.css';
 
 
-class DraggableListItem extends Widget {
+class ListItem extends Widget {
 
   static createNode(): HTMLElement {
     let node = document.createElement('div');
@@ -44,25 +44,42 @@ class DraggableListItem extends Widget {
     return node;
   }
 
-  constructor(label: string, factory: () => Widget) {
+  get draggable(): boolean {
+    return this._draggable;
+  }
+
+  set draggable(draggable: boolean) {
+    if (this._draggable === draggable) {
+      return;
+    }
+    this._draggable = draggable;
+    if (draggable) {
+      this._dragHandler = new DragHandler(this.node, this);
+      this._dragHandler.onDragStart = this._onDragStart;
+    } else {
+      this._dragHandler.dispose();
+      this._dragHandler = null;
+    }
+  }
+
+  constructor(label: string) {
     super();
-    this._factory = widgetFactory(label);
-    this._dragHandler = new DragHandler(this.node, this);
-    this._dragHandler.onDragStart = this._onDragStart;
-    this.node.querySelector('span').appendChild(document.createTextNode(label));
+    this._label = label;
+    this.node.querySelector('span').textContent = label;
   }
 
   dispose(): void {
-    this._dragHandler.dispose();
+    this.draggable = false;
     super.dispose();
   }
 
   private _onDragStart(event: MouseEvent, dragData: IDragDropData): void {
-    dragData.payload[DockPanel.DROP_MIME_TYPE] = this._factory;
+    dragData.payload[DockPanel.DROP_MIME_TYPE] = widgetFactory(this._label);
   }
 
-  private _factory: () => Widget = null;
+  private _draggable: boolean = false;
   private _dragHandler: DragHandler = null;
+  private _label: string;
 }
 
 function widgetFactory(color: string): () => Widget {
@@ -116,8 +133,9 @@ function createToggle(list: Widget, dock: DockPanel): void {
 
 function populateList(list: Widget, dock: DockPanel): void {
   for (let color of ['yellow', 'blue', 'red', 'purple']) {
-    let item = new DraggableListItem(color, widgetFactory(color));
+    let item = new ListItem(color);
     item.addClass(color);
+    item.draggable = true;
     list.addChild(item);
   }
   createToggle(list, dock);
