@@ -19,7 +19,7 @@ import {
 } from 'phosphor-disposable';
 
 import {
-  boxSizing, overrideCursor, IDragDropData, DropHandler
+  boxSizing, overrideCursor, DragData, DropHandler
 } from 'phosphor-domutil';
 
 import {
@@ -249,7 +249,7 @@ class DockPanel extends BoxPanel {
       this._dropHandler = new DropHandler(this.node, this);
       this._dropHandler.onDragEnter = this._onDragEnter;
       this._dropHandler.onDragLeave = this._onDragLeave;
-      this._dropHandler.onDrag = this._onDrag;
+      this._dropHandler.onDragOver = this._onDragOver;
       this._dropHandler.onDrop = this._onDrop;
     } else {
       this._dropHandler.dispose();
@@ -381,30 +381,27 @@ class DockPanel extends BoxPanel {
     this.droppable = false;
   }
 
-  private _onDragEnter(event: MouseEvent, dragData: IDragDropData): void {
-    dragData.override = overrideCursor('copy');
+  private _onDragEnter(event: MouseEvent, dragData: DragData): void {
+    dragData.dropAction = 'copy';
   }
 
-  private _onDrag(event: MouseEvent, dragData: IDragDropData): void {
-    let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
+  private _onDragOver(event: MouseEvent, dragData: DragData): void {
+    let factory = dragData.getData(DockPanel.DROP_MIME_TYPE);
     if (factory) {
       this._showOverlay(event.clientX, event.clientY);
     }
   }
 
-  private _onDragLeave(event: MouseEvent, dragData: IDragDropData): void {
-    if (dragData.override) {
-      dragData.override.dispose();
-    }
+  private _onDragLeave(event: MouseEvent, dragData: DragData): void {
     this._overlay.hide();
   }
 
-  private _onDrop(event: MouseEvent, dragData: IDragDropData): void {
-    let factory = dragData.payload[DockPanel.DROP_MIME_TYPE];
-    dragData.override.dispose();
+  private _onDrop(event: MouseEvent, dragData: DragData): void {
+    let factory = dragData.getData(DockPanel.DROP_MIME_TYPE);
     this._overlay.hide();
     if (!factory) {
       console.log(`no appropriate data for ${DockPanel.DROP_MIME_TYPE}`);
+      dragData.dropAction = 'none';
       return;
     }
     let data = findDockTarget(this._root, event.clientX, event.clientY);

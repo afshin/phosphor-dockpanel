@@ -7,12 +7,14 @@
 |----------------------------------------------------------------------------*/
 'use-strict';
 
+import Bokeh from 'bokehjs';
+
 import {
 Message
 } from 'phosphor-messaging';
 
 import {
-DragHandler, IDragDropData
+DragHandler, DragData
 } from 'phosphor-domutil';
 
 import {
@@ -73,8 +75,8 @@ class ListItem extends Widget {
     super.dispose();
   }
 
-  private _onDragStart(event: MouseEvent, dragData: IDragDropData): void {
-    dragData.payload[DockPanel.DROP_MIME_TYPE] = widgetFactory(this._label);
+  private _onDragStart(event: MouseEvent, dragData: DragData): void {
+    dragData.setData(DockPanel.DROP_MIME_TYPE, widgetFactory(this._label));
   }
 
   private _draggable: boolean = false;
@@ -107,7 +109,6 @@ function createDock(): DockPanel {
   return dock;
 }
 
-
 function createList(): Widget {
   let widget = new Widget();
   widget.addClass('content');
@@ -130,7 +131,6 @@ function createToggle(list: Widget, dock: DockPanel): void {
   list.addChild(toggle);
 }
 
-
 function populateList(list: Widget, dock: DockPanel): void {
   for (let color of ['yellow', 'blue', 'red', 'purple']) {
     let item = new ListItem(color);
@@ -141,8 +141,8 @@ function populateList(list: Widget, dock: DockPanel): void {
   createToggle(list, dock);
 }
 
-
 function main(): void {
+  // console.log('Bokeh', Bokeh);
   let list = createList();
   let dock = createDock();
   let panel = new SplitPanel();
@@ -155,6 +155,5 @@ function main(): void {
   Widget.attach(panel, document.body);
   window.onresize = () => panel.update();
 }
-
 
 window.onload = main;
