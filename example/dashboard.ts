@@ -7,8 +7,6 @@
 |----------------------------------------------------------------------------*/
 'use-strict';
 
-import Bokeh from 'bokehjs';
-
 import {
 Message
 } from 'phosphor-messaging';
@@ -58,7 +56,10 @@ class ListItem extends Widget {
     if (draggable) {
       this._dragHandler = new DragHandler(this.node, this);
       this._dragHandler.onDragStart = this._onDragStart;
+      this._dragHandler.onDragEnd = this._onDragEnd;
+      this.addClass('draggable');
     } else {
+      this.removeClass('draggable');
       this._dragHandler.dispose();
       this._dragHandler = null;
     }
@@ -75,8 +76,15 @@ class ListItem extends Widget {
     super.dispose();
   }
 
-  private _onDragStart(event: MouseEvent, dragData: DragData): void {
-    dragData.setData(DockPanel.DROP_MIME_TYPE, widgetFactory(this._label));
+  private _onDragStart(event: MouseEvent, data: DragData): void {
+    let factory = plotFactory(this, this._label);
+    data.setData(DockPanel.DROP_MIME_TYPE, factory);
+  }
+
+  private _onDragEnd(event: MouseEvent, data: DragData): void {
+    if (data.dropAction !== 'none') {
+      this.draggable = false;
+    }
   }
 
   private _draggable: boolean = false;
@@ -84,20 +92,36 @@ class ListItem extends Widget {
   private _label: string;
 }
 
-function widgetFactory(color: string): () => Widget {
+class Plot extends Widget {
+
+  constructor(item: ListItem, color: string) {
+    super();
+    this._item = item;
+    this.addClass('content');
+    this.addClass('dashboard-content');
+    this.addClass(color);
+    this.node.appendChild(document.createTextNode(`This is ${color}.`));
+  }
+
+  protected onCloseRequest(msg: Message) {
+    super.onCloseRequest(msg);
+    // Reactivate the list item.
+    this._item.draggable = true;
+  }
+
+  private _item: ListItem = null;
+}
+
+function plotFactory(item: ListItem, color: string): () => Widget {
   return () => {
-    let widget = new Widget();
-    widget.addClass('content');
-    widget.addClass('dashboard-content');
-    widget.addClass(color);
-    widget.node.appendChild(document.createTextNode(`This is ${color}.`));
+    let plot = new Plot(item, color);
 
     // This should become unnecessary in DockPanel instances without tabs.
     let tab = new Tab(color);
     tab.closable = true;
-    DockPanel.setTab(widget, tab);
+    DockPanel.setTab(plot, tab);
 
-    return widget;
+    return plot;
   }
 }
 
@@ -142,7 +166,6 @@ function populateList(list: Widget, dock: DockPanel): void {
 }
 
 function main(): void {
-  // console.log('Bokeh', Bokeh);
   let list = createList();
   let dock = createDock();
   let panel = new SplitPanel();
