@@ -65,9 +65,8 @@ class ListItem extends Widget {
     }
   }
 
-  constructor(label: string) {
+  constructor(public color: string, public label: string, private _plot: Node) {
     super();
-    this._label = label;
     this.node.querySelector('span').textContent = label;
   }
 
@@ -77,7 +76,7 @@ class ListItem extends Widget {
   }
 
   private _onDragStart(event: MouseEvent, data: DragData): void {
-    let factory = plotFactory(this, this._label);
+    let factory = plotFactory(this, this._plot);
     data.setData(DockPanel.DROP_MIME_TYPE, factory);
   }
 
@@ -89,18 +88,16 @@ class ListItem extends Widget {
 
   private _draggable: boolean = false;
   private _dragHandler: DragHandler = null;
-  private _label: string;
 }
 
 class Plot extends Widget {
 
-  constructor(item: ListItem, color: string) {
+  constructor(item: ListItem, node: Node) {
     super();
     this._item = item;
     this.addClass('content');
     this.addClass('dashboard-content');
-    this.addClass(color);
-    this.node.appendChild(document.createTextNode(`This is ${color}.`));
+    this.node.appendChild(node);
   }
 
   protected onCloseRequest(msg: Message) {
@@ -112,12 +109,12 @@ class Plot extends Widget {
   private _item: ListItem = null;
 }
 
-function plotFactory(item: ListItem, color: string): () => Widget {
+function plotFactory(item: ListItem, node: Node): () => Widget {
   return () => {
-    let plot = new Plot(item, color);
+    let plot = new Plot(item, node);
 
     // This should become unnecessary in DockPanel instances without tabs.
-    let tab = new Tab(color);
+    let tab = new Tab(item.label);
     tab.closable = true;
     DockPanel.setTab(plot, tab);
 
@@ -156,9 +153,18 @@ function createToggle(list: Widget, dock: DockPanel): void {
 }
 
 function populateList(list: Widget, dock: DockPanel): void {
-  for (let color of ['yellow', 'blue', 'red', 'purple']) {
-    let item = new ListItem(color);
-    item.addClass(color);
+  let plots = document.querySelectorAll('div.bk-plot');
+  let colors = ['yellow', 'blue', 'red', 'purple'];
+  let labels = [
+    'Periodic Table',
+    'Linked One',
+    'Linked Two',
+    'Linked Three'
+  ];
+  for (let index = 0; index < 4; ++index) {
+    let plot = document.body.removeChild(plots[index]);
+    let item = new ListItem(colors[index], labels[index], plot);
+    item.addClass(colors[index]);
     item.draggable = true;
     list.addChild(item);
   }
@@ -179,4 +185,6 @@ function main(): void {
   window.onresize = () => panel.update();
 }
 
-window.onload = main;
+window.addEventListener('load', () => {
+  requestAnimationFrame(main);
+});
