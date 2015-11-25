@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  overflow: hidden;\n}\n#main {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  right: 10px;\n  bottom: 10px;\n}\n.content {\n  min-width: 50px;\n  min-height: 50px;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n}\n.dashboard-content {\n  padding: 20px;\n}\n.list-item {\n  margin: 1px;\n  min-width: 100px;\n  min-height: 50px;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-ghost {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.toggle {\n  margin: 10px;\n  min-width: 100px;\n  min-height: 50px;\n  text-align: center;\n}\n.red {\n  background: #E74C3C;\n  color: #3498DB;\n}\n.yellow {\n  background: #F1C40F;\n  color: #4B0082;\n}\n.green {\n  background: #27AE60;\n}\n.blue {\n  background: #3498DB;\n  color: #E74C3C;\n}\n.purple {\n  background: #4B0082;\n  color: #F1C40F;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-edge-top {\n  border-top-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-left {\n  border-left-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-right {\n  border-right-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-bottom {\n  border-bottom-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-content {\n  bottom: 1px;\n  align-items: flex-end;\n}\n.p-TabBar-content > .p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-TabBar-content > .p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-TabBar-content > .p-Tab.p-mod-selected {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {\n  background: #F0F0F0;\n}\n.p-TabBar-content > .p-Tab > span {\n  line-height: 21px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-docking {\n  font: 12px Helvetica, Arial, sans-serif;\n  height: 24px;\n  width: 125px;\n  padding: 0px 10px;\n  background: white;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n}\n.p-Tab.p-mod-docking > span {\n  line-height: 21px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
+var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  overflow: hidden;\n}\n#main {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  right: 10px;\n  bottom: 10px;\n}\n.content {\n  min-width: 50px;\n  min-height: 50px;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n}\n.dashboard-content {\n  padding: 20px;\n  overflow: auto;\n}\n.list-item {\n  margin: 1px;\n  min-width: 100px;\n  min-height: 50px;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-ghost {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.toggle {\n  margin: 10px;\n  min-width: 100px;\n  min-height: 50px;\n  text-align: center;\n}\n.red {\n  background: #E74C3C;\n  color: #3498DB;\n}\n.yellow {\n  background: #F1C40F;\n  color: #4B0082;\n}\n.green {\n  background: #27AE60;\n}\n.blue {\n  background: #3498DB;\n  color: #E74C3C;\n}\n.purple {\n  background: #4B0082;\n  color: #F1C40F;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-edge-top {\n  border-top-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-left {\n  border-left-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-right {\n  border-right-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-bottom {\n  border-bottom-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-content {\n  bottom: 1px;\n  align-items: flex-end;\n}\n.p-TabBar-content > .p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-TabBar-content > .p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-TabBar-content > .p-Tab.p-mod-selected {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {\n  background: #F0F0F0;\n}\n.p-TabBar-content > .p-Tab > span {\n  line-height: 21px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-docking {\n  font: 12px Helvetica, Arial, sans-serif;\n  height: 24px;\n  width: 125px;\n  padding: 0px 10px;\n  background: white;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n}\n.p-Tab.p-mod-docking > span {\n  line-height: 21px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
 },{"browserify-css":5}],2:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
@@ -150,6 +150,7 @@ function populateList(list, dock) {
     createToggle(list, dock);
 }
 function main() {
+    document.body.style.visibility = '';
     var list = createList();
     var dock = createDock();
     var panel = new phosphor_splitpanel_1.SplitPanel();
@@ -163,10 +164,16 @@ function main() {
     window.onresize = function () { return panel.update(); };
 }
 window.addEventListener('load', function () {
-    requestAnimationFrame(main);
+    var check = function () {
+        if (document.querySelectorAll('div.bk-plot').length !== 4) {
+            return setTimeout(check, 250);
+        }
+        main();
+    };
+    check();
 });
 
-},{"../lib/index":4,"./dashboard.css":1,"phosphor-domutil":14,"phosphor-splitpanel":22,"phosphor-tabs":30,"phosphor-widget":37}],3:[function(require,module,exports){
+},{"../lib/index":4,"./dashboard.css":1,"phosphor-domutil":14,"phosphor-splitpanel":21,"phosphor-tabs":29,"phosphor-widget":36}],3:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\n.p-DockPanel {\n  z-index: 0;\n}\n.p-DockPanel > .p-DockSplitPanel {\n  z-index: 0;\n}\n.p-DockPanelOverlay {\n  box-sizing: border-box;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 0;\n  height: 0;\n  z-index: 1;\n}\n.p-DockPanelOverlay.p-mod-hidden {\n  display: none;\n}\n.p-Tab.p-mod-docking {\n  position: absolute;\n  transform: translateX(-40%) translateY(-58%);\n}\n"; (require("browserify-css").createStyle(css, { "href": "lib/index.css"})); module.exports = css;
 },{"browserify-css":5}],4:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
@@ -491,6 +498,7 @@ var DockPanel = (function (_super) {
         }
         var data = findDockTarget(this._root, event.clientX, event.clientY);
         if (data.zone === 9 /* Invalid */) {
+            dragData.dropAction = 'none';
             return;
         }
         var widget = factory();
@@ -1365,7 +1373,7 @@ function hitTestRect(r, x, y) {
     return x >= r.left && y >= r.top && x < r.right && y < r.bottom;
 }
 
-},{"./index.css":3,"phosphor-arrays":6,"phosphor-boxpanel":9,"phosphor-domutil":14,"phosphor-nodewrapper":17,"phosphor-properties":18,"phosphor-splitpanel":22,"phosphor-stackedpanel":26,"phosphor-tabs":30}],5:[function(require,module,exports){
+},{"./index.css":3,"phosphor-arrays":6,"phosphor-boxpanel":9,"phosphor-domutil":14,"phosphor-nodewrapper":16,"phosphor-properties":17,"phosphor-splitpanel":21,"phosphor-stackedpanel":25,"phosphor-tabs":29}],5:[function(require,module,exports){
 'use strict';
 // For more information about browser field, check out the browser field at https://github.com/substack/browserify-handbook#browser-field.
 
@@ -1452,7 +1460,7 @@ module.exports = {
  *   console.log(value);
  * }
  *
- * var data = [1, 2, 3, 4];
+ * let data = [1, 2, 3, 4];
  * arrays.forEach(data, logger);           // logs 1, 2, 3, 4
  * arrays.forEach(data, logger, 2);        // logs 3, 4
  * arrays.forEach(data, logger, 2, true);  // logs 3, 4, 1, 2
@@ -1514,7 +1522,7 @@ exports.forEach = forEach;
  *   console.log(value);
  * }
  *
- * var data = [1, 2, 3, 4];
+ * let data = [1, 2, 3, 4];
  * arrays.rforEach(data, logger);           // logs 4, 3, 2, 1
  * arrays.rforEach(data, logger, 2);        // logs 3, 2, 1
  * arrays.rforEach(data, logger, 2, true);  // logs 3, 2, 1, 4
@@ -1574,7 +1582,7 @@ exports.rforEach = rforEach;
  *   return value % 2 === 0;
  * }
  *
- * var data = [1, 2, 3, 4, 3, 2, 1];
+ * let data = [1, 2, 3, 4, 3, 2, 1];
  * arrays.findIndex(data, isEven);           // 1
  * arrays.findIndex(data, isEven, 4);        // 5
  * arrays.findIndex(data, isEven, 6);        // -1
@@ -1631,7 +1639,7 @@ exports.findIndex = findIndex;
  *   return value % 2 === 0;
  * }
  *
- * var data = [1, 2, 3, 4, 3, 2, 1];
+ * let data = [1, 2, 3, 4, 3, 2, 1];
  * arrays.rfindIndex(data, isEven);           // 5
  * arrays.rfindIndex(data, isEven, 4);        // 3
  * arrays.rfindIndex(data, isEven, 0);        // -1
@@ -1688,7 +1696,7 @@ exports.rfindIndex = rfindIndex;
  *   return value % 2 === 0;
  * }
  *
- * var data = [1, 2, 3, 4, 3, 2, 1];
+ * let data = [1, 2, 3, 4, 3, 2, 1];
  * arrays.find(data, isEven);           // 2
  * arrays.find(data, isEven, 4);        // 2
  * arrays.find(data, isEven, 6);        // undefined
@@ -1728,7 +1736,7 @@ exports.find = find;
  *   return value % 2 === 0;
  * }
  *
- * var data = [1, 2, 3, 4, 3, 2, 1];
+ * let data = [1, 2, 3, 4, 3, 2, 1];
  * arrays.rfind(data, isEven);           // 2
  * arrays.rfind(data, isEven, 4);        // 4
  * arrays.rfind(data, isEven, 0);        // undefined
@@ -1758,7 +1766,7 @@ exports.rfind = rfind;
  * ```typescript
  * import * as arrays from 'phosphor-arrays';
  *
- * var data = [0, 1, 2, 3, 4];
+ * let data = [0, 1, 2, 3, 4];
  * arrays.insert(data, 0, 12);  // 0
  * arrays.insert(data, 3, 42);  // 3
  * arrays.insert(data, -9, 9);  // 0
@@ -1793,7 +1801,7 @@ exports.insert = insert;
  * ```typescript
  * import * as arrays from 'phosphor-arrays';
  *
- * var data = [0, 1, 2, 3, 4];
+ * let data = [0, 1, 2, 3, 4];
  * arrays.move(data, 1, 2);   // true
  * arrays.move(data, -1, 0);  // false
  * arrays.move(data, 4, 2);   // true
@@ -1839,7 +1847,7 @@ exports.move = move;
  * ```typescript
  * import * as arrays from 'phosphor-arrays';
  *
- * var data = [0, 1, 2, 3, 4];
+ * let data = [0, 1, 2, 3, 4];
  * arrays.removeAt(data, 1);   // 1
  * arrays.removeAt(data, 3);   // 4
  * arrays.removeAt(data, 10);  // undefined
@@ -1875,7 +1883,7 @@ exports.removeAt = removeAt;
  * ```typescript
  * import * as arrays from 'phosphor-arrays';
  *
- * var data = [0, 1, 2, 3, 4];
+ * let data = [0, 1, 2, 3, 4];
  * arrays.remove(data, 1);  // 1
  * arrays.remove(data, 3);  // 2
  * arrays.remove(data, 7);  // -1
@@ -1919,7 +1927,7 @@ exports.remove = remove;
  * ```typescript
  * import * as arrays from 'phosphor-arrays';
  *
- * var data = [0, 1, 2, 3, 4];
+ * let data = [0, 1, 2, 3, 4];
  * arrays.reverse(data, 1, 3);    // [0, 3, 2, 1, 4]
  * arrays.reverse(data, 3);       // [0, 3, 2, 4, 1]
  * arrays.reverse(data);          // [1, 4, 2, 3, 0]
@@ -1960,7 +1968,7 @@ exports.reverse = reverse;
  * ```typescript
  * import * as arrays from 'phosphor-arrays';
  *
- * var data = [0, 1, 2, 3, 4];
+ * let data = [0, 1, 2, 3, 4];
  * arrays.rotate(data, 2);    // [2, 3, 4, 0, 1]
  * arrays.rotate(data, -2);   // [0, 1, 2, 3, 4]
  * arrays.rotate(data, 10);   // [0, 1, 2, 3, 4]
@@ -2016,7 +2024,7 @@ exports.rotate = rotate;
  *   return a < b;
  * }
  *
- * var data = [0, 3, 4, 7, 7, 9];
+ * let data = [0, 3, 4, 7, 7, 9];
  * arrays.lowerBound(data, 0, numberCmp);   // 0
  * arrays.lowerBound(data, 6, numberCmp);   // 3
  * arrays.lowerBound(data, 7, numberCmp);   // 3
@@ -2071,7 +2079,7 @@ exports.lowerBound = lowerBound;
  *   return a < b;
  * }
  *
- * var data = [0, 3, 4, 7, 7, 9];
+ * let data = [0, 3, 4, 7, 7, 9];
  * arrays.upperBound(data, 0, numberCmp);   // 1
  * arrays.upperBound(data, 6, numberCmp);   // 3
  * arrays.upperBound(data, 7, numberCmp);   // 5
@@ -2998,7 +3006,7 @@ function onChildPropertyChanged(child) {
     }
 }
 
-},{"./index.css":8,"phosphor-arrays":6,"phosphor-boxengine":7,"phosphor-domutil":11,"phosphor-messaging":16,"phosphor-properties":18,"phosphor-widget":37}],10:[function(require,module,exports){
+},{"./index.css":8,"phosphor-arrays":6,"phosphor-boxengine":7,"phosphor-domutil":11,"phosphor-messaging":15,"phosphor-properties":17,"phosphor-widget":36}],10:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\nbody.p-mod-override-cursor * {\n  cursor: inherit !important;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-boxpanel/node_modules/phosphor-domutil/lib/index.css"})); module.exports = css;
 },{"browserify-css":5}],11:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
@@ -3263,7 +3271,7 @@ var DisposableDelegate = (function () {
      *   disposed.
      */
     function DisposableDelegate(callback) {
-        this._callback = callback;
+        this._callback = callback || null;
     }
     Object.defineProperty(DisposableDelegate.prototype, "isDisposed", {
         /**
@@ -3273,7 +3281,7 @@ var DisposableDelegate = (function () {
          * This is a read-only property which is always safe to access.
          */
         get: function () {
-            return !this._callback;
+            return this._callback === null;
         },
         enumerable: true,
         configurable: true
@@ -3286,10 +3294,12 @@ var DisposableDelegate = (function () {
      * first will be a no-op.
      */
     DisposableDelegate.prototype.dispose = function () {
+        if (this._callback === null) {
+            return;
+        }
         var callback = this._callback;
         this._callback = null;
-        if (callback)
-            callback();
+        callback();
     };
     return DisposableDelegate;
 })();
@@ -3307,7 +3317,7 @@ var DisposableSet = (function () {
         var _this = this;
         this._set = new Set();
         if (items)
-            items.forEach(function (item) { return _this._set.add(item); });
+            items.forEach(function (item) { _this._set.add(item); });
     }
     Object.defineProperty(DisposableSet.prototype, "isDisposed", {
         /**
@@ -3317,7 +3327,7 @@ var DisposableSet = (function () {
          * This is a read-only property which is always safe to access.
          */
         get: function () {
-            return !this._set;
+            return this._set === null;
         },
         enumerable: true,
         configurable: true
@@ -3334,10 +3344,12 @@ var DisposableSet = (function () {
      * first will be a no-op.
      */
     DisposableSet.prototype.dispose = function () {
+        if (this._set === null) {
+            return;
+        }
         var set = this._set;
         this._set = null;
-        if (set)
-            set.forEach(function (item) { return item.dispose(); });
+        set.forEach(function (item) { item.dispose(); });
     };
     /**
      * Add a disposable item to the set.
@@ -3348,7 +3360,7 @@ var DisposableSet = (function () {
      * @throws Will throw an error if the set has been disposed.
      */
     DisposableSet.prototype.add = function (item) {
-        if (!this._set) {
+        if (this._set === null) {
             throw new Error('object is disposed');
         }
         this._set.add(item);
@@ -3362,7 +3374,7 @@ var DisposableSet = (function () {
      * @throws Will throw an error if the set has been disposed.
      */
     DisposableSet.prototype.remove = function (item) {
-        if (!this._set) {
+        if (this._set === null) {
             throw new Error('object is disposed');
         }
         this._set.delete(item);
@@ -3373,7 +3385,7 @@ var DisposableSet = (function () {
      * @throws Will throw an error if the set has been disposed.
      */
     DisposableSet.prototype.clear = function () {
-        if (!this._set) {
+        if (this._set === null) {
             throw new Error('object is disposed');
         }
         this._set.clear();
@@ -4309,150 +4321,7 @@ function runDrop(handler, event, data) {
     }
 }
 
-},{"./index.css":13,"phosphor-disposable":15}],15:[function(require,module,exports){
-/*-----------------------------------------------------------------------------
-| Copyright (c) 2014-2015, PhosphorJS Contributors
-|
-| Distributed under the terms of the BSD 3-Clause License.
-|
-| The full license is in the file LICENSE, distributed with this software.
-|----------------------------------------------------------------------------*/
-'use strict';
-/**
- * A disposable object which delegates to a callback.
- */
-var DisposableDelegate = (function () {
-    /**
-     * Construct a new disposable delegate.
-     *
-     * @param callback - The function to invoke when the delegate is
-     *   disposed.
-     */
-    function DisposableDelegate(callback) {
-        this._callback = callback || null;
-    }
-    Object.defineProperty(DisposableDelegate.prototype, "isDisposed", {
-        /**
-         * Test whether the delegate has been disposed.
-         *
-         * #### Notes
-         * This is a read-only property which is always safe to access.
-         */
-        get: function () {
-            return this._callback === null;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Dispose of the delegate and invoke its callback.
-     *
-     * #### Notes
-     * If this method is called more than once, all calls made after the
-     * first will be a no-op.
-     */
-    DisposableDelegate.prototype.dispose = function () {
-        if (this._callback === null) {
-            return;
-        }
-        var callback = this._callback;
-        this._callback = null;
-        callback();
-    };
-    return DisposableDelegate;
-})();
-exports.DisposableDelegate = DisposableDelegate;
-/**
- * An object which manages a collection of disposable items.
- */
-var DisposableSet = (function () {
-    /**
-     * Construct a new disposable set.
-     *
-     * @param items - The initial disposable items for the set.
-     */
-    function DisposableSet(items) {
-        var _this = this;
-        this._set = new Set();
-        if (items)
-            items.forEach(function (item) { _this._set.add(item); });
-    }
-    Object.defineProperty(DisposableSet.prototype, "isDisposed", {
-        /**
-         * Test whether the set has been disposed.
-         *
-         * #### Notes
-         * This is a read-only property which is always safe to access.
-         */
-        get: function () {
-            return this._set === null;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Dispose of the set and dispose the items it contains.
-     *
-     * #### Notes
-     * Items are disposed in the order they are added to the set.
-     *
-     * It is unsafe to use the set after it has been disposed.
-     *
-     * If this method is called more than once, all calls made after the
-     * first will be a no-op.
-     */
-    DisposableSet.prototype.dispose = function () {
-        if (this._set === null) {
-            return;
-        }
-        var set = this._set;
-        this._set = null;
-        set.forEach(function (item) { item.dispose(); });
-    };
-    /**
-     * Add a disposable item to the set.
-     *
-     * @param item - The disposable item to add to the set. If the item
-     *   is already contained in the set, this is a no-op.
-     *
-     * @throws Will throw an error if the set has been disposed.
-     */
-    DisposableSet.prototype.add = function (item) {
-        if (this._set === null) {
-            throw new Error('object is disposed');
-        }
-        this._set.add(item);
-    };
-    /**
-     * Remove a disposable item from the set.
-     *
-     * @param item - The disposable item to remove from the set. If the
-     *   item does not exist in the set, this is a no-op.
-     *
-     * @throws Will throw an error if the set has been disposed.
-     */
-    DisposableSet.prototype.remove = function (item) {
-        if (this._set === null) {
-            throw new Error('object is disposed');
-        }
-        this._set.delete(item);
-    };
-    /**
-     * Clear all disposable items from the set.
-     *
-     * @throws Will throw an error if the set has been disposed.
-     */
-    DisposableSet.prototype.clear = function () {
-        if (this._set === null) {
-            throw new Error('object is disposed');
-        }
-        this._set.clear();
-    };
-    return DisposableSet;
-})();
-exports.DisposableSet = DisposableSet;
-
-},{}],16:[function(require,module,exports){
+},{"./index.css":13,"phosphor-disposable":12}],15:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -4837,7 +4706,7 @@ var MessageDispatcher = (function () {
     return MessageDispatcher;
 })();
 
-},{"phosphor-queue":19}],17:[function(require,module,exports){
+},{"phosphor-queue":18}],16:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -4962,7 +4831,7 @@ var NodeWrapper = (function () {
 })();
 exports.NodeWrapper = NodeWrapper;
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -5244,7 +5113,7 @@ function lookupHash(owner) {
     return hash;
 }
 
-},{"phosphor-signaling":20}],19:[function(require,module,exports){
+},{"phosphor-signaling":19}],18:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -5600,7 +5469,7 @@ var Queue = (function () {
 })();
 exports.Queue = Queue;
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -6037,9 +5906,9 @@ function removeFromSendersList(conn) {
     conn.nextSender = null;
 }
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\n.p-SplitPanel {\n  position: relative;\n  z-index: 0;\n}\n.p-SplitPanel > .p-Widget {\n  position: absolute;\n  z-index: 0;\n}\n.p-SplitHandle {\n  box-sizing: border-box;\n  position: absolute;\n  z-index: 1;\n}\n.p-SplitHandle.p-mod-hidden {\n  display: none;\n}\n.p-SplitHandle.p-mod-horizontal {\n  cursor: ew-resize;\n}\n.p-SplitHandle.p-mod-vertical {\n  cursor: ns-resize;\n}\n.p-SplitHandle-overlay {\n  box-sizing: border-box;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}\n.p-SplitHandle.p-mod-horizontal > .p-SplitHandle-overlay {\n  min-width: 7px;\n  left: 50%;\n  transform: translateX(-50%);\n}\n.p-SplitHandle.p-mod-vertical > .p-SplitHandle-overlay {\n  min-height: 7px;\n  top: 50%;\n  transform: translateY(-50%);\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-splitpanel/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],22:[function(require,module,exports){
+},{"browserify-css":5}],21:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -6946,13 +6815,13 @@ function normalize(values) {
     return result;
 }
 
-},{"./index.css":21,"phosphor-arrays":6,"phosphor-boxengine":7,"phosphor-domutil":24,"phosphor-messaging":16,"phosphor-nodewrapper":17,"phosphor-properties":18,"phosphor-widget":37}],23:[function(require,module,exports){
+},{"./index.css":20,"phosphor-arrays":6,"phosphor-boxengine":7,"phosphor-domutil":23,"phosphor-messaging":15,"phosphor-nodewrapper":16,"phosphor-properties":17,"phosphor-widget":36}],22:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\nbody.p-mod-override-cursor * {\n  cursor: inherit !important;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-splitpanel/node_modules/phosphor-domutil/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],24:[function(require,module,exports){
+},{"browserify-css":5}],23:[function(require,module,exports){
 arguments[4][11][0].apply(exports,arguments)
-},{"./index.css":23,"dup":11,"phosphor-disposable":12}],25:[function(require,module,exports){
+},{"./index.css":22,"dup":11,"phosphor-disposable":12}],24:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\n.p-StackedPanel {\n  position: relative;\n}\n.p-StackedPanel > .p-Widget {\n  position: absolute;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-stackedpanel/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],26:[function(require,module,exports){
+},{"browserify-css":5}],25:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -7261,13 +7130,13 @@ function resetGeometry(widget) {
     style.height = '';
 }
 
-},{"./index.css":25,"phosphor-domutil":28,"phosphor-messaging":16,"phosphor-properties":18,"phosphor-signaling":20,"phosphor-widget":37}],27:[function(require,module,exports){
+},{"./index.css":24,"phosphor-domutil":27,"phosphor-messaging":15,"phosphor-properties":17,"phosphor-signaling":19,"phosphor-widget":36}],26:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\nbody.p-mod-override-cursor * {\n  cursor: inherit !important;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-stackedpanel/node_modules/phosphor-domutil/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],28:[function(require,module,exports){
+},{"browserify-css":5}],27:[function(require,module,exports){
 arguments[4][11][0].apply(exports,arguments)
-},{"./index.css":27,"dup":11,"phosphor-disposable":12}],29:[function(require,module,exports){
+},{"./index.css":26,"dup":11,"phosphor-disposable":12}],28:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\n.p-TabBar {\n  position: relative;\n  z-index: 0;\n}\n.p-TabBar-header {\n  display: none;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  z-index: 0;\n}\n.p-TabBar-content {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 2;\n  display: flex;\n  flex-direction: row;\n}\n.p-TabBar-footer {\n  display: none;\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 1;\n}\n.p-Tab {\n  display: flex;\n  flex-direction: row;\n  box-sizing: border-box;\n  overflow: hidden;\n}\n.p-Tab-icon,\n.p-Tab-close {\n  flex: 0 0 auto;\n}\n.p-Tab-text {\n  flex: 1 1 auto;\n  overflow: hidden;\n  white-space: nowrap;\n}\n.p-TabBar.p-mod-dragging > .p-TabBar-content > .p-Tab {\n  position: relative;\n  left: 0;\n  transition: left 150ms ease;\n}\n.p-TabBar.p-mod-dragging > .p-TabBar-content > .p-Tab.p-mod-active {\n  transition: none;\n}\n.p-TabPanel {\n  z-index: 0;\n}\n.p-TabPanel > .p-TabBar {\n  z-index: 1;\n}\n.p-TabPanel > .p-StackedPanel {\n  z-index: 0;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-tabs/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],30:[function(require,module,exports){
+},{"browserify-css":5}],29:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -7284,7 +7153,7 @@ __export(require('./tabbar'));
 __export(require('./tabpanel'));
 require('./index.css');
 
-},{"./index.css":29,"./tab":31,"./tabbar":32,"./tabpanel":33}],31:[function(require,module,exports){
+},{"./index.css":28,"./tab":30,"./tabbar":31,"./tabpanel":32}],30:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -7417,7 +7286,7 @@ var Tab = (function (_super) {
 })(phosphor_nodewrapper_1.NodeWrapper);
 exports.Tab = Tab;
 
-},{"phosphor-nodewrapper":17}],32:[function(require,module,exports){
+},{"phosphor-nodewrapper":16}],31:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -8428,7 +8297,7 @@ function snapTabLayout(tabs) {
     return layout;
 }
 
-},{"phosphor-arrays":6,"phosphor-domutil":35,"phosphor-properties":18,"phosphor-signaling":20,"phosphor-widget":37}],33:[function(require,module,exports){
+},{"phosphor-arrays":6,"phosphor-domutil":34,"phosphor-properties":17,"phosphor-signaling":19,"phosphor-widget":36}],32:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -8799,13 +8668,13 @@ var TabPanel = (function (_super) {
 })(phosphor_boxpanel_1.BoxPanel);
 exports.TabPanel = TabPanel;
 
-},{"./tabbar":32,"phosphor-boxpanel":9,"phosphor-properties":18,"phosphor-signaling":20,"phosphor-stackedpanel":26}],34:[function(require,module,exports){
+},{"./tabbar":31,"phosphor-boxpanel":9,"phosphor-properties":17,"phosphor-signaling":19,"phosphor-stackedpanel":25}],33:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\nbody.p-mod-override-cursor * {\n  cursor: inherit !important;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-tabs/node_modules/phosphor-domutil/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],35:[function(require,module,exports){
+},{"browserify-css":5}],34:[function(require,module,exports){
 arguments[4][11][0].apply(exports,arguments)
-},{"./index.css":34,"dup":11,"phosphor-disposable":12}],36:[function(require,module,exports){
+},{"./index.css":33,"dup":11,"phosphor-disposable":12}],35:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\r\n| Copyright (c) 2014-2015, PhosphorJS Contributors\r\n|\r\n| Distributed under the terms of the BSD 3-Clause License.\r\n|\r\n| The full license is in the file LICENSE, distributed with this software.\r\n|----------------------------------------------------------------------------*/\n.p-Widget {\n  box-sizing: border-box;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  overflow: hidden;\n  cursor: default;\n}\n.p-Widget.p-mod-hidden {\n  display: none;\n}\n"; (require("browserify-css").createStyle(css, { "href": "node_modules/phosphor-widget/lib/index.css"})); module.exports = css;
-},{"browserify-css":5}],37:[function(require,module,exports){
+},{"browserify-css":5}],36:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -8821,7 +8690,7 @@ __export(require('./title'));
 __export(require('./widget'));
 require('./index.css');
 
-},{"./index.css":36,"./title":38,"./widget":39}],38:[function(require,module,exports){
+},{"./index.css":35,"./title":37,"./widget":38}],37:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -9052,7 +8921,7 @@ var Title = (function () {
 })();
 exports.Title = Title;
 
-},{"phosphor-properties":18}],39:[function(require,module,exports){
+},{"phosphor-properties":17}],38:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
 |
@@ -10114,4 +9983,4 @@ function sendToShown(widgets, msg) {
         phosphor_messaging_1.sendMessage(w, msg); });
 }
 
-},{"./title":38,"phosphor-arrays":6,"phosphor-messaging":16,"phosphor-nodewrapper":17,"phosphor-properties":18,"phosphor-signaling":20}]},{},[2]);
+},{"./title":37,"phosphor-arrays":6,"phosphor-messaging":15,"phosphor-nodewrapper":16,"phosphor-properties":17,"phosphor-signaling":19}]},{},[2]);

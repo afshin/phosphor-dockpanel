@@ -147,6 +147,7 @@ function populateList(list, dock) {
     createToggle(list, dock);
 }
 function main() {
+    document.body.style.visibility = '';
     var list = createList();
     var dock = createDock();
     var panel = new phosphor_splitpanel_1.SplitPanel();
@@ -160,5 +161,11 @@ function main() {
     window.onresize = function () { return panel.update(); };
 }
 window.addEventListener('load', function () {
-    requestAnimationFrame(main);
+    var check = function () {
+        if (document.querySelectorAll('div.bk-plot').length !== 4) {
+            return setTimeout(check, 250);
+        }
+        main();
+    };
+    check();
 });

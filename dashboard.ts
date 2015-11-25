@@ -172,6 +172,7 @@ function populateList(list: Widget, dock: DockPanel): void {
 }
 
 function main(): void {
+  document.body.style.visibility = '';
   let list = createList();
   let dock = createDock();
   let panel = new SplitPanel();
@@ -186,5 +187,11 @@ function main(): void {
 }
 
 window.addEventListener('load', () => {
-  requestAnimationFrame(main);
+  let check = () => {
+    if (document.querySelectorAll('div.bk-plot').length !== 4) {
+      return setTimeout(check, 250);
+    }
+    main();
+  }
+  check();
 });
