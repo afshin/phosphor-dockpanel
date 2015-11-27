@@ -46,7 +46,7 @@ output_file("periodic.html")
 
 p = figure(title="Periodic Table", toolbar_location=None,
     x_range=group_range, y_range=period_range)
-p.plot_width = 1200
+p.plot_width = 950
 
 p.rect("group", "period", 0.9, 0.9, source=source,
     fill_alpha=0.6, color="type_color")
@@ -60,13 +60,13 @@ text_props = {
 }
 
 p.text(x="symx", y="period", text="sym",
-    text_font_style="bold", text_font_size="15pt", **text_props)
+    text_font_style="bold", text_font_size="14pt", **text_props)
 
 p.text(x="symx", y="numbery", text="atomic_number",
-    text_font_size="9pt", **text_props)
+    text_font_size="8pt", **text_props)
 
 p.text(x="symx", y="namey", text="name",
-    text_font_size="6pt", **text_props)
+    text_font_size="5pt", **text_props)
 
 p.text(x="symx", y="massy", text="mass",
     text_font_size="5pt", **text_props)

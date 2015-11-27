@@ -39,7 +39,11 @@ class ListItem extends Widget {
   static createNode(): HTMLElement {
     let node = document.createElement('div');
     let span = document.createElement('span');
+    let space = document.createTextNode(' ');
+    let icon = document.createElement('i');
     node.className = 'list-item';
+    node.appendChild(icon);
+    node.appendChild(space);
     node.appendChild(span);
     return node;
   }
@@ -65,8 +69,9 @@ class ListItem extends Widget {
     }
   }
 
-  constructor(public color: string, public label: string, private _plot: Node) {
+  constructor(public color: string, public icon: string, public label: string, private _plot: Node) {
     super();
+    this.node.querySelector('i').classList.add('fa', `fa-${icon}`);
     this.node.querySelector('span').textContent = label;
   }
 
@@ -95,8 +100,8 @@ class Plot extends Widget {
   constructor(item: ListItem, node: Node) {
     super();
     this._item = item;
-    this.addClass('content');
     this.addClass('dashboard-content');
+    this.addClass(item.icon);
     this.node.appendChild(node);
   }
 
@@ -125,15 +130,21 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
 function createDock(): DockPanel {
   let dock = new DockPanel();
   dock.addClass('content');
-  dock.addClass('green');
   dock.droppable = true;
   return dock;
 }
 
 function createList(): Widget {
   let widget = new Widget();
+  let title = document.createElement('div');
+  let right = document.createElement('i');
+  right.classList.add('fa', 'fa-arrow-right');
+  title.classList.add('list-item');
+  title.textContent = 'Drag items onto dashboard ';
+  title.appendChild(right);
   widget.addClass('content');
   widget.addClass('green');
+  widget.node.appendChild(title);
   return widget;
 }
 
@@ -154,16 +165,25 @@ function createToggle(list: Widget, dock: DockPanel): void {
 
 function populateList(list: Widget, dock: DockPanel): void {
   let plots = document.querySelectorAll('div.bk-plot');
-  let colors = ['yellow', 'blue', 'red', 'purple'];
+  let colors = ['yellow', 'blue', 'blue', 'blue'];
   let labels = [
-    'Periodic Table',
-    'Linked One',
-    'Linked Two',
-    'Linked Three'
+    'Elements',
+    'Linked 1',
+    'Linked 2',
+    'Linked 3'
+  ];
+  let icons = [
+    'table',
+    'line-chart',
+    'line-chart',
+    'line-chart'
   ];
   for (let index = 0; index < 4; ++index) {
     let plot = document.body.removeChild(plots[index]);
-    let item = new ListItem(colors[index], labels[index], plot);
+    let label = labels[index];
+    let icon = icons[index];
+    let color = colors[index];
+    let item = new ListItem(color, icon, label, plot);
     item.addClass(colors[index]);
     item.draggable = true;
     list.addChild(item);
@@ -172,6 +192,7 @@ function populateList(list: Widget, dock: DockPanel): void {
 }
 
 function main(): void {
+  document.body.style.visibility = '';
   let list = createList();
   let dock = createDock();
   let panel = new SplitPanel();
@@ -179,12 +200,18 @@ function main(): void {
   panel.orientation = SplitPanel.Horizontal;
   panel.children = [list, dock];
   SplitPanel.setStretch(list, 1);
-  SplitPanel.setStretch(dock, 5);
+  SplitPanel.setStretch(dock, 12);
   panel.id = 'main';
   Widget.attach(panel, document.body);
   window.onresize = () => panel.update();
 }
 
 window.addEventListener('load', () => {
-  requestAnimationFrame(main);
+  let check = () => {
+    if (document.querySelectorAll('div.bk-plot').length !== 4) {
+      return setTimeout(check, 250);
+    }
+    main();
+  }
+  check();
 });

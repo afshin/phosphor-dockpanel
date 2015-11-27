@@ -25,22 +25,24 @@ body {
 .content {
   min-width: 50px;
   min-height: 50px;
-  font-family: FontAwesome;
-  font-weight: bold;
-  font-size: 1.2em;
 }
 
 .dashboard-content {
-  padding: 20px;
+  overflow: auto;
+}
+
+.dashboard-content.line-chart {
+  overflow: hidden;
 }
 
 .list-item {
   margin: 1px;
   min-width: 100px;
-  min-height: 50px;
+  min-height: 1.3em;
   font-family: FontAwesome;
   font-weight: bold;
   font-size: 1.2em;
+  padding: 3px 0 3px 15px;
   opacity: 0.45;
   cursor: not-allowed;
 }
@@ -81,7 +83,7 @@ body {
 
 .blue {
   background: #3498DB;
-  color: #E74C3C;
+  color: #F1C40F;
 }
 
 .purple {

@@ -406,6 +406,7 @@ class DockPanel extends BoxPanel {
     }
     let data = findDockTarget(this._root, event.clientX, event.clientY);
     if (data.zone === DockZone.Invalid) {
+      dragData.dropAction = 'none';
       return;
     }
     let widget = factory();
