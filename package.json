@@ -5,16 +5,16 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "phosphor-arrays": "^1.0.5",
-    "phosphor-boxpanel": "^0.9.6",
-    "phosphor-disposable": "^1.0.4",
-    "phosphor-domutil": "1.1.0-alpha.3",
+    "phosphor-arrays": "^1.0.6",
+    "phosphor-domutil": "^1.2.0",
+    "phosphor-dragdrop": "^0.9.0",
+    "phosphor-messaging": "^1.0.5",
     "phosphor-nodewrapper": "^1.0.4",
-    "phosphor-properties": "^1.2.0",
-    "phosphor-splitpanel": "^0.9.8",
-    "phosphor-stackedpanel": "^0.9.5",
-    "phosphor-tabs": "^0.9.7",
-    "phosphor-widget": "^0.9.13"
+    "phosphor-properties": "^2.0.0",
+    "phosphor-splitpanel": "^1.0.0-beta",
+    "phosphor-stackedpanel": "^1.0.0-beta.1",
+    "phosphor-tabs": "^1.0.0-beta.3",
+    "phosphor-widget": "^1.0.0-beta.1"
   },
   "devDependencies": {
     "browserify": "^11.0.1",
@@ -38,11 +38,11 @@
   },
   "scripts": {
     "clean": "rimraf lib && rimraf test/build && rimraf test/coverage",
-    "clean:example": "rimraf example/*.js && rimraf example/plots/*.js",
+    "clean:example": "rimraf example/*.js",
     "build:src": "tsc --project src",
     "build:test": "tsc --project test/src",
     "build:css": "node scripts/copycss.js",
-    "build:example": "tsc --project example && browserify -t browserify-css example/index.js -o example/bundle.js && browserify -t browserify-css example/dashboard.js -o example/dashboard-bundle.js",
+    "build:example": "tsc --project example && browserify -t browserify-css example/index.js -o example/bundle.js",
     "build": "npm run build:src && npm run build:test && npm run build:css",
     "docs": "rimraf docs/api && typedoc --options scripts/tdoptions.json",
     "postinstall": "npm dedupe",
@@ -58,9 +58,9 @@
     "url": "https://github.com/phosphorjs/phosphor-dockpanel.git"
   },
   "files": [
-    "lib/index.js",
-    "lib/index.css",
-    "lib/index.d.ts"
+    "lib/*.css",
+    "lib/*.d.ts",
+    "lib/*.js"
   ],
   "browserify": {
     "transform": [
@@ -68,11 +68,11 @@
     ]
   },
   "keywords": [
-    "ui",
     "dock",
     "docking",
     "dockpanel",
     "panel",
+    "ui",
     "widget",
     "widgets"
   ],
