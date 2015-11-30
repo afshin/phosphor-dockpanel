@@ -129,7 +129,7 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
 
 function createDock(): DockPanel {
   let dock = new DockPanel();
-  dock.addClass('content');
+  dock.addClass('dock');
   dock.droppable = true;
   return dock;
 }
@@ -142,8 +142,7 @@ function createList(): Widget {
   title.classList.add('list-item');
   title.textContent = 'Drag items onto dashboard ';
   title.appendChild(right);
-  widget.addClass('content');
-  widget.addClass('green');
+  widget.addClass('list');
   widget.node.appendChild(title);
   return widget;
 }
