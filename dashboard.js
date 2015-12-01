@@ -260,21 +260,57 @@ function populateList(list, dock) {
             icon: 'line-chart',
             creationStatus: 'Created third linked plot',
             dragStatus: 'Dragging third linked plot'
+        },
+        {
+            color: 'green',
+            label: 'Editor',
+            icon: 'pencil',
+            creationStatus: 'Created text editor',
+            dragStatus: 'Dragging text editor'
         }
     ];
+    // Plots
     for (var index = 0; index < 4; ++index) {
         var plot = document.body.removeChild(plots[index]);
-        var _a = specs[index], color = _a.color, label = _a.label, icon = _a.icon, creationStatus = _a.creationStatus, dragStatus = _a.dragStatus;
-        var item = new ListItem(color, icon, label);
-        item.addClass(color);
-        item.draggable = true;
-        item.factory = plotFactory(item, plot);
-        item.creationStatus = creationStatus;
-        item.dragStatus = dragStatus;
-        item.supportedActions = phosphor_dragdrop_1.DropActions.Move;
-        item.proposedAction = phosphor_dragdrop_1.DropAction.Move;
-        list.children.add(item);
+        var _a = specs[index], color_1 = _a.color, label_1 = _a.label, icon_1 = _a.icon, creationStatus_1 = _a.creationStatus, dragStatus_1 = _a.dragStatus;
+        var item_1 = new ListItem(color_1, icon_1, label_1);
+        item_1.addClass(color_1);
+        item_1.draggable = true;
+        item_1.creationStatus = creationStatus_1;
+        item_1.dragStatus = dragStatus_1;
+        item_1.supportedActions = phosphor_dragdrop_1.DropActions.Move;
+        item_1.proposedAction = phosphor_dragdrop_1.DropAction.Move;
+        item_1.factory = plotFactory(item_1, plot);
+        list.children.add(item_1);
     }
+    // Text editor
+    var _b = specs[4], color = _b.color, label = _b.label, icon = _b.icon, creationStatus = _b.creationStatus, dragStatus = _b.dragStatus;
+    var item = new ListItem(color, icon, label);
+    item.addClass(color);
+    item.draggable = true;
+    item.creationStatus = creationStatus;
+    item.dragStatus = dragStatus;
+    item.supportedActions = phosphor_dragdrop_1.DropActions.Copy;
+    item.proposedAction = phosphor_dragdrop_1.DropAction.Copy;
+    item.factory = function () {
+        var editor = new phosphor_widget_1.Widget();
+        editor.addClass('dashboard-content');
+        var codemirror = CodeMirror(editor.node, {
+            dragDrop: false,
+            value: '\/* This is a code editor in JS mode. *\/',
+            mode: 'text/javascript',
+            readOnly: false
+        });
+        setTimeout(function () {
+            codemirror.refresh();
+            codemirror.focus();
+        });
+        editor.title.text = item.label;
+        editor.title.closable = true;
+        Status.update(item.creationStatus);
+        return editor;
+    };
+    list.children.add(item);
 }
 function main() {
     document.body.style.visibility = '';

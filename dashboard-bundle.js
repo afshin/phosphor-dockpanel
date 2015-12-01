@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  overflow: hidden;\n}\n#main {\n  position: absolute;\n  top: 0px;\n  left: 10px;\n  right: 10px;\n  bottom: 0px;\n  border-left: 1px solid rgb(180, 180, 180);\n  border-right: 1px solid rgb(180, 180, 180);\n}\n.dock {\n  background: rgb(238, 238, 238);\n  min-width: 50px;\n  min-height: 50px;\n}\n.list {\n  background: rgb(248, 248, 248);\n  border-right: 1px solid rgb(180, 180, 180);\n  min-width: 150px;\n  min-height: 50px;\n}\n.instructions {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 0 1px 2px;\n  text-align: center;\n}\n.status {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 10px 1px 2px;\n  text-align: right;\n}\n.dashboard-content {\n  overflow: auto;\n}\n.dashboard-content.line-chart {\n  overflow: hidden;\n}\n.list-item {\n  margin: 1px;\n  min-width: 100px;\n  min-height: 1.3em;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n  padding: 3px 0 3px 15px;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-drag-image {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.toggle {\n  margin: 10px;\n  min-width: 100px;\n  min-height: 50px;\n  text-align: center;\n}\n.red {\n  background: #E74C3C;\n  color: #3498DB;\n}\n.yellow {\n  background: #F1C40F;\n  color: #4B0082;\n}\n.green {\n  background: #27AE60;\n}\n.blue {\n  background: #3498DB;\n  color: #F1C40F;\n}\n.purple {\n  background: #4B0082;\n  color: #F1C40F;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-edge-top {\n  border-top-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-left {\n  border-left-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-right {\n  border-right-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-bottom {\n  border-bottom-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-content {\n  bottom: 1px;\n  align-items: flex-end;\n}\n.p-TabBar-content > .p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-TabBar-content > .p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-TabBar-content > .p-Tab.p-mod-selected {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {\n  background: #F0F0F0;\n}\n.p-TabBar-content > .p-Tab > span {\n  line-height: 21px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-docking {\n  font: 12px Helvetica, Arial, sans-serif;\n  height: 24px;\n  width: 125px;\n  padding: 0px 10px;\n  background: white;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n}\n.p-Tab.p-mod-docking > span {\n  line-height: 21px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
+var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  overflow: hidden;\n}\n#main {\n  position: absolute;\n  top: 0px;\n  left: 10px;\n  right: 10px;\n  bottom: 0px;\n  border-left: 1px solid rgb(180, 180, 180);\n  border-right: 1px solid rgb(180, 180, 180);\n}\n.dock {\n  background: rgb(238, 238, 238);\n  min-width: 50px;\n  min-height: 50px;\n}\n.list {\n  background: rgb(248, 248, 248);\n  border-right: 1px solid rgb(180, 180, 180);\n  min-width: 150px;\n  min-height: 50px;\n}\n.instructions {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 0 1px 2px;\n  text-align: center;\n}\n.status {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 10px 1px 2px;\n  text-align: right;\n}\n.dashboard-content {\n  overflow: auto;\n}\n.dashboard-content.line-chart {\n  overflow: hidden;\n}\n.dashboard-content.pencil {\n  padding: 0;\n}\n.list-item {\n  margin: 1px;\n  min-width: 100px;\n  min-height: 1.3em;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n  padding: 3px 0 3px 15px;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-drag-image {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.toggle {\n  margin: 10px;\n  min-width: 100px;\n  min-height: 50px;\n  text-align: center;\n}\n.red {\n  background: #E74C3C;\n  color: #3498DB;\n}\n.yellow {\n  background: #F1C40F;\n  color: #4B0082;\n}\n.green {\n  background: #27AE60;\n}\n.blue {\n  background: #3498DB;\n  color: #F1C40F;\n}\n.purple {\n  background: #4B0082;\n  color: #F1C40F;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-edge-top {\n  border-top-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-left {\n  border-left-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-right {\n  border-right-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-bottom {\n  border-bottom-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-content {\n  bottom: 1px;\n  align-items: flex-end;\n}\n.p-TabBar-content > .p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-TabBar-content > .p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-TabBar-content > .p-Tab.p-mod-selected {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {\n  background: #F0F0F0;\n}\n.p-TabBar-content > .p-Tab > span {\n  line-height: 21px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-docking {\n  font: 12px Helvetica, Arial, sans-serif;\n  height: 24px;\n  width: 125px;\n  padding: 0px 10px;\n  background: white;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n}\n.p-Tab.p-mod-docking > span {\n  line-height: 21px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
 },{"browserify-css":5}],2:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
@@ -263,21 +263,57 @@ function populateList(list, dock) {
             icon: 'line-chart',
             creationStatus: 'Created third linked plot',
             dragStatus: 'Dragging third linked plot'
+        },
+        {
+            color: 'green',
+            label: 'Editor',
+            icon: 'pencil',
+            creationStatus: 'Created text editor',
+            dragStatus: 'Dragging text editor'
         }
     ];
+    // Plots
     for (var index = 0; index < 4; ++index) {
         var plot = document.body.removeChild(plots[index]);
-        var _a = specs[index], color = _a.color, label = _a.label, icon = _a.icon, creationStatus = _a.creationStatus, dragStatus = _a.dragStatus;
-        var item = new ListItem(color, icon, label);
-        item.addClass(color);
-        item.draggable = true;
-        item.factory = plotFactory(item, plot);
-        item.creationStatus = creationStatus;
-        item.dragStatus = dragStatus;
-        item.supportedActions = phosphor_dragdrop_1.DropActions.Move;
-        item.proposedAction = phosphor_dragdrop_1.DropAction.Move;
-        list.children.add(item);
+        var _a = specs[index], color_1 = _a.color, label_1 = _a.label, icon_1 = _a.icon, creationStatus_1 = _a.creationStatus, dragStatus_1 = _a.dragStatus;
+        var item_1 = new ListItem(color_1, icon_1, label_1);
+        item_1.addClass(color_1);
+        item_1.draggable = true;
+        item_1.creationStatus = creationStatus_1;
+        item_1.dragStatus = dragStatus_1;
+        item_1.supportedActions = phosphor_dragdrop_1.DropActions.Move;
+        item_1.proposedAction = phosphor_dragdrop_1.DropAction.Move;
+        item_1.factory = plotFactory(item_1, plot);
+        list.children.add(item_1);
     }
+    // Text editor
+    var _b = specs[4], color = _b.color, label = _b.label, icon = _b.icon, creationStatus = _b.creationStatus, dragStatus = _b.dragStatus;
+    var item = new ListItem(color, icon, label);
+    item.addClass(color);
+    item.draggable = true;
+    item.creationStatus = creationStatus;
+    item.dragStatus = dragStatus;
+    item.supportedActions = phosphor_dragdrop_1.DropActions.Copy;
+    item.proposedAction = phosphor_dragdrop_1.DropAction.Copy;
+    item.factory = function () {
+        var editor = new phosphor_widget_1.Widget();
+        editor.addClass('dashboard-content');
+        var codemirror = CodeMirror(editor.node, {
+            dragDrop: false,
+            value: '\/* This is a code editor in JS mode. *\/',
+            mode: 'text/javascript',
+            readOnly: false
+        });
+        setTimeout(function () {
+            codemirror.refresh();
+            codemirror.focus();
+        });
+        editor.title.text = item.label;
+        editor.title.closable = true;
+        Status.update(item.creationStatus);
+        return editor;
+    };
+    list.children.add(item);
 }
 function main() {
     document.body.style.visibility = '';
