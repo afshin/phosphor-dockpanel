@@ -16,7 +16,7 @@ BoxPanel
 } from 'phosphor-boxpanel';
 
 import {
-  Drag, DropAction, DropActions, IDragEvent, MimeData
+  Drag, DropAction, DropActions, MimeData
 } from 'phosphor-dragdrop';
 
 import {
