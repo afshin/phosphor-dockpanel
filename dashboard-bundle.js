@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  overflow: hidden;\n}\n#main {\n  position: absolute;\n  top: 0px;\n  left: 10px;\n  right: 10px;\n  bottom: 0px;\n  border-left: 1px solid rgb(180, 180, 180);\n  border-right: 1px solid rgb(180, 180, 180);\n}\n.dock {\n  background: rgb(238, 238, 238);\n  min-width: 50px;\n  min-height: 50px;\n}\n.list {\n  background: rgb(248, 248, 248);\n  border-right: 1px solid rgb(180, 180, 180);\n  min-width: 150px;\n  min-height: 50px;\n}\n.instructions {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 0 1px 2px;\n  text-align: center;\n}\n.status {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 10px 1px 2px;\n  text-align: right;\n}\n.dashboard-content {\n  overflow: auto;\n}\n.dashboard-content.line-chart {\n  overflow: hidden;\n}\n.dashboard-content.pencil {\n  padding: 0;\n}\n.list-item {\n  margin: 1px;\n  min-width: 100px;\n  min-height: 1.3em;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n  padding: 3px 0 3px 15px;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-drag-image {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.toggle {\n  margin: 10px;\n  min-width: 100px;\n  min-height: 50px;\n  text-align: center;\n}\n.red {\n  background: #E74C3C;\n  color: #3498DB;\n}\n.yellow {\n  background: #F1C40F;\n  color: #4B0082;\n}\n.green {\n  background: #27AE60;\n}\n.blue {\n  background: #3498DB;\n  color: #F1C40F;\n}\n.purple {\n  background: #4B0082;\n  color: #F1C40F;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-edge-top {\n  border-top-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-left {\n  border-left-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-right {\n  border-right-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-bottom {\n  border-bottom-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-content {\n  bottom: 1px;\n  align-items: flex-end;\n}\n.p-TabBar-content > .p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-TabBar-content > .p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-TabBar-content > .p-Tab.p-mod-selected {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {\n  background: #F0F0F0;\n}\n.p-TabBar-content > .p-Tab > span {\n  line-height: 21px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-docking {\n  font: 12px Helvetica, Arial, sans-serif;\n  height: 24px;\n  width: 125px;\n  padding: 0px 10px;\n  background: white;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n}\n.p-Tab.p-mod-docking > span {\n  line-height: 21px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
+var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  overflow: hidden;\n}\n#main {\n  position: absolute;\n  top: 0px;\n  left: 10px;\n  right: 10px;\n  bottom: 0px;\n  border-left: 1px solid rgb(180, 180, 180);\n  border-right: 1px solid rgb(180, 180, 180);\n}\n.dock {\n  background: rgb(238, 238, 238);\n  min-width: 50px;\n  min-height: 50px;\n}\n.list {\n  background: rgb(248, 248, 248);\n  border-right: 1px solid rgb(180, 180, 180);\n  min-width: 150px;\n  min-height: 50px;\n}\n.instructions {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 0 1px 2px;\n  text-align: center;\n}\n.status {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  font-family: FontAwesome;\n  font-size: 0.8em;\n  min-height: 20px;\n  max-height: 20px;\n  padding: 1px 10px 1px 2px;\n  text-align: right;\n}\n.dashboard-content {\n  overflow: auto;\n}\n.dashboard-content.line-chart {\n  overflow: hidden;\n}\n.dashboard-content.pencil {\n  padding: 0;\n}\n.list-item {\n  margin: 1px;\n  min-width: 100px;\n  min-height: 1.3em;\n  font-family: FontAwesome;\n  font-weight: bold;\n  font-size: 1.2em;\n  padding: 3px 0 3px 15px;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-drag-image {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.toggle {\n  margin: 10px;\n  min-width: 100px;\n  min-height: 50px;\n  text-align: center;\n}\n.yellow {\n  background: #F1C40F;\n  color: #4B0082;\n}\n.green {\n  background: #27AE60;\n}\n.blue {\n  background: #3498DB;\n  color: #F1C40F;\n}\n.p-Tab.p-mod-current {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-edge-top {\n  border-top-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-left {\n  border-left-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-right {\n  border-right-width: 2px;\n}\n.p-DockPanelOverlay.p-mod-edge-bottom {\n  border-bottom-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-content {\n  bottom: 1px;\n  align-items: flex-end;\n}\n.p-TabBar-content > .p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-TabBar-content > .p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-TabBar-content > .p-Tab.p-mod-selected {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {\n  background: #F0F0F0;\n}\n.p-TabBar-content > .p-Tab > span {\n  line-height: 21px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-docking {\n  font: 12px Helvetica, Arial, sans-serif;\n  height: 24px;\n  width: 125px;\n  padding: 0px 10px;\n  background: white;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n}\n.p-Tab.p-mod-docking > span {\n  line-height: 21px;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
 },{"browserify-css":5}],2:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
@@ -20,8 +20,36 @@ var phosphor_splitpanel_1 = require('phosphor-splitpanel');
 var phosphor_widget_1 = require('phosphor-widget');
 var index_1 = require('../lib/index');
 require('./dashboard.css');
+var FACTORY_MIME = 'application/x-phosphor-widget-factory';
 var INSTRUCTIONS = 'Drag items from the left side onto the right-hand panel.';
 var DRAG_THRESHOLD = 5;
+var Status;
+(function (Status) {
+    var DURATION = 1500;
+    var IDLE_MESSAGE = 'Idle';
+    var status = null;
+    var timeout = null;
+    function create() {
+        status = new phosphor_widget_1.Widget();
+        status.addClass('status');
+        status.node.textContent = IDLE_MESSAGE;
+        phosphor_boxpanel_1.BoxPanel.setSizeBasis(status, 20);
+        phosphor_boxpanel_1.BoxPanel.setStretch(status, 0);
+        return status;
+    }
+    Status.create = create;
+    function update(text, permanent) {
+        status.node.textContent = text || IDLE_MESSAGE;
+        if (permanent) {
+            clearTimeout(timeout);
+            return;
+        }
+        timeout = setTimeout(function () {
+            status.node.textContent = IDLE_MESSAGE;
+        }, DURATION);
+    }
+    Status.update = update;
+})(Status || (Status = {}));
 var ListItem = (function (_super) {
     __extends(ListItem, _super);
     function ListItem(color, icon, label) {
@@ -105,6 +133,7 @@ var ListItem = (function (_super) {
         document.addEventListener('mousemove', this, true);
     };
     ListItem.prototype._evtMouseMove = function (event) {
+        var _this = this;
         event.preventDefault();
         event.stopPropagation();
         if (this._drag) {
@@ -122,26 +151,23 @@ var ListItem = (function (_super) {
             supportedActions: this.supportedActions,
             proposedAction: this.proposedAction
         });
-        this._releaseMouse();
-        this._drag.mimeData.setData(index_1.FACTORY_MIME, this.factory);
-        this._drag.start(event.clientX, event.clientY);
+        this._drag.mimeData.setData(FACTORY_MIME, this.factory);
         Status.update(this.dragStatus, true);
+        this._drag.start(event.clientX, event.clientY).then(function () {
+            _this._releaseMouse();
+            _this._drag.dispose();
+            _this._drag = null;
+        });
     };
     ListItem.prototype._evtMouseUp = function (event) {
-        if (event.button !== 0) {
-            return;
-        }
-        if (!this._drag) {
+        if (event.button !== 0 || !this._drag) {
+            this._releaseMouse();
             return;
         }
         event.preventDefault();
         event.stopPropagation();
-        this._drag.dispose();
-        this._drag = null;
-        this._releaseMouse();
     };
     ListItem.prototype._releaseMouse = function () {
-        Status.update('');
         document.removeEventListener('mouseup', this, true);
         document.removeEventListener('mousemove', this, true);
     };
@@ -165,31 +191,6 @@ var Plot = (function (_super) {
     };
     return Plot;
 })(phosphor_widget_1.Widget);
-var Status;
-(function (Status) {
-    var DURATION = 1500;
-    var IDLE_MESSAGE = 'Idle';
-    var status = null;
-    var timeout = null;
-    function create() {
-        status = new phosphor_widget_1.Widget();
-        status.addClass('status');
-        status.node.textContent = IDLE_MESSAGE;
-        phosphor_boxpanel_1.BoxPanel.setSizeBasis(status, 20);
-        phosphor_boxpanel_1.BoxPanel.setStretch(status, 0);
-        return status;
-    }
-    Status.create = create;
-    function update(text, permanent) {
-        status.node.textContent = text || IDLE_MESSAGE;
-        if (permanent) {
-            clearTimeout(timeout);
-            return;
-        }
-        timeout = setTimeout(function () { return status.node.textContent = IDLE_MESSAGE; }, DURATION);
-    }
-    Status.update = update;
-})(Status || (Status = {}));
 function plotFactory(item, node) {
     return function () {
         var plot = new Plot(item, node);
@@ -429,7 +430,7 @@ var PANEL_CENTER_CLASS = 'p-mod-panel-center';
 /**
  * The factory MIME type supported by the dock panel.
  */
-exports.FACTORY_MIME = 'application/x-phosphor-widget-factory';
+var FACTORY_MIME = 'application/x-phosphor-widget-factory';
 /**
  * The size of the edge dock zone for the root panel.
  */
@@ -615,7 +616,7 @@ var DockPanel = (function (_super) {
      * Handle the `'p-dragenter'` event for the dock panel.
      */
     DockPanel.prototype._evtDragEnter = function (event) {
-        if (event.mimeData.hasData(exports.FACTORY_MIME)) {
+        if (event.mimeData.hasData(FACTORY_MIME)) {
             event.preventDefault();
             event.stopPropagation();
         }
@@ -661,7 +662,7 @@ var DockPanel = (function (_super) {
             event.dropAction = phosphor_dragdrop_1.DropAction.None;
             return;
         }
-        var factory = event.mimeData.getData(exports.FACTORY_MIME);
+        var factory = event.mimeData.getData(FACTORY_MIME);
         if (typeof factory !== 'function') {
             event.dropAction = phosphor_dragdrop_1.DropAction.None;
             return;
@@ -728,7 +729,7 @@ var DockTabBar = (function (_super) {
         // Setup the mime data for the drag operation.
         var widget = msg.item;
         var mimeData = new phosphor_dragdrop_1.MimeData();
-        mimeData.setData(exports.FACTORY_MIME, function () { return widget; });
+        mimeData.setData(FACTORY_MIME, function () { return widget; });
         // Create the drag image for the drag operation.
         var tabNode = msg.node;
         var dragImage = tabNode.cloneNode(true);
