@@ -81,10 +81,14 @@ class ListItem extends Widget {
     this.node.querySelector('span').textContent = label;
   }
 
+  creationStatus: string = null;
+
   dispose(): void {
     this.draggable = false;
     super.dispose();
   }
+
+  dragStatus: string = null;
 
   factory: () => Widget = null;
 
@@ -138,6 +142,7 @@ class ListItem extends Widget {
     this._releaseMouse();
     this._drag.mimeData.setData(FACTORY_MIME, this.factory);
     this._drag.start(event.clientX, event.clientY);
+    Status.update(this.dragStatus, true);
   }
 
   private _evtMouseUp(event: MouseEvent): void {
@@ -155,6 +160,7 @@ class ListItem extends Widget {
   }
 
   private _releaseMouse(): void {
+    Status.update('');
     document.removeEventListener('mouseup', this as any, true);
     document.removeEventListener('mousemove', this as any, true);
   }
@@ -178,9 +184,39 @@ class Plot extends Widget {
     super.onCloseRequest(msg);
     // Reactivate the list item.
     this._item.draggable = true;
+    Status.update(`Reactivated ${this._item.label}`);
   }
 
   private _item: ListItem = null;
+}
+
+module Status {
+  const DURATION = 1500;
+
+  const IDLE_MESSAGE = 'Idle';
+
+  let status: Widget = null;
+
+  let timeout: number = null;
+
+  export
+  function create(): Widget {
+    status = new Widget();
+    status.addClass('status');
+    status.node.textContent = IDLE_MESSAGE;
+    BoxPanel.setSizeBasis(status, 20);
+    BoxPanel.setStretch(status, 0);
+    return status;
+  }
+  export
+  function update(text: string, permanent?: boolean): void {
+    status.node.textContent = text || IDLE_MESSAGE;
+    if (permanent) {
+      clearTimeout(timeout);
+      return;
+    }
+    timeout = setTimeout(() => status.node.textContent = IDLE_MESSAGE, DURATION);
+  }
 }
 
 function plotFactory(item: ListItem, node: Node): () => Widget {
@@ -189,6 +225,7 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
     item.draggable = false;
     plot.title.text = item.label;
     plot.title.closable = true;
+    Status.update(item.creationStatus);
     return plot;
   }
 }
@@ -217,7 +254,7 @@ function createList(): Panel {
   return panel;
 }
 
-function createPanel(instructions: Widget, list: Panel, dock: DockPanel): BoxPanel {
+function createPanel(instructions: Widget, list: Panel, dock: DockPanel, status: Widget): BoxPanel {
   let panel = new BoxPanel();
   let subpanel = new SplitPanel();
 
@@ -225,7 +262,7 @@ function createPanel(instructions: Widget, list: Panel, dock: DockPanel): BoxPan
   subpanel.children.assign([list, dock]);
   subpanel.setSizes([0, 1]);
 
-  panel.children.assign([instructions, subpanel]);
+  panel.children.assign([instructions, subpanel, status]);
   panel.spacing = 0;
   panel.direction = BoxPanel.TopToBottom;
 
@@ -235,28 +272,45 @@ function createPanel(instructions: Widget, list: Panel, dock: DockPanel): BoxPan
 
 function populateList(list: Panel, dock: DockPanel): void {
   let plots = document.querySelectorAll('div.bk-plot');
-  let colors = ['yellow', 'blue', 'blue', 'blue'];
-  let labels = [
-    'Elements',
-    'Linked 1',
-    'Linked 2',
-    'Linked 3'
-  ];
-  let icons = [
-    'table',
-    'line-chart',
-    'line-chart',
-    'line-chart'
+  let specs = [
+    {
+      color: 'yellow',
+      label: 'Elements',
+      icon: 'table',
+      creationStatus: 'Created periodic table of elements',
+      dragStatus: 'Dragging periodic table of elements'
+    },
+    {
+      color: 'blue',
+      label: 'Linked 1',
+      icon: 'line-chart',
+      creationStatus: 'Created first linked plot',
+      dragStatus: 'Dragging first linked plot'
+    },
+    {
+      color: 'blue',
+      label: 'Linked 2',
+      icon: 'line-chart',
+      creationStatus: 'Created second linked plot',
+      dragStatus: 'Dragging second linked plot'
+    },
+    {
+      color: 'blue',
+      label: 'Linked 3',
+      icon: 'line-chart',
+      creationStatus: 'Created third linked plot',
+      dragStatus: 'Dragging third linked plot'
+    }
   ];
   for (let index = 0; index < 4; ++index) {
     let plot = document.body.removeChild(plots[index]);
-    let label = labels[index];
-    let icon = icons[index];
-    let color = colors[index];
+    let { color, label, icon, creationStatus, dragStatus } = specs[index];
     let item = new ListItem(color, icon, label);
     item.addClass(color);
     item.draggable = true;
     item.factory = plotFactory(item, plot);
+    item.creationStatus = creationStatus;
+    item.dragStatus = dragStatus;
     item.supportedActions = DropActions.Move;
     item.proposedAction = DropAction.Move;
     list.children.add(item);
@@ -268,7 +322,8 @@ function main(): void {
   let instructions = createInstructions();
   let list = createList();
   let dock = createDock();
-  let panel = createPanel(instructions, list, dock);
+  let status = Status.create();
+  let panel = createPanel(instructions, list, dock, status);
   populateList(list, dock);
   Widget.attach(panel, document.body);
   window.onresize = () => panel.update();

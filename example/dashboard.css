@@ -45,6 +45,17 @@ body {
   text-align: center;
 }
 
+.status {
+  border-bottom: 1px solid rgb(180, 180, 180);
+  border-top: 1px solid rgb(180, 180, 180);
+  font-family: FontAwesome;
+  font-size: 0.8em;
+  min-height: 20px;
+  max-height: 20px;
+  padding: 1px 10px 1px 2px;
+  text-align: right;
+}
+
 .dashboard-content {
   overflow: auto;
 }
@@ -70,7 +81,7 @@ body {
   cursor: move;
 }
 
-.list-item.p-mod-ghost {
+.list-item.p-mod-drag-image {
   opacity: 0.70;
   transform: translateX(-10px) translateY(-10px);
 }
