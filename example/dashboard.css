@@ -64,6 +64,10 @@ body {
   overflow: hidden;
 }
 
+.dashboard-content.pencil {
+  padding: 0;
+}
+
 .list-item {
   margin: 1px;
   min-width: 100px;

@@ -300,21 +300,57 @@ function populateList(list: Panel, dock: DockPanel): void {
       icon: 'line-chart',
       creationStatus: 'Created third linked plot',
       dragStatus: 'Dragging third linked plot'
+    },
+    {
+      color: 'green',
+      label: 'Editor',
+      icon: 'pencil',
+      creationStatus: 'Created text editor',
+      dragStatus: 'Dragging text editor'
     }
   ];
+  // Plots
   for (let index = 0; index < 4; ++index) {
     let plot = document.body.removeChild(plots[index]);
     let { color, label, icon, creationStatus, dragStatus } = specs[index];
     let item = new ListItem(color, icon, label);
     item.addClass(color);
     item.draggable = true;
-    item.factory = plotFactory(item, plot);
     item.creationStatus = creationStatus;
     item.dragStatus = dragStatus;
     item.supportedActions = DropActions.Move;
     item.proposedAction = DropAction.Move;
+    item.factory = plotFactory(item, plot);
     list.children.add(item);
   }
+  // Text editor
+  let { color, label, icon, creationStatus, dragStatus } = specs[4];
+  let item = new ListItem(color, icon, label);
+  item.addClass(color);
+  item.draggable = true;
+  item.creationStatus = creationStatus;
+  item.dragStatus = dragStatus;
+  item.supportedActions = DropActions.Copy;
+  item.proposedAction = DropAction.Copy;
+  item.factory = () => {
+    let editor = new Widget();
+    editor.addClass('dashboard-content');
+    let codemirror = CodeMirror(editor.node, {
+      dragDrop: false,
+      value: '\/* This is a code editor in JS mode. *\/',
+      mode: 'text/javascript',
+      readOnly: false
+    });
+    setTimeout(() => {
+      codemirror.refresh();
+      codemirror.focus();
+    });
+    editor.title.text = item.label;
+    editor.title.closable = true;
+    Status.update(item.creationStatus);
+    return editor;
+  };
+  list.children.add(item);
 }
 
 function main(): void {
