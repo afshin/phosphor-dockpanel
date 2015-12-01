@@ -97,11 +97,6 @@ body {
   text-align: center;
 }
 
-.red {
-  background: #E74C3C;
-  color: #3498DB;
-}
-
 
 .yellow {
   background: #F1C40F;
@@ -119,10 +114,13 @@ body {
   color: #F1C40F;
 }
 
-.purple {
-  background: #4B0082;
-  color: #F1C40F;
+
+.p-Tab.p-mod-current {
+  min-height: 24px;
+  background: white;
+  transform: translateY(1px);
 }
+
 
 .p-DockTabPanel {
   padding-right: 2px;

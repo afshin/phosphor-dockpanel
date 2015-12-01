@@ -132,7 +132,6 @@ const PANEL_CENTER_CLASS = 'p-mod-panel-center';
 /**
  * The factory MIME type supported by the dock panel.
  */
-export
 const FACTORY_MIME = 'application/x-phosphor-widget-factory';
 
 /**

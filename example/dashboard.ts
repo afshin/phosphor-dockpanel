@@ -28,15 +28,50 @@ Panel, Widget
 } from 'phosphor-widget';
 
 import {
-  DockPanel, FACTORY_MIME
+  DockPanel
 } from '../lib/index';
 
 import './dashboard.css';
 
 
+const FACTORY_MIME = 'application/x-phosphor-widget-factory';
+
 const INSTRUCTIONS = 'Drag items from the left side onto the right-hand panel.';
 
 const DRAG_THRESHOLD = 5;
+
+
+module Status {
+
+  const DURATION = 1500;
+
+  const IDLE_MESSAGE = 'Idle';
+
+  let status: Widget = null;
+
+  let timeout: number = null;
+
+  export
+  function create(): Widget {
+    status = new Widget();
+    status.addClass('status');
+    status.node.textContent = IDLE_MESSAGE;
+    BoxPanel.setSizeBasis(status, 20);
+    BoxPanel.setStretch(status, 0);
+    return status;
+  }
+  export
+  function update(text: string, permanent?: boolean): void {
+    status.node.textContent = text || IDLE_MESSAGE;
+    if (permanent) {
+      clearTimeout(timeout);
+      return;
+    }
+    timeout = setTimeout(() => {
+      status.node.textContent = IDLE_MESSAGE;
+    }, DURATION);
+  }
+}
 
 class ListItem extends Widget {
 
@@ -139,28 +174,25 @@ class ListItem extends Widget {
       supportedActions: this.supportedActions,
       proposedAction: this.proposedAction
     });
-    this._releaseMouse();
     this._drag.mimeData.setData(FACTORY_MIME, this.factory);
-    this._drag.start(event.clientX, event.clientY);
     Status.update(this.dragStatus, true);
+    this._drag.start(event.clientX, event.clientY).then(() => {
+      this._releaseMouse();
+      this._drag.dispose();
+      this._drag = null;
+    });
   }
 
   private _evtMouseUp(event: MouseEvent): void {
-    if (event.button !== 0) {
-      return;
-    }
-    if (!this._drag) {
+    if (event.button !== 0 || !this._drag) {
+      this._releaseMouse();
       return;
     }
     event.preventDefault();
     event.stopPropagation();
-    this._drag.dispose();
-    this._drag = null;
-    this._releaseMouse();
   }
 
   private _releaseMouse(): void {
-    Status.update('');
     document.removeEventListener('mouseup', this as any, true);
     document.removeEventListener('mousemove', this as any, true);
   }
@@ -188,35 +220,6 @@ class Plot extends Widget {
   }
 
   private _item: ListItem = null;
-}
-
-module Status {
-  const DURATION = 1500;
-
-  const IDLE_MESSAGE = 'Idle';
-
-  let status: Widget = null;
-
-  let timeout: number = null;
-
-  export
-  function create(): Widget {
-    status = new Widget();
-    status.addClass('status');
-    status.node.textContent = IDLE_MESSAGE;
-    BoxPanel.setSizeBasis(status, 20);
-    BoxPanel.setStretch(status, 0);
-    return status;
-  }
-  export
-  function update(text: string, permanent?: boolean): void {
-    status.node.textContent = text || IDLE_MESSAGE;
-    if (permanent) {
-      clearTimeout(timeout);
-      return;
-    }
-    timeout = setTimeout(() => status.node.textContent = IDLE_MESSAGE, DURATION);
-  }
 }
 
 function plotFactory(item: ListItem, node: Node): () => Widget {
