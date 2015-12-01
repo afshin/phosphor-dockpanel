@@ -12,36 +12,66 @@ body {
   overflow: hidden;
 }
 
-
 #main {
   position: absolute;
-  top: 10px;
+  top: 0px;
   left: 10px;
   right: 10px;
-  bottom: 10px;
+  bottom: 0px;
+  border-left: 1px solid rgb(180, 180, 180);
+  border-right: 1px solid rgb(180, 180, 180);
 }
 
-
-.content {
+.dock {
+  background: rgb(238, 238, 238);
   min-width: 50px;
   min-height: 50px;
+}
+
+.list {
+  background: rgb(248, 248, 248);
+  border-right: 1px solid rgb(180, 180, 180);
+  min-width: 150px;
+  min-height: 50px;
+}
+
+.instructions {
+  border-bottom: 1px solid rgb(180, 180, 180);
   font-family: FontAwesome;
-  font-weight: bold;
-  font-size: 1.2em;
+  font-size: 0.8em;
+  min-height: 20px;
+  max-height: 20px;
+  padding: 1px 0 1px 2px;
+  text-align: center;
+}
+
+.status {
+  border-bottom: 1px solid rgb(180, 180, 180);
+  border-top: 1px solid rgb(180, 180, 180);
+  font-family: FontAwesome;
+  font-size: 0.8em;
+  min-height: 20px;
+  max-height: 20px;
+  padding: 1px 10px 1px 2px;
+  text-align: right;
 }
 
 .dashboard-content {
-  padding: 20px;
   overflow: auto;
+}
+
+.dashboard-content.line-chart {
+  overflow: hidden;
 }
 
 .list-item {
   margin: 1px;
   min-width: 100px;
-  min-height: 50px;
+  min-height: 1.3em;
   font-family: FontAwesome;
   font-weight: bold;
   font-size: 1.2em;
+  padding: 3px 0 3px 15px;
   opacity: 0.45;
   cursor: not-allowed;
 }
@@ -51,7 +81,7 @@ body {
   cursor: move;
 }
 
-.list-item.p-mod-ghost {
+.list-item.p-mod-drag-image {
   opacity: 0.70;
   transform: translateX(-10px) translateY(-10px);
 }
@@ -82,7 +112,7 @@ body {
 
 .blue {
   background: #3498DB;
-  color: #E74C3C;
+  color: #F1C40F;
 }
 
 .purple {
