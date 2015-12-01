@@ -12,27 +12,31 @@ Message
 } from 'phosphor-messaging';
 
 import {
-DragHandler, DragData
-} from 'phosphor-domutil';
+BoxPanel
+} from 'phosphor-boxpanel';
+
+import {
+  Drag, DropAction, DropActions, IDragEvent, MimeData
+} from 'phosphor-dragdrop';
 
 import {
 SplitPanel
 } from 'phosphor-splitpanel';
 
 import {
-  Tab
-} from 'phosphor-tabs';
-
-import {
-Widget
+Panel, Widget
 } from 'phosphor-widget';
 
 import {
-  DockPanel
+  DockPanel, FACTORY_MIME
 } from '../lib/index';
 
 import './dashboard.css';
 
+
+const INSTRUCTIONS = 'Drag items from the left side onto the right-hand panel.';
+
+const DRAG_THRESHOLD = 5;
 
 class ListItem extends Widget {
 
@@ -58,18 +62,20 @@ class ListItem extends Widget {
     }
     this._draggable = draggable;
     if (draggable) {
-      this._dragHandler = new DragHandler(this.node, this);
-      this._dragHandler.onDragStart = this._onDragStart;
-      this._dragHandler.onDragEnd = this._onDragEnd;
       this.addClass('draggable');
+      this.node.addEventListener('mousedown', this as any);
     } else {
       this.removeClass('draggable');
-      this._dragHandler.dispose();
-      this._dragHandler = null;
+      this._releaseMouse();
+      if (this._drag) {
+        this._drag.dispose();
+        this._drag = null;
+      }
+      this.node.removeEventListener('mousedown', this as any);
     }
   }
 
-  constructor(public color: string, public icon: string, public label: string, private _plot: Node) {
+  constructor(public color: string, public icon: string, public label: string) {
     super();
     this.node.querySelector('i').classList.add('fa', `fa-${icon}`);
     this.node.querySelector('span').textContent = label;
@@ -80,29 +86,92 @@ class ListItem extends Widget {
     super.dispose();
   }
 
-  private _onDragStart(event: MouseEvent, data: DragData): void {
-    let factory = plotFactory(this, this._plot);
-    data.setData(DockPanel.DROP_MIME_TYPE, factory);
-  }
+  factory: () => Widget = null;
 
-  private _onDragEnd(event: MouseEvent, data: DragData): void {
-    if (data.dropAction !== 'none') {
-      this.draggable = false;
+  handleEvent(event: Event): void {
+    switch (event.type) {
+    case 'mousedown':
+      this._evtMouseDown(<MouseEvent>event);
+      break;
+    case 'mousemove':
+      this._evtMouseMove(<MouseEvent>event);
+      break;
+    case 'mouseup':
+      this._evtMouseUp(<MouseEvent>event);
+      break;
     }
   }
 
+  proposedAction: DropAction = null;
+
+  supportedActions: DropActions = null;
+
+  private _evtMouseDown(event: MouseEvent): void {
+    if (event.button !== 0) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    this._dragData = { pressX: event.clientX, pressY: event.clientY };
+    document.addEventListener('mouseup', this as any, true);
+    document.addEventListener('mousemove', this as any, true);
+  }
+
+  private _evtMouseMove(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this._drag) {
+      return;
+    }
+    let data = this._dragData;
+    let dx = Math.abs(event.clientX - data.pressX);
+    let dy = Math.abs(event.clientY - data.pressY);
+    if (dx < DRAG_THRESHOLD && dy < DRAG_THRESHOLD) {
+      return;
+    }
+    this._drag = new Drag({
+      dragImage: this.node.cloneNode(true) as HTMLElement,
+      mimeData: new MimeData(),
+      supportedActions: this.supportedActions,
+      proposedAction: this.proposedAction
+    });
+    this._releaseMouse();
+    this._drag.mimeData.setData(FACTORY_MIME, this.factory);
+    this._drag.start(event.clientX, event.clientY);
+  }
+
+  private _evtMouseUp(event: MouseEvent): void {
+    if (event.button !== 0) {
+      return;
+    }
+    if (!this._drag) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    this._drag.dispose();
+    this._drag = null;
+    this._releaseMouse();
+  }
+
+  private _releaseMouse(): void {
+    document.removeEventListener('mouseup', this as any, true);
+    document.removeEventListener('mousemove', this as any, true);
+  }
+
   private _draggable: boolean = false;
-  private _dragHandler: DragHandler = null;
+  private _dragData: { pressX: number, pressY: number } = null;
+  private _drag: Drag = null;
 }
 
 class Plot extends Widget {
 
-  constructor(item: ListItem, node: Node) {
+  constructor(item: ListItem, plot: Node) {
     super();
     this._item = item;
     this.addClass('dashboard-content');
     this.addClass(item.icon);
-    this.node.appendChild(node);
+    this.node.appendChild(plot);
   }
 
   protected onCloseRequest(msg: Message) {
@@ -117,12 +186,9 @@ class Plot extends Widget {
 function plotFactory(item: ListItem, node: Node): () => Widget {
   return () => {
     let plot = new Plot(item, node);
-
-    // This should become unnecessary in DockPanel instances without tabs.
-    let tab = new Tab(item.label);
-    tab.closable = true;
-    DockPanel.setTab(plot, tab);
-
+    item.draggable = false;
+    plot.title.text = item.label;
+    plot.title.closable = true;
     return plot;
   }
 }
@@ -130,39 +196,44 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
 function createDock(): DockPanel {
   let dock = new DockPanel();
   dock.addClass('dock');
-  dock.droppable = true;
   return dock;
 }
 
-function createList(): Widget {
-  let widget = new Widget();
-  let title = document.createElement('div');
-  let right = document.createElement('i');
-  right.classList.add('fa', 'fa-arrow-right');
-  title.classList.add('list-item');
-  title.textContent = 'Drag items onto dashboard ';
-  title.appendChild(right);
-  widget.addClass('list');
-  widget.node.appendChild(title);
-  return widget;
+function createInstructions(): Widget {
+  let instructions = new Widget();
+  let lightbulb = document.createElement('i');
+  lightbulb.classList.add('fa', 'fa-lightbulb-o');
+  instructions.addClass('instructions');
+  instructions.node.appendChild(lightbulb);
+  instructions.node.appendChild(document.createTextNode(` ${INSTRUCTIONS}`));
+  BoxPanel.setSizeBasis(instructions, 20);
+  BoxPanel.setStretch(instructions, 0);
+  return instructions;
 }
 
-function createToggle(list: Widget, dock: DockPanel): void {
-  let toggle = new Widget();
-  let button = document.createElement('button');
-  button.textContent = `Droppable: ${dock.droppable}`;
-  button.addEventListener('click', event => {
-    event.preventDefault();
-    event.stopPropagation();
-    dock.droppable = !dock.droppable;
-    button.textContent = `Droppable: ${dock.droppable}`;
-  });
-  toggle.node.appendChild(button);
-  toggle.addClass('toggle');
-  list.addChild(toggle);
+function createList(): Panel {
+  let panel = new Panel();
+  panel.addClass('list');
+  return panel;
 }
 
-function populateList(list: Widget, dock: DockPanel): void {
+function createPanel(instructions: Widget, list: Panel, dock: DockPanel): BoxPanel {
+  let panel = new BoxPanel();
+  let subpanel = new SplitPanel();
+
+  subpanel.orientation = SplitPanel.Horizontal;
+  subpanel.children.assign([list, dock]);
+  subpanel.setSizes([0, 1]);
+
+  panel.children.assign([instructions, subpanel]);
+  panel.spacing = 0;
+  panel.direction = BoxPanel.TopToBottom;
+
+  panel.id = 'main';
+  return panel;
+}
+
+function populateList(list: Panel, dock: DockPanel): void {
   let plots = document.querySelectorAll('div.bk-plot');
   let colors = ['yellow', 'blue', 'blue', 'blue'];
   let labels = [
@@ -182,25 +253,23 @@ function populateList(list: Widget, dock: DockPanel): void {
     let label = labels[index];
     let icon = icons[index];
     let color = colors[index];
-    let item = new ListItem(color, icon, label, plot);
-    item.addClass(colors[index]);
+    let item = new ListItem(color, icon, label);
+    item.addClass(color);
     item.draggable = true;
-    list.addChild(item);
+    item.factory = plotFactory(item, plot);
+    item.supportedActions = DropActions.Move;
+    item.proposedAction = DropAction.Move;
+    list.children.add(item);
   }
-  createToggle(list, dock);
 }
 
 function main(): void {
   document.body.style.visibility = '';
+  let instructions = createInstructions();
   let list = createList();
   let dock = createDock();
-  let panel = new SplitPanel();
+  let panel = createPanel(instructions, list, dock);
   populateList(list, dock);
-  panel.orientation = SplitPanel.Horizontal;
-  panel.children = [list, dock];
-  SplitPanel.setStretch(list, 1);
-  SplitPanel.setStretch(dock, 12);
-  panel.id = 'main';
   Widget.attach(panel, document.body);
   window.onresize = () => panel.update();
 }
