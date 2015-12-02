@@ -180,6 +180,7 @@ class ListItem extends Widget {
       if (action !== DropAction.None) {
         Status.update(this.dropStatus);
       }
+      this._drag = null;
     });
   }
 
@@ -222,11 +223,13 @@ class Plot extends Widget {
   private _item: ListItem = null;
 }
 
-function editorFactory(item: ListItem): () => Widget {
-  return () => {
-    let editor = new Widget();
-    editor.addClass('dashboard-content');
-    let codemirror = CodeMirror(editor.node, {
+class Editor extends Widget {
+
+  constructor(item: ListItem) {
+    super();
+    this._item = item;
+    this.addClass('dashboard-content');
+    let codemirror = CodeMirror(this.node, {
       dragDrop: false,
       value: '\/* This is a code editor in JS mode. *\/',
       mode: 'text/javascript',
@@ -236,8 +239,21 @@ function editorFactory(item: ListItem): () => Widget {
       codemirror.refresh();
       codemirror.focus();
     });
-    editor.title.text = item.label;
-    editor.title.closable = true;
+    this.title.text = item.label;
+    this.title.closable = true;
+  }
+
+  protected onCloseRequest(msg: Message) {
+    super.onCloseRequest(msg);
+    Status.update(this._item.clearStatus);
+  }
+
+  private _item: ListItem = null;
+}
+
+function editorFactory(item: ListItem): () => Widget {
+  return () => {
+    let editor = new Editor(item);
     return editor;
   };
 }
