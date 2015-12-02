@@ -36,7 +36,7 @@ class Video extends Widget {
     video.setAttribute('height', '320');
     video.setAttribute('width', '512');
     video.setAttribute('controls', '');
-    source.setAttribute('src', 'https://www.dropbox.com/s/opjvn36se5tvld2/bokeh_simple_map.mp4');
+    source.setAttribute('src', 'https://www.dropbox.com/s/opjvn36se5tvld2/bokeh_simple_map.mp4?raw=1');
     source.setAttribute('type', 'video/mp4');
     this.node.appendChild(video);
   }
