@@ -10,34 +10,60 @@ body {
   padding: 0;
   background: #F5F6F7;
   overflow: hidden;
+  font-family: "Lato",sans-serif;
 }
 
 #main {
+  box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.5);
   position: absolute;
-  top: 0px;
+  top: 10px;
   left: 10px;
   right: 10px;
-  bottom: 0px;
+  bottom: 10px;
   border-left: 1px solid rgb(180, 180, 180);
   border-right: 1px solid rgb(180, 180, 180);
 }
+
 
 .dock {
   background: rgb(238, 238, 238);
   min-width: 50px;
   min-height: 50px;
+  padding: 3px;
 }
 
 .list {
   background: rgb(248, 248, 248);
   border-right: 1px solid rgb(180, 180, 180);
   min-width: 150px;
+  max-width: 150px;
   min-height: 50px;
 }
 
+
+.list-item {
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.75);
+  margin: 2px;
+  min-width: 150px;
+  max-width: 150px;
+  min-height: 1.3em;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 3px 0 3px 15px;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+.list-item.p-mod-drag-image {
+  opacity: 0.70;
+  transform: translateX(-10px) translateY(-10px);
+}
+
+
 .instructions {
   border-bottom: 1px solid rgb(180, 180, 180);
-  font-family: FontAwesome;
+  border-top: 1px solid rgb(180, 180, 180);
   font-size: 0.8em;
   min-height: 20px;
   max-height: 20px;
@@ -48,7 +74,6 @@ body {
 .status {
   border-bottom: 1px solid rgb(180, 180, 180);
   border-top: 1px solid rgb(180, 180, 180);
-  font-family: FontAwesome;
   font-size: 0.8em;
   min-height: 20px;
   max-height: 20px;
@@ -68,39 +93,15 @@ body {
   padding: 0;
 }
 
-.list-item {
-  margin: 1px;
-  min-width: 100px;
-  min-height: 1.3em;
-  font-family: FontAwesome;
-  font-weight: bold;
-  font-size: 1.2em;
-  padding: 3px 0 3px 15px;
-  opacity: 0.45;
-  cursor: not-allowed;
-}
 
 .draggable {
   opacity: 1;
   cursor: move;
 }
 
-.list-item.p-mod-drag-image {
-  opacity: 0.70;
-  transform: translateX(-10px) translateY(-10px);
-}
-
-.toggle {
-  margin: 10px;
-  min-width: 100px;
-  min-height: 50px;
-  text-align: center;
-}
-
 
 .yellow {
   background: #F1C40F;
-  color: #4B0082;
 }
 
 
@@ -111,14 +112,6 @@ body {
 
 .blue {
   background: #3498DB;
-  color: #F1C40F;
-}
-
-
-.p-Tab.p-mod-current {
-  min-height: 24px;
-  background: white;
-  transform: translateY(1px);
 }
 
 
@@ -143,23 +136,12 @@ body {
 }
 
 
-.p-DockPanelOverlay.p-mod-edge-top {
-  border-top-width: 2px;
-}
-
-
-.p-DockPanelOverlay.p-mod-edge-left {
-  border-left-width: 2px;
-}
-
-
-.p-DockPanelOverlay.p-mod-edge-right {
-  border-right-width: 2px;
-}
-
-
-.p-DockPanelOverlay.p-mod-edge-bottom {
-  border-bottom-width: 2px;
+.p-DockPanelOverlay.p-mod-root-top,
+.p-DockPanelOverlay.p-mod-root-left,
+.p-DockPanelOverlay.p-mod-root-right,
+.p-DockPanelOverlay.p-mod-root-bottom,
+.p-DockPanelOverlay.p-mod-root-center {
+  border-width: 2px;
 }
 
 
@@ -168,13 +150,24 @@ body {
 }
 
 
-.p-TabBar-content {
+.p-TabBar-body {
   bottom: 1px;
+}
+
+
+.p-TabBar-footer {
+  display: block;
+  height: 1px;
+  background: #C0C0C0;
+}
+
+
+.p-TabBar-content {
   align-items: flex-end;
 }
 
 
-.p-TabBar-content > .p-Tab {
+.p-Tab {
   flex-basis: 125px;
   max-height: 21px;
   min-width: 35px;
@@ -187,32 +180,27 @@ body {
 }
 
 
-.p-TabBar-content > .p-Tab.p-mod-first {
+.p-Tab.p-mod-first {
   margin-left: 0;
 }
 
 
-.p-TabBar-content > .p-Tab.p-mod-selected {
+.p-Tab.p-mod-current {
   min-height: 24px;
   background: white;
   transform: translateY(1px);
 }
 
 
-.p-TabBar-content > .p-Tab:hover:not(.p-mod-selected) {
+.p-Tab:hover:not(.p-mod-current) {
   background: #F0F0F0;
 }
 
 
-.p-TabBar-content > .p-Tab > span {
+.p-Tab-icon,
+.p-Tab-text,
+.p-Tab-close {
   line-height: 21px;
-}
-
-
-.p-TabBar-footer {
-  display: block;
-  height: 1px;
-  background: #C0C0C0;
 }
 
 
@@ -227,16 +215,10 @@ body {
 }
 
 
-.p-Tab.p-mod-docking {
-  font: 12px Helvetica, Arial, sans-serif;
-  height: 24px;
-  width: 125px;
-  padding: 0px 10px;
-  background: white;
+.p-Tab.p-mod-drag-image {
+  min-height: 24px;
+  min-width: 125px;
+  border: none;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-
-.p-Tab.p-mod-docking > span {
-  line-height: 21px;
+  transform: translateX(-40%) translateY(-58%);
 }

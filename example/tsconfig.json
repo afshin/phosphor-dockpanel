@@ -10,6 +10,10 @@
     "../typings/codemirror/codemirror.d.ts",
     "../typings/es6-promise/es6-promise.d.ts",
     "index.ts",
-    "dashboard.ts"
+    "dashboard.ts",
+    "editor.ts",
+    "listitem.ts",
+    "plot.ts",
+    "status.ts"
   ]
 }
