@@ -40,10 +40,6 @@ import {
 } from './plot';
 
 import {
-  videoFactory
-} from './video';
-
-import {
   ListItem
 } from './listitem';
 
@@ -97,15 +93,6 @@ const specs = [
     dragStatus: 'Dragging JS editor',
     dropStatus: 'Mounted JS editor',
     clearStatus: 'Unmounted JS editor'
-  },
-  {
-    type: 'video',
-    color: 'red',
-    label: 'Jupyter video',
-    icon: 'youtube',
-    dragStatus: 'Dragging Jupyter video',
-    dropStatus: 'Mounted Jupyter video',
-    clearStatus: 'Reactivated Jupyter video'
   }
 ];
 
@@ -172,11 +159,6 @@ function populateList(list: Panel, dock: DockPanel): void {
       item.supportedActions = DropActions.Copy;
       item.proposedAction = DropAction.Copy;
       item.factory = editorFactory(item);
-      break;
-    case 'video':
-      item.supportedActions = DropActions.Move;
-      item.proposedAction = DropAction.Move;
-      item.factory = videoFactory(item);
       break;
     }
     list.children.add(item);
