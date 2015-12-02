@@ -102,10 +102,6 @@ class ListItem extends Widget {
     } else {
       this.removeClass('draggable');
       this._releaseMouse();
-      if (this._drag) {
-        this._drag.dispose();
-        this._drag = null;
-      }
       this.node.removeEventListener('mousedown', this as any);
     }
   }
@@ -116,14 +112,16 @@ class ListItem extends Widget {
     this.node.querySelector('span').textContent = label;
   }
 
-  creationStatus: string = null;
-
   dispose(): void {
     this.draggable = false;
     super.dispose();
   }
 
+  clearStatus: string = null;
+
   dragStatus: string = null;
+
+  dropStatus: string = null;
 
   factory: () => Widget = null;
 
@@ -176,10 +174,12 @@ class ListItem extends Widget {
     });
     this._drag.mimeData.setData(FACTORY_MIME, this.factory);
     Status.update(this.dragStatus, true);
-    this._drag.start(event.clientX, event.clientY).then(() => {
-      this._releaseMouse();
-      this._drag.dispose();
-      this._drag = null;
+    let { clientX, clientY } = event;
+    this._releaseMouse();
+    this._drag.start(clientX, clientY).then(action => {
+      if (action !== DropAction.None) {
+        Status.update(this.dropStatus);
+      }
     });
   }
 
@@ -216,10 +216,30 @@ class Plot extends Widget {
     super.onCloseRequest(msg);
     // Reactivate the list item.
     this._item.draggable = true;
-    Status.update(`Reactivated ${this._item.label}`);
+    Status.update(this._item.clearStatus);
   }
 
   private _item: ListItem = null;
+}
+
+function editorFactory(item: ListItem): () => Widget {
+  return () => {
+    let editor = new Widget();
+    editor.addClass('dashboard-content');
+    let codemirror = CodeMirror(editor.node, {
+      dragDrop: false,
+      value: '\/* This is a code editor in JS mode. *\/',
+      mode: 'text/javascript',
+      readOnly: false
+    });
+    setTimeout(() => {
+      codemirror.refresh();
+      codemirror.focus();
+    });
+    editor.title.text = item.label;
+    editor.title.closable = true;
+    return editor;
+  };
 }
 
 function plotFactory(item: ListItem, node: Node): () => Widget {
@@ -228,7 +248,6 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
     item.draggable = false;
     plot.title.text = item.label;
     plot.title.closable = true;
-    Status.update(item.creationStatus);
     return plot;
   }
 }
@@ -277,83 +296,75 @@ function populateList(list: Panel, dock: DockPanel): void {
   let plots = document.querySelectorAll('div.bk-plot');
   let specs = [
     {
+      type: 'plot',
       color: 'yellow',
       label: 'Elements',
       icon: 'table',
-      creationStatus: 'Created periodic table of elements',
-      dragStatus: 'Dragging periodic table of elements'
+      dragStatus: 'Dragging periodic table of elements',
+      dropStatus: 'Mounted periodic table of elements',
+      clearStatus: 'Reactivated periodic table of elements'
     },
     {
+      type: 'plot',
       color: 'blue',
       label: 'Linked 1',
       icon: 'line-chart',
-      creationStatus: 'Created first linked plot',
-      dragStatus: 'Dragging first linked plot'
+      dragStatus: 'Dragging first linked plot',
+      dropStatus: 'Mounted first linked plot',
+      clearStatus: 'Reactivated first linked plot'
     },
     {
+      type: 'plot',
       color: 'blue',
       label: 'Linked 2',
       icon: 'line-chart',
-      creationStatus: 'Created second linked plot',
-      dragStatus: 'Dragging second linked plot'
+      dragStatus: 'Dragging second linked plot',
+      dropStatus: 'Mounted second linked plot',
+      clearStatus: 'Reactivated second linked plot'
     },
     {
+      type: 'plot',
       color: 'blue',
       label: 'Linked 3',
       icon: 'line-chart',
-      creationStatus: 'Created third linked plot',
-      dragStatus: 'Dragging third linked plot'
+      dragStatus: 'Dragging third linked plot',
+      dropStatus: 'Mounted third linked plot',
+      clearStatus: 'Reactivated third linked plot'
     },
     {
+      type: 'editor',
       color: 'green',
       label: 'Editor',
       icon: 'pencil',
-      creationStatus: 'Created text editor',
-      dragStatus: 'Dragging text editor'
+      dragStatus: 'Dragging text editor',
+      dropStatus: 'Mounted text editor',
+      clearStatus: 'Unmounted text editor'
     }
   ];
-  // Plots
-  for (let index = 0; index < 4; ++index) {
-    let plot = document.body.removeChild(plots[index]);
-    let { color, label, icon, creationStatus, dragStatus } = specs[index];
+  for (let index = 0; index < specs.length; ++index) {
+    let { color, label, icon, type } = specs[index];
+    let { dragStatus, dropStatus, clearStatus } = specs[index];
     let item = new ListItem(color, icon, label);
     item.addClass(color);
     item.draggable = true;
-    item.creationStatus = creationStatus;
     item.dragStatus = dragStatus;
-    item.supportedActions = DropActions.Move;
-    item.proposedAction = DropAction.Move;
-    item.factory = plotFactory(item, plot);
+    item.dropStatus = dropStatus;
+    item.clearStatus = clearStatus;
+    switch (type) {
+    case 'plot':
+      let plot = document.body.removeChild(plots[index]);
+      item.supportedActions = DropActions.Move;
+      item.proposedAction = DropAction.Move;
+      item.factory = plotFactory(item, plot);
+      break;
+    case 'editor':
+      item.supportedActions = DropActions.Copy;
+      item.proposedAction = DropAction.Copy;
+      item.factory = editorFactory(item);
+      break;
+    }
     list.children.add(item);
   }
-  // Text editor
-  let { color, label, icon, creationStatus, dragStatus } = specs[4];
-  let item = new ListItem(color, icon, label);
-  item.addClass(color);
-  item.draggable = true;
-  item.creationStatus = creationStatus;
-  item.dragStatus = dragStatus;
-  item.supportedActions = DropActions.Copy;
-  item.proposedAction = DropAction.Copy;
-  item.factory = () => {
-    let editor = new Widget();
-    editor.addClass('dashboard-content');
-    let codemirror = CodeMirror(editor.node, {
-      dragDrop: false,
-      value: '\/* This is a code editor in JS mode. *\/',
-      mode: 'text/javascript',
-      readOnly: false
-    });
-    setTimeout(() => {
-      codemirror.refresh();
-      codemirror.focus();
-    });
-    editor.title.text = item.label;
-    editor.title.closable = true;
-    Status.update(item.creationStatus);
-    return editor;
-  };
-  list.children.add(item);
 }
 
 function main(): void {
