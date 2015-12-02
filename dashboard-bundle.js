@@ -57,8 +57,9 @@ var ListItem = (function (_super) {
         this.color = color;
         this.icon = icon;
         this.label = label;
-        this.creationStatus = null;
+        this.clearStatus = null;
         this.dragStatus = null;
+        this.dropStatus = null;
         this.factory = null;
         this.proposedAction = null;
         this.supportedActions = null;
@@ -95,10 +96,6 @@ var ListItem = (function (_super) {
             else {
                 this.removeClass('draggable');
                 this._releaseMouse();
-                if (this._drag) {
-                    this._drag.dispose();
-                    this._drag = null;
-                }
                 this.node.removeEventListener('mousedown', this);
             }
         },
@@ -153,10 +150,12 @@ var ListItem = (function (_super) {
         });
         this._drag.mimeData.setData(FACTORY_MIME, this.factory);
         Status.update(this.dragStatus, true);
-        this._drag.start(event.clientX, event.clientY).then(function () {
-            _this._releaseMouse();
-            _this._drag.dispose();
-            _this._drag = null;
+        var clientX = event.clientX, clientY = event.clientY;
+        this._releaseMouse();
+        this._drag.start(clientX, clientY).then(function (action) {
+            if (action !== phosphor_dragdrop_1.DropAction.None) {
+                Status.update(_this.dropStatus);
+            }
         });
     };
     ListItem.prototype._evtMouseUp = function (event) {
@@ -187,17 +186,35 @@ var Plot = (function (_super) {
         _super.prototype.onCloseRequest.call(this, msg);
         // Reactivate the list item.
         this._item.draggable = true;
-        Status.update("Reactivated " + this._item.label);
+        Status.update(this._item.clearStatus);
     };
     return Plot;
 })(phosphor_widget_1.Widget);
+function editorFactory(item) {
+    return function () {
+        var editor = new phosphor_widget_1.Widget();
+        editor.addClass('dashboard-content');
+        var codemirror = CodeMirror(editor.node, {
+            dragDrop: false,
+            value: '\/* This is a code editor in JS mode. *\/',
+            mode: 'text/javascript',
+            readOnly: false
+        });
+        setTimeout(function () {
+            codemirror.refresh();
+            codemirror.focus();
+        });
+        editor.title.text = item.label;
+        editor.title.closable = true;
+        return editor;
+    };
+}
 function plotFactory(item, node) {
     return function () {
         var plot = new Plot(item, node);
         item.draggable = false;
         plot.title.text = item.label;
         plot.title.closable = true;
-        Status.update(item.creationStatus);
         return plot;
     };
 }
@@ -238,83 +255,75 @@ function populateList(list, dock) {
     var plots = document.querySelectorAll('div.bk-plot');
     var specs = [
         {
+            type: 'plot',
             color: 'yellow',
             label: 'Elements',
             icon: 'table',
-            creationStatus: 'Created periodic table of elements',
-            dragStatus: 'Dragging periodic table of elements'
+            dragStatus: 'Dragging periodic table of elements',
+            dropStatus: 'Mounted periodic table of elements',
+            clearStatus: 'Reactivated periodic table of elements'
         },
         {
+            type: 'plot',
             color: 'blue',
             label: 'Linked 1',
             icon: 'line-chart',
-            creationStatus: 'Created first linked plot',
-            dragStatus: 'Dragging first linked plot'
+            dragStatus: 'Dragging first linked plot',
+            dropStatus: 'Mounted first linked plot',
+            clearStatus: 'Reactivated first linked plot'
         },
         {
+            type: 'plot',
             color: 'blue',
             label: 'Linked 2',
             icon: 'line-chart',
-            creationStatus: 'Created second linked plot',
-            dragStatus: 'Dragging second linked plot'
+            dragStatus: 'Dragging second linked plot',
+            dropStatus: 'Mounted second linked plot',
+            clearStatus: 'Reactivated second linked plot'
         },
         {
+            type: 'plot',
             color: 'blue',
             label: 'Linked 3',
             icon: 'line-chart',
-            creationStatus: 'Created third linked plot',
-            dragStatus: 'Dragging third linked plot'
+            dragStatus: 'Dragging third linked plot',
+            dropStatus: 'Mounted third linked plot',
+            clearStatus: 'Reactivated third linked plot'
         },
         {
+            type: 'editor',
             color: 'green',
             label: 'Editor',
             icon: 'pencil',
-            creationStatus: 'Created text editor',
-            dragStatus: 'Dragging text editor'
+            dragStatus: 'Dragging text editor',
+            dropStatus: 'Mounted text editor',
+            clearStatus: 'Unmounted text editor'
         }
     ];
-    // Plots
-    for (var index = 0; index < 4; ++index) {
-        var plot = document.body.removeChild(plots[index]);
-        var _a = specs[index], color_1 = _a.color, label_1 = _a.label, icon_1 = _a.icon, creationStatus_1 = _a.creationStatus, dragStatus_1 = _a.dragStatus;
-        var item_1 = new ListItem(color_1, icon_1, label_1);
-        item_1.addClass(color_1);
-        item_1.draggable = true;
-        item_1.creationStatus = creationStatus_1;
-        item_1.dragStatus = dragStatus_1;
-        item_1.supportedActions = phosphor_dragdrop_1.DropActions.Move;
-        item_1.proposedAction = phosphor_dragdrop_1.DropAction.Move;
-        item_1.factory = plotFactory(item_1, plot);
-        list.children.add(item_1);
+    for (var index = 0; index < specs.length; ++index) {
+        var _a = specs[index], color = _a.color, label = _a.label, icon = _a.icon, type = _a.type;
+        var _b = specs[index], dragStatus = _b.dragStatus, dropStatus = _b.dropStatus, clearStatus = _b.clearStatus;
+        var item = new ListItem(color, icon, label);
+        item.addClass(color);
+        item.draggable = true;
+        item.dragStatus = dragStatus;
+        item.dropStatus = dropStatus;
+        item.clearStatus = clearStatus;
+        switch (type) {
+            case 'plot':
+                var plot = document.body.removeChild(plots[index]);
+                item.supportedActions = phosphor_dragdrop_1.DropActions.Move;
+                item.proposedAction = phosphor_dragdrop_1.DropAction.Move;
+                item.factory = plotFactory(item, plot);
+                break;
+            case 'editor':
+                item.supportedActions = phosphor_dragdrop_1.DropActions.Copy;
+                item.proposedAction = phosphor_dragdrop_1.DropAction.Copy;
+                item.factory = editorFactory(item);
+                break;
+        }
+        list.children.add(item);
     }
-    // Text editor
-    var _b = specs[4], color = _b.color, label = _b.label, icon = _b.icon, creationStatus = _b.creationStatus, dragStatus = _b.dragStatus;
-    var item = new ListItem(color, icon, label);
-    item.addClass(color);
-    item.draggable = true;
-    item.creationStatus = creationStatus;
-    item.dragStatus = dragStatus;
-    item.supportedActions = phosphor_dragdrop_1.DropActions.Copy;
-    item.proposedAction = phosphor_dragdrop_1.DropAction.Copy;
-    item.factory = function () {
-        var editor = new phosphor_widget_1.Widget();
-        editor.addClass('dashboard-content');
-        var codemirror = CodeMirror(editor.node, {
-            dragDrop: false,
-            value: '\/* This is a code editor in JS mode. *\/',
-            mode: 'text/javascript',
-            readOnly: false
-        });
-        setTimeout(function () {
-            codemirror.refresh();
-            codemirror.focus();
-        });
-        editor.title.text = item.label;
-        editor.title.closable = true;
-        Status.update(item.creationStatus);
-        return editor;
-    };
-    list.children.add(item);
 }
 function main() {
     document.body.style.visibility = '';
@@ -673,6 +682,7 @@ var DockPanel = (function (_super) {
             return;
         }
         handleDrop(this, widget, target);
+        console.log('dropAction = ', event.proposedAction, phosphor_dragdrop_1.DropAction.Move);
         event.dropAction = event.proposedAction;
     };
     /**
