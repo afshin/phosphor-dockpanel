@@ -40,6 +40,10 @@ import {
 } from './plot';
 
 import {
+  videoFactory
+} from './video';
+
+import {
   ListItem
 } from './listitem';
 
@@ -93,6 +97,15 @@ const specs = [
     dragStatus: 'Dragging JS editor',
     dropStatus: 'Mounted JS editor',
     clearStatus: 'Unmounted JS editor'
+  },
+  {
+    type: 'video',
+    color: 'red',
+    label: 'Bokeh video',
+    icon: 'television',
+    dragStatus: 'Dragging Bokeh video',
+    dropStatus: 'Mounted Bokeh video',
+    clearStatus: 'Unmounted Bokeh video'
   }
 ];
 
@@ -159,6 +172,11 @@ function populateList(list: Panel, dock: DockPanel): void {
       item.supportedActions = DropActions.Copy;
       item.proposedAction = DropAction.Copy;
       item.factory = editorFactory(item);
+      break;
+    case 'video':
+      item.supportedActions = DropActions.Copy;
+      item.proposedAction = DropAction.Copy;
+      item.factory = videoFactory(item);
       break;
     }
     list.children.add(item);

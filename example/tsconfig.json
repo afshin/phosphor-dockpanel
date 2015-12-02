@@ -14,6 +14,7 @@
     "editor.ts",
     "listitem.ts",
     "plot.ts",
-    "status.ts"
+    "status.ts",
+    "video.ts"
   ]
 }
