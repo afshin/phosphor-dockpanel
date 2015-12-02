@@ -156,6 +156,7 @@ var ListItem = (function (_super) {
             if (action !== phosphor_dragdrop_1.DropAction.None) {
                 Status.update(_this.dropStatus);
             }
+            _this._drag = null;
         });
     };
     ListItem.prototype._evtMouseUp = function (event) {
@@ -190,11 +191,14 @@ var Plot = (function (_super) {
     };
     return Plot;
 })(phosphor_widget_1.Widget);
-function editorFactory(item) {
-    return function () {
-        var editor = new phosphor_widget_1.Widget();
-        editor.addClass('dashboard-content');
-        var codemirror = CodeMirror(editor.node, {
+var Editor = (function (_super) {
+    __extends(Editor, _super);
+    function Editor(item) {
+        _super.call(this);
+        this._item = null;
+        this._item = item;
+        this.addClass('dashboard-content');
+        var codemirror = CodeMirror(this.node, {
             dragDrop: false,
             value: '\/* This is a code editor in JS mode. *\/',
             mode: 'text/javascript',
@@ -204,8 +208,18 @@ function editorFactory(item) {
             codemirror.refresh();
             codemirror.focus();
         });
-        editor.title.text = item.label;
-        editor.title.closable = true;
+        this.title.text = item.label;
+        this.title.closable = true;
+    }
+    Editor.prototype.onCloseRequest = function (msg) {
+        _super.prototype.onCloseRequest.call(this, msg);
+        Status.update(this._item.clearStatus);
+    };
+    return Editor;
+})(phosphor_widget_1.Widget);
+function editorFactory(item) {
+    return function () {
+        var editor = new Editor(item);
         return editor;
     };
 }
@@ -682,7 +696,6 @@ var DockPanel = (function (_super) {
             return;
         }
         handleDrop(this, widget, target);
-        console.log('dropAction = ', event.proposedAction, phosphor_dragdrop_1.DropAction.Move);
         event.dropAction = event.proposedAction;
     };
     /**
