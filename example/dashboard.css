@@ -93,6 +93,19 @@ body {
   padding: 0;
 }
 
+.dashboard-content.television {
+  margin: 0;
+  padding: 0;
+  min-width: 256px;
+  min-height: 160px;
+}
+
+.dashboard-content video {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 
 .draggable {
   opacity: 1;
