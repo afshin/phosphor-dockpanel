@@ -85,6 +85,11 @@ body {
   overflow: auto;
 }
 
+.dashboard-content.table {
+  min-width: 250px;
+  min-height: 250px;
+}
+
 .dashboard-content.line-chart {
   overflow: hidden;
   min-width: 250px;
