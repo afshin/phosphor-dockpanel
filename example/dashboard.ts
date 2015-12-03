@@ -40,7 +40,7 @@ import {
 } from './plot';
 
 import {
-  videoFactory
+  videoFactory, IVideoSpec
 } from './video';
 
 import {
@@ -50,9 +50,20 @@ import {
 import './dashboard.css';
 
 
+interface IWidgetSpec {
+  type: string;
+  color: string;
+  label: string;
+  icon: string;
+  dragStatus: string;
+  dropStatus: string;
+  clearStatus: string;
+  config?: any;
+}
+
 const INSTRUCTIONS = 'Drag items from the left side onto the right-hand panel.';
 
-const specs = [
+const specs: IWidgetSpec[] = [
   {
     type: 'plot',
     color: 'yellow',
@@ -105,7 +116,12 @@ const specs = [
     icon: 'television',
     dragStatus: 'Dragging Bokeh video',
     dropStatus: 'Mounted Bokeh video',
-    clearStatus: 'Unmounted Bokeh video'
+    clearStatus: 'Unmounted Bokeh video',
+    config: ({
+      aspect: 1.6,
+      mime: 'video/mp4',
+      url: 'https://www.continuum.io/sites/default/files/bokeh_simple_map.mp4'
+    } as IVideoSpec)
   }
 ];
 
@@ -176,7 +192,7 @@ function populateList(list: Panel, dock: DockPanel): void {
     case 'video':
       item.supportedActions = DropActions.Copy;
       item.proposedAction = DropAction.Copy;
-      item.factory = videoFactory(item);
+      item.factory = videoFactory(item, specs[index].config);
       break;
     }
     list.children.add(item);

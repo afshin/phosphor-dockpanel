@@ -96,8 +96,8 @@ body {
 .dashboard-content.television {
   margin: 0;
   padding: 0;
-  min-width: 256px;
-  min-height: 160px;
+  min-width: 320px;
+  min-height: 240px;
 }
 
 .dashboard-content video {

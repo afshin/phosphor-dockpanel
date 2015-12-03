@@ -24,23 +24,25 @@ import {
 } from './status';
 
 
-const ASPECT_RATIO = 1.6;
-
-const URL = 'https://www.continuum.io/sites/default/files/bokeh_simple_map.mp4';
+export
+interface IVideoSpec {
+  url: string;
+  mime: string;
+  aspect: number;
+}
 
 class Video extends Widget {
 
-  constructor() {
+  constructor(spec: IVideoSpec) {
     super();
     this.addClass('dashboard-content');
     let video = document.createElement('video');
     let source = document.createElement('source');
     video.appendChild(source);
-    video.setAttribute('height', '320');
-    video.setAttribute('width', '512');
     video.setAttribute('controls', '');
-    source.setAttribute('src', URL);
-    source.setAttribute('type', 'video/mp4');
+    source.setAttribute('src', spec.url);
+    source.setAttribute('type', spec.mime);
+    this._aspect = spec.aspect;
     this.node.appendChild(video);
   }
 
@@ -50,21 +52,23 @@ class Video extends Widget {
       let width = msg.width < 0 ? this.node.offsetWidth : msg.width;
       let height = msg.height < 0 ? this.node.offsetHeight : msg.height;
       let video = this.node.querySelector('video');
-      if (width / height >= ASPECT_RATIO) {
-        video.setAttribute('width', `${height * ASPECT_RATIO}`);
+      if (width / height >= this._aspect) {
+        video.setAttribute('width', `${height * this._aspect}`);
         video.setAttribute('height', `${height}`);
       } else {
         video.setAttribute('width', `${width}`);
-        video.setAttribute('height', `${Math.floor(width / ASPECT_RATIO)}`);
+        video.setAttribute('height', `${Math.floor(width / this._aspect)}`);
       }
     }
   }
+
+  private _aspect: number = null;
 }
 
 export
-function videoFactory(item: ListItem): () => Widget {
+function videoFactory(item: ListItem, spec: IVideoSpec): () => Widget {
   return () => {
-    let video = new Video();
+    let video = new Video(spec);
     video.title.text = item.label;
     video.title.closable = true;
     video.addClass(item.icon);
