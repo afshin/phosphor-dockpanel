@@ -1,23 +1,29 @@
+import numpy as np
 from bokeh.resources import CDN
 from bokeh.embed import autoload_static
-from bokeh.plotting import figure, gridplot, output_file, show
+from bokeh.plotting import *
 
-x = list(range(11))
-y0 = x
-y1 = [10-xx for xx in x]
-y2 = [abs(xx-5) for xx in x]
+# prepare some data
+N = 100
+x = np.linspace(0, 4*np.pi, N)
+y0 = np.sin(x)
+y1 = np.cos(x)
+y2 = np.sin(x) + np.cos(x)
 
 # create a new plot
-s1 = figure(width=250, plot_height=250, title=None, toolbar_location=None)
-s1.circle(x, y0, size=6, color="navy", alpha=0.5)
+s1 = figure(width=250, plot_height=250, title=None)
+s1.circle(x, y0, size=10, color="navy", alpha=0.5)
+s1.toolbar_location = None;
 
-# create a new plot and share both ranges
-s2 = figure(width=250, height=250, x_range=s1.x_range, y_range=s1.y_range, title=None, toolbar_location=None)
-s2.triangle(x, y1, size=6, color="firebrick", alpha=0.5)
+# NEW: create a new plot and share both ranges
+s2 = figure(width=250, height=250, x_range=s1.x_range, y_range=s1.y_range, title=None)
+s2.triangle(x, y1, size=10, color="firebrick", alpha=0.5)
+s2.toolbar_location = None;
 
-# create a new plot and share only one range
-s3 = figure(width=250, height=250, x_range=s1.x_range, title=None, toolbar_location=None)
-s3.square(x, y2, size=6, color="olive", alpha=0.5)
+# NEW: create a new plot and share only one range
+s3 = figure(width=250, height=250, x_range=s1.x_range, title=None)
+s3.square(x, y2, size=10, color="olive", alpha=0.5)
+s3.toolbar_location = None;
 
 web_s1_path = "./plots/linked-1.js"
 web_s2_path = "./plots/linked-2.js"

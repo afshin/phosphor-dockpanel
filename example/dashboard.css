@@ -87,6 +87,8 @@ body {
 
 .dashboard-content.line-chart {
   overflow: hidden;
+  min-width: 250px;
+  min-height: 250px;
 }
 
 .dashboard-content.pencil {
