@@ -29,8 +29,6 @@ class Plot extends Widget {
   constructor(item: ListItem, plot: Node) {
     super();
     this._item = item;
-    this.addClass('dashboard-content');
-    this.addClass(item.icon);
     this.node.appendChild(plot);
   }
 
@@ -49,6 +47,8 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
   return () => {
     let plot = new Plot(item, node);
     item.draggable = false;
+    plot.addClass('dashboard-content');
+    plot.addClass(item.icon);
     plot.title.text = item.label;
     plot.title.closable = true;
     return plot;

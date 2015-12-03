@@ -29,7 +29,6 @@ class Editor extends Widget {
   constructor(item: ListItem) {
     super();
     this._item = item;
-    this.addClass('dashboard-content');
     let codemirror = CodeMirror(this.node, {
       dragDrop: false,
       value: '\/* This is a code editor in JS mode. *\/',
@@ -54,5 +53,9 @@ class Editor extends Widget {
 
 export
 function editorFactory(item: ListItem): () => Widget {
-  return () => new Editor(item);
+  return () => {
+    let editor = new Editor(item);
+    editor.addClass('dashboard-content');
+    return editor;
+  }
 }

@@ -35,15 +35,33 @@ class Video extends Widget {
 
   constructor(spec: IVideoSpec) {
     super();
-    this.addClass('dashboard-content');
+    this._aspect = spec.aspect;
     let video = document.createElement('video');
     let source = document.createElement('source');
     video.appendChild(source);
     video.setAttribute('controls', '');
     source.setAttribute('src', spec.url);
     source.setAttribute('type', spec.mime);
-    this._aspect = spec.aspect;
     this.node.appendChild(video);
+  }
+
+  protected onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+    if (!this._paused) {
+      let video = this.node.querySelector('video') as HTMLMediaElement;
+
+      // If user has already started playing the video and it was not paused
+      // before detachment, then it should play after attachment.
+      if (video.played.length && !this._paused && video.paused) {
+        video.play();
+      }
+    }
+  }
+
+  protected onBeforeDetach(msg: Message): void {
+    super.onBeforeDetach(msg);
+    let video = this.node.querySelector('video') as HTMLMediaElement;
+    this._paused = video.paused;
   }
 
   protected onResize(msg: ResizeMessage): void {
@@ -52,6 +70,9 @@ class Video extends Widget {
       let width = msg.width < 0 ? this.node.offsetWidth : msg.width;
       let height = msg.height < 0 ? this.node.offsetHeight : msg.height;
       let video = this.node.querySelector('video');
+
+      // Set the video player dimensions to the largest possible rectangle
+      // with the correct aspect ratio.
       if (width / height >= this._aspect) {
         video.setAttribute('width', `${height * this._aspect}`);
         video.setAttribute('height', `${height}`);
@@ -63,6 +84,7 @@ class Video extends Widget {
   }
 
   private _aspect: number = null;
+  private _paused: boolean = false;
 }
 
 export
@@ -71,6 +93,7 @@ function videoFactory(item: ListItem, spec: IVideoSpec): () => Widget {
     let video = new Video(spec);
     video.title.text = item.label;
     video.title.closable = true;
+    video.addClass('dashboard-content');
     video.addClass(item.icon);
     return video;
   }
