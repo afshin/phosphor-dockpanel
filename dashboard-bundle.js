@@ -187,18 +187,20 @@ var status_1 = require('./status');
 var Editor = (function (_super) {
     __extends(Editor, _super);
     function Editor(item) {
+        var _this = this;
         _super.call(this);
+        this._editor = null;
         this._item = null;
         this._item = item;
-        var codemirror = CodeMirror(this.node, {
+        this._editor = CodeMirror(this.node, {
             dragDrop: false,
             value: '\/* This is a code editor in JS mode. *\/',
             mode: 'text/javascript',
             readOnly: false
         });
         setTimeout(function () {
-            codemirror.refresh();
-            codemirror.focus();
+            _this._editor.refresh();
+            _this._editor.focus();
         });
         this.title.text = item.label;
         this.title.closable = true;
@@ -206,6 +208,14 @@ var Editor = (function (_super) {
     Editor.prototype.onCloseRequest = function (msg) {
         _super.prototype.onCloseRequest.call(this, msg);
         status_1.updateStatus(this._item.clearStatus);
+    };
+    Editor.prototype.onResize = function (msg) {
+        if (msg.width < 0 || msg.height < 0) {
+            this._editor.refresh();
+        }
+        else {
+            this._editor.setSize(msg.width, msg.height);
+        }
     };
     return Editor;
 })(phosphor_widget_1.Widget);
