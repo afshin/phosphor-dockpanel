@@ -12,7 +12,7 @@ Message
 } from 'phosphor-messaging';
 
 import {
-Widget
+Widget, ResizeMessage
 } from 'phosphor-widget';
 
 import {
@@ -29,15 +29,15 @@ class Editor extends Widget {
   constructor(item: ListItem) {
     super();
     this._item = item;
-    let codemirror = CodeMirror(this.node, {
+    this._editor = CodeMirror(this.node, {
       dragDrop: false,
       value: '\/* This is a code editor in JS mode. *\/',
       mode: 'text/javascript',
       readOnly: false
     });
     setTimeout(() => {
-      codemirror.refresh();
-      codemirror.focus();
+      this._editor.refresh();
+      this._editor.focus();
     });
     this.title.text = item.label;
     this.title.closable = true;
@@ -48,6 +48,15 @@ class Editor extends Widget {
     updateStatus(this._item.clearStatus);
   }
 
+  protected onResize(msg: ResizeMessage): void {
+    if (msg.width < 0 || msg.height < 0) {
+      this._editor.refresh();
+    } else {
+      this._editor.setSize(msg.width, msg.height);
+    }
+  }
+
+  private _editor: CodeMirror.Editor = null;
   private _item: ListItem = null;
 }
 
