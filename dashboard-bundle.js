@@ -190,7 +190,6 @@ var Editor = (function (_super) {
         _super.call(this);
         this._item = null;
         this._item = item;
-        this.addClass('dashboard-content');
         var codemirror = CodeMirror(this.node, {
             dragDrop: false,
             value: '\/* This is a code editor in JS mode. *\/',
@@ -211,7 +210,11 @@ var Editor = (function (_super) {
     return Editor;
 })(phosphor_widget_1.Widget);
 function editorFactory(item) {
-    return function () { return new Editor(item); };
+    return function () {
+        var editor = new Editor(item);
+        editor.addClass('dashboard-content');
+        return editor;
+    };
 }
 exports.editorFactory = editorFactory;
 
@@ -381,8 +384,6 @@ var Plot = (function (_super) {
         _super.call(this);
         this._item = null;
         this._item = item;
-        this.addClass('dashboard-content');
-        this.addClass(item.icon);
         this.node.appendChild(plot);
     }
     Plot.prototype.onCloseRequest = function (msg) {
@@ -397,6 +398,8 @@ function plotFactory(item, node) {
     return function () {
         var plot = new Plot(item, node);
         item.draggable = false;
+        plot.addClass('dashboard-content');
+        plot.addClass(item.icon);
         plot.title.text = item.label;
         plot.title.closable = true;
         return plot;
@@ -458,22 +461,40 @@ var Video = (function (_super) {
     function Video(spec) {
         _super.call(this);
         this._aspect = null;
-        this.addClass('dashboard-content');
+        this._paused = false;
+        this._aspect = spec.aspect;
         var video = document.createElement('video');
         var source = document.createElement('source');
         video.appendChild(source);
         video.setAttribute('controls', '');
         source.setAttribute('src', spec.url);
         source.setAttribute('type', spec.mime);
-        this._aspect = spec.aspect;
         this.node.appendChild(video);
     }
+    Video.prototype.onAfterAttach = function (msg) {
+        _super.prototype.onAfterAttach.call(this, msg);
+        if (!this._paused) {
+            var video = this.node.querySelector('video');
+            // If user has already started playing the video and it was not paused
+            // before detachment, then it should play after attachment.
+            if (video.played.length && !this._paused && video.paused) {
+                video.play();
+            }
+        }
+    };
+    Video.prototype.onBeforeDetach = function (msg) {
+        _super.prototype.onBeforeDetach.call(this, msg);
+        var video = this.node.querySelector('video');
+        this._paused = video.paused;
+    };
     Video.prototype.onResize = function (msg) {
         _super.prototype.onResize.call(this, msg);
         if (this.isVisible) {
             var width = msg.width < 0 ? this.node.offsetWidth : msg.width;
             var height = msg.height < 0 ? this.node.offsetHeight : msg.height;
             var video = this.node.querySelector('video');
+            // Set the video player dimensions to the largest possible rectangle
+            // with the correct aspect ratio.
             if (width / height >= this._aspect) {
                 video.setAttribute('width', "" + height * this._aspect);
                 video.setAttribute('height', "" + height);
@@ -491,6 +512,7 @@ function videoFactory(item, spec) {
         var video = new Video(spec);
         video.title.text = item.label;
         video.title.closable = true;
+        video.addClass('dashboard-content');
         video.addClass(item.icon);
         return video;
     };
