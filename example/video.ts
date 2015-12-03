@@ -33,8 +33,9 @@ interface IVideoSpec {
 
 class Video extends Widget {
 
-  constructor(spec: IVideoSpec) {
+  constructor(item: ListItem, spec: IVideoSpec) {
     super();
+    this._item = item;
     this._aspect = spec.aspect;
     let video = document.createElement('video');
     let source = document.createElement('source');
@@ -43,6 +44,11 @@ class Video extends Widget {
     source.setAttribute('src', spec.url);
     source.setAttribute('type', spec.mime);
     this.node.appendChild(video);
+  }
+
+  protected onCloseRequest(msg: Message) {
+    super.onCloseRequest(msg);
+    updateStatus(this._item.clearStatus);
   }
 
   protected onAfterAttach(msg: Message): void {
@@ -83,6 +89,7 @@ class Video extends Widget {
     }
   }
 
+  private _item: ListItem = null;
   private _aspect: number = null;
   private _paused: boolean = false;
 }
@@ -90,7 +97,7 @@ class Video extends Widget {
 export
 function videoFactory(item: ListItem, spec: IVideoSpec): () => Widget {
   return () => {
-    let video = new Video(spec);
+    let video = new Video(item, spec);
     video.title.text = item.label;
     video.title.closable = true;
     video.addClass('dashboard-content');

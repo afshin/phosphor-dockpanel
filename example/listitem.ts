@@ -130,9 +130,7 @@ class ListItem extends Widget {
     let { clientX, clientY } = event;
     this._releaseMouse();
     this._drag.start(clientX, clientY).then(action => {
-      if (action !== DropAction.None) {
-        updateStatus(this.dropStatus);
-      }
+      updateStatus(action === DropAction.None ? '' : this.dropStatus);
       this._drag = null;
     });
   }
