@@ -340,9 +340,7 @@ var ListItem = (function (_super) {
         var clientX = event.clientX, clientY = event.clientY;
         this._releaseMouse();
         this._drag.start(clientX, clientY).then(function (action) {
-            if (action !== phosphor_dragdrop_1.DropAction.None) {
-                status_1.updateStatus(_this.dropStatus);
-            }
+            status_1.updateStatus(action === phosphor_dragdrop_1.DropAction.None ? '' : _this.dropStatus);
             _this._drag = null;
         });
     };
@@ -456,12 +454,15 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var phosphor_widget_1 = require('phosphor-widget');
+var status_1 = require('./status');
 var Video = (function (_super) {
     __extends(Video, _super);
-    function Video(spec) {
+    function Video(item, spec) {
         _super.call(this);
+        this._item = null;
         this._aspect = null;
         this._paused = false;
+        this._item = item;
         this._aspect = spec.aspect;
         var video = document.createElement('video');
         var source = document.createElement('source');
@@ -471,6 +472,10 @@ var Video = (function (_super) {
         source.setAttribute('type', spec.mime);
         this.node.appendChild(video);
     }
+    Video.prototype.onCloseRequest = function (msg) {
+        _super.prototype.onCloseRequest.call(this, msg);
+        status_1.updateStatus(this._item.clearStatus);
+    };
     Video.prototype.onAfterAttach = function (msg) {
         _super.prototype.onAfterAttach.call(this, msg);
         if (!this._paused) {
@@ -509,7 +514,7 @@ var Video = (function (_super) {
 })(phosphor_widget_1.Widget);
 function videoFactory(item, spec) {
     return function () {
-        var video = new Video(spec);
+        var video = new Video(item, spec);
         video.title.text = item.label;
         video.title.closable = true;
         video.addClass('dashboard-content');
@@ -519,7 +524,7 @@ function videoFactory(item, spec) {
 }
 exports.videoFactory = videoFactory;
 
-},{"phosphor-widget":34}],8:[function(require,module,exports){
+},{"./status":6,"phosphor-widget":34}],8:[function(require,module,exports){
 var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\n.p-DockPanel,\n.p-DockPanel > .p-DockTabPanel,\n.p-DockPanel > .p-DockSplitPanel {\n  z-index: 0;\n}\n.p-DockPanelOverlay {\n  box-sizing: border-box;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 0;\n  height: 0;\n  z-index: 1;\n  pointer-events: none;\n}\n.p-Tab.p-mod-hidden,\n.p-DockPanelOverlay.p-mod-hidden {\n  display: none;\n}\n"; (require("browserify-css").createStyle(css, { "href": "lib/index.css"})); module.exports = css;
 },{"browserify-css":10}],9:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
