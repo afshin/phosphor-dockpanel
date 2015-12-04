@@ -120,8 +120,10 @@ function populateList(list, dock) {
     for (var index = 0; index < specs.length; ++index) {
         var _a = specs[index], color = _a.color, label = _a.label, icon = _a.icon, type = _a.type;
         var _b = specs[index], dragStatus = _b.dragStatus, dropStatus = _b.dropStatus, clearStatus = _b.clearStatus;
-        var item = new listitem_1.ListItem(color, icon, label);
-        item.addClass(color);
+        var item = new listitem_1.ListItem();
+        item.color = color;
+        item.label = label;
+        item.icon = icon;
         item.draggable = true;
         item.dragStatus = dragStatus;
         item.dropStatus = dropStatus;
@@ -249,11 +251,8 @@ var DRAG_THRESHOLD = 5;
 var FACTORY_MIME = 'application/x-phosphor-widget-factory';
 var ListItem = (function (_super) {
     __extends(ListItem, _super);
-    function ListItem(color, icon, label) {
-        _super.call(this);
-        this.color = color;
-        this.icon = icon;
-        this.label = label;
+    function ListItem() {
+        _super.apply(this, arguments);
         this.clearStatus = null;
         this.dragStatus = null;
         this.dropStatus = null;
@@ -263,8 +262,6 @@ var ListItem = (function (_super) {
         this._draggable = false;
         this._dragData = null;
         this._drag = null;
-        this.node.querySelector('i').classList.add('fa', "fa-" + icon);
-        this.node.querySelector('span').textContent = label;
     }
     ListItem.createNode = function () {
         var node = document.createElement('div');
@@ -295,6 +292,51 @@ var ListItem = (function (_super) {
                 this._releaseMouse();
                 this.node.removeEventListener('mousedown', this);
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListItem.prototype, "color", {
+        get: function () {
+            return this._color;
+        },
+        set: function (color) {
+            if (this._color === color) {
+                return;
+            }
+            if (this._color) {
+                this.removeClass(this._color);
+            }
+            this._color = color;
+            this.addClass(color);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListItem.prototype, "icon", {
+        get: function () {
+            return this._icon;
+        },
+        set: function (icon) {
+            if (this._icon === icon) {
+                return;
+            }
+            this._icon = icon;
+            this.node.querySelector('i').classList.add('fa', "fa-" + icon);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListItem.prototype, "label", {
+        get: function () {
+            return this._label;
+        },
+        set: function (label) {
+            if (this._label === label) {
+                return;
+            }
+            this._label = label;
+            this.node.querySelector('span').textContent = label;
         },
         enumerable: true,
         configurable: true
