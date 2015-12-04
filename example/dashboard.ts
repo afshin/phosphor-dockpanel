@@ -171,8 +171,10 @@ function populateList(list: Panel, dock: DockPanel): void {
   for (let index = 0; index < specs.length; ++index) {
     let { color, label, icon, type } = specs[index];
     let { dragStatus, dropStatus, clearStatus } = specs[index];
-    let item = new ListItem(color, icon, label);
-    item.addClass(color);
+    let item = new ListItem();
+    item.color = color;
+    item.label = label;
+    item.icon = icon;
     item.draggable = true;
     item.dragStatus = dragStatus;
     item.dropStatus = dropStatus;

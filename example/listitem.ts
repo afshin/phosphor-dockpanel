@@ -24,7 +24,6 @@ const DRAG_THRESHOLD = 5;
 
 const FACTORY_MIME = 'application/x-phosphor-widget-factory';
 
-
 export
 class ListItem extends Widget {
 
@@ -59,10 +58,43 @@ class ListItem extends Widget {
     }
   }
 
-  constructor(public color: string, public icon: string, public label: string) {
-    super();
+  set color(color: string) {
+    if (this._color === color) {
+      return;
+    }
+    if (this._color) {
+      this.removeClass(this._color);
+    }
+    this._color = color;
+    this.addClass(color);
+  }
+
+  get color(): string {
+    return this._color;
+  }
+
+  set icon(icon: string) {
+    if (this._icon === icon) {
+      return;
+    }
+    this._icon = icon;
     this.node.querySelector('i').classList.add('fa', `fa-${icon}`);
+  }
+
+  get icon(): string {
+    return this._icon;
+  }
+
+  set label(label: string) {
+    if (this._label === label) {
+      return;
+    }
+    this._label = label;
     this.node.querySelector('span').textContent = label;
+  }
+
+  get label(): string {
+    return this._label;
   }
 
   dispose(): void {
@@ -149,6 +181,9 @@ class ListItem extends Widget {
     document.removeEventListener('mousemove', this as any, true);
   }
 
+  private _icon: string;
+  private _color: string;
+  private _label: string;
   private _draggable: boolean = false;
   private _dragData: { pressX: number, pressY: number } = null;
   private _drag: Drag = null;
