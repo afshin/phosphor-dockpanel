@@ -133,16 +133,16 @@ function createDock(): DockPanel {
   return dock;
 }
 
-function createInstructions(): Widget {
-  let instructions = new Widget();
+function createHeader(): Widget {
+  let header = new Widget();
   let lightbulb = document.createElement('i');
   lightbulb.classList.add('fa', 'fa-lightbulb-o');
-  instructions.addClass('instructions');
-  instructions.node.appendChild(lightbulb);
-  instructions.node.appendChild(document.createTextNode(` ${INSTRUCTIONS}`));
-  BoxPanel.setSizeBasis(instructions, 20);
-  BoxPanel.setStretch(instructions, 0);
-  return instructions;
+  header.addClass('instructions');
+  header.node.appendChild(lightbulb);
+  header.node.appendChild(document.createTextNode(` ${INSTRUCTIONS}`));
+  BoxPanel.setSizeBasis(header, 20);
+  BoxPanel.setStretch(header, 0);
+  return header;
 }
 
 function createList(): Panel {
@@ -170,7 +170,7 @@ function createList(): Panel {
   return panel;
 }
 
-function createPanel(instructions: Widget, list: Panel, dock: DockPanel, status: Widget): BoxPanel {
+function createPanel(header: Widget, list: Panel, dock: DockPanel, status: Widget): BoxPanel {
   let panel = new BoxPanel();
   let subpanel = new BoxPanel();
 
@@ -180,7 +180,7 @@ function createPanel(instructions: Widget, list: Panel, dock: DockPanel, status:
   BoxPanel.setSizeBasis(list, 150);
   BoxPanel.setStretch(list, 0);
 
-  panel.children.assign([instructions, subpanel, status]);
+  panel.children.assign([header, subpanel, status]);
   panel.spacing = 0;
   panel.direction = BoxPanel.TopToBottom;
 
@@ -231,11 +231,11 @@ function populateList(list: Panel, dock: DockPanel): void {
 
 function main(): void {
   document.body.style.visibility = '';
-  let instructions = createInstructions();
+  let header = createHeader();
   let list = createList();
   let dock = createDock();
   let status = createStatus();
-  let panel = createPanel(instructions, list, dock, status);
+  let panel = createPanel(header, list, dock, status);
   populateList(list, dock);
   Widget.attach(panel, document.body);
   window.onresize = () => panel.update();
