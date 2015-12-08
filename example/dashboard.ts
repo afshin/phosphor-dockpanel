@@ -54,6 +54,7 @@ interface IWidgetSpec {
   type: string;
   label: string;
   icon: string;
+  description?: string;
   dragStatus: string;
   dropStatus: string;
   clearStatus: string;
@@ -67,6 +68,7 @@ const specs: IWidgetSpec[] = [
     type: 'plot',
     label: 'Elements',
     icon: 'table',
+    description: 'Periodic table of elements',
     dragStatus: 'Dragging periodic table of elements',
     dropStatus: 'Mounted periodic table of elements',
     clearStatus: 'Reactivated periodic table of elements'
@@ -75,6 +77,7 @@ const specs: IWidgetSpec[] = [
     type: 'plot',
     label: 'Linked 1',
     icon: 'line-chart',
+    description: 'First linked plot',
     dragStatus: 'Dragging first linked plot',
     dropStatus: 'Mounted first linked plot',
     clearStatus: 'Reactivated first linked plot'
@@ -83,6 +86,7 @@ const specs: IWidgetSpec[] = [
     type: 'plot',
     label: 'Linked 2',
     icon: 'line-chart',
+    description: 'Second linked plot',
     dragStatus: 'Dragging second linked plot',
     dropStatus: 'Mounted second linked plot',
     clearStatus: 'Reactivated second linked plot'
@@ -91,22 +95,27 @@ const specs: IWidgetSpec[] = [
     type: 'plot',
     label: 'Linked 3',
     icon: 'line-chart',
+    description: 'Third linked plot',
     dragStatus: 'Dragging third linked plot',
     dropStatus: 'Mounted third linked plot',
     clearStatus: 'Reactivated third linked plot'
   },
+  null,
   {
     type: 'editor',
-    label: 'JS editor',
+    label: 'Text editor',
+    description: 'Code editor in JS mode',
     icon: 'pencil',
     dragStatus: 'Dragging JS editor',
     dropStatus: 'Mounted JS editor',
     clearStatus: 'Unmounted JS editor'
   },
+  null,
   {
     type: 'video',
     label: 'Bokeh video',
     icon: 'television',
+    description: 'Introducing Bokeh maps',
     dragStatus: 'Dragging Bokeh video',
     dropStatus: 'Mounted Bokeh video',
     clearStatus: 'Unmounted Bokeh video',
@@ -138,7 +147,26 @@ function createInstructions(): Widget {
 
 function createList(): Panel {
   let panel = new Panel();
+  let header = document.createElement('div');
+  let angle = document.createElement('i');
+  let ellipsis = document.createElement('i');
+  let home = document.createElement('i');
+  header.classList.add('header');
+  angle.classList.add('fa', 'fa-angle-right');
+  ellipsis.classList.add('fa', 'fa-ellipsis-h');
+  home.classList.add('fa', 'fa-home');
+  header.appendChild(home);
+  header.appendChild(document.createTextNode(' '));
+  header.appendChild(angle.cloneNode(true));
+  header.appendChild(document.createTextNode(' '));
+  header.appendChild(ellipsis);
+  header.appendChild(document.createTextNode(' '));
+  header.appendChild(angle.cloneNode(true));
+  header.appendChild(document.createTextNode(' '));
+  header.appendChild(document.createTextNode('widgets'));
   panel.addClass('list');
+  panel.node.appendChild(header);
+  panel.node.appendChild(document.createElement('hr'));
   return panel;
 }
 
@@ -163,11 +191,18 @@ function createPanel(instructions: Widget, list: Panel, dock: DockPanel, status:
 function populateList(list: Panel, dock: DockPanel): void {
   let plots = document.querySelectorAll('div.bk-plot');
   for (let index = 0; index < specs.length; ++index) {
-    let { label, icon, type } = specs[index];
+    if (!specs[index]) {
+      let item = new Widget();
+      item.node.appendChild(document.createElement('hr'));
+      list.children.add(item);
+      continue;
+    }
+    let { label, icon, description, type } = specs[index];
     let { dragStatus, dropStatus, clearStatus } = specs[index];
     let item = new ListItem();
     item.label = label;
     item.icon = icon;
+    item.description = description;
     item.draggable = true;
     item.dragStatus = dragStatus;
     item.dropStatus = dropStatus;

@@ -34,12 +34,27 @@ class ListItem extends Widget {
     let span = document.createElement('span');
     let space = document.createTextNode(' ');
     let icon = document.createElement('i');
+    let description = document.createElement('div');
     icon.classList.add('fa');
     node.classList.add('list-item');
+    description.classList.add('description');
     node.appendChild(icon);
     node.appendChild(space);
     node.appendChild(span);
+    node.appendChild(description);
     return node;
+  }
+
+  set description(description: string) {
+    if (this._description === description) {
+      return;
+    }
+    this._description = description;
+    this.node.querySelector('.description').textContent = description;
+  }
+
+  get description(): string {
+    return this._description;
   }
 
   get draggable(): boolean {
@@ -172,6 +187,7 @@ class ListItem extends Widget {
     document.removeEventListener('mousemove', this as any, true);
   }
 
+  private _description: string;
   private _icon: string;
   private _color: string;
   private _label: string;
