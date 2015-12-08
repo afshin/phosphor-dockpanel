@@ -10,8 +10,11 @@ body {
   padding: 0;
   background: #F5F6F7;
   overflow: hidden;
-  font-family: "Lato",sans-serif;
+  font-family: "Helvetica Neue", Helvetica;
+  font-size: 13px;
+  color: #757575;
 }
+
 
 #main {
   box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.5);
@@ -20,85 +23,70 @@ body {
   left: 10px;
   right: 10px;
   bottom: 10px;
-  border-left: 1px solid rgb(180, 180, 180);
-  border-right: 1px solid rgb(180, 180, 180);
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
 }
 
 
 .dock {
-  background: rgb(238, 238, 238);
+  background: #ffffff;
   min-width: 50px;
   min-height: 50px;
   padding: 3px;
 }
 
+
 .list {
-  background: rgb(248, 248, 248);
+  background: #f5f5f5;
   border-right: 1px solid rgb(180, 180, 180);
-  min-width: 150px;
-  max-width: 150px;
+  min-width: 125px;
+  max-width: 125px;
   min-height: 50px;
-}
-
-
-.list-item {
-  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.75);
-  margin: 2px;
-  min-width: 150px;
-  max-width: 150px;
-  min-height: 1.3em;
-  font-weight: bold;
-  font-size: 1em;
-  padding: 3px 0 3px 15px;
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-
-.list-item.p-mod-drag-image {
-  opacity: 0.70;
-  transform: translateX(-10px) translateY(-10px);
 }
 
 
 .instructions {
   border-bottom: 1px solid rgb(180, 180, 180);
   border-top: 1px solid rgb(180, 180, 180);
-  font-size: 0.8em;
-  min-height: 20px;
-  max-height: 20px;
+  min-height: 19px;
+  max-height: 19px;
   padding: 1px 0 1px 2px;
   text-align: center;
 }
 
+
 .status {
   border-bottom: 1px solid rgb(180, 180, 180);
   border-top: 1px solid rgb(180, 180, 180);
-  font-size: 0.8em;
-  min-height: 20px;
-  max-height: 20px;
+  min-height: 19px;
+  max-height: 19px;
   padding: 2px 10px 1px 2px;
   text-align: right;
 }
 
+
 .dashboard-content {
   overflow: auto;
 }
+
 
 .dashboard-content.table {
   min-width: 250px;
   min-height: 250px;
 }
 
+
 .dashboard-content.line-chart {
   overflow: hidden;
-  min-width: 250px;
-  min-height: 250px;
+  min-width: 350px;
+  min-height: 350px;
 }
+
 
 .dashboard-content.pencil {
   padding: 0;
 }
+
 
 .dashboard-content.television {
   margin: 0;
@@ -107,39 +95,12 @@ body {
   min-height: 240px;
 }
 
+
 .dashboard-content video {
   position: absolute;
   top: 0;
   left: 0;
 }
-
-
-.draggable {
-  opacity: 1;
-  cursor: move;
-}
-
-
-.yellow {
-  background: #F1C40F;
-}
-
-
-.green {
-  background: #27AE60;
-}
-
-
-.blue {
-  background: #3498DB;
-}
-
-
-
-.red {
-  background: #E74C3C;
-}
-
 
 
 .p-DockTabPanel {

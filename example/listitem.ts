@@ -19,6 +19,8 @@ import {
   updateStatus
 } from './status';
 
+import './listitem.css';
+
 
 const DRAG_THRESHOLD = 5;
 
@@ -32,7 +34,8 @@ class ListItem extends Widget {
     let span = document.createElement('span');
     let space = document.createTextNode(' ');
     let icon = document.createElement('i');
-    node.className = 'list-item';
+    icon.classList.add('fa');
+    node.classList.add('list-item');
     node.appendChild(icon);
     node.appendChild(space);
     node.appendChild(span);
@@ -58,27 +61,15 @@ class ListItem extends Widget {
     }
   }
 
-  set color(color: string) {
-    if (this._color === color) {
-      return;
-    }
-    if (this._color) {
-      this.removeClass(this._color);
-    }
-    this._color = color;
-    this.addClass(color);
-  }
-
-  get color(): string {
-    return this._color;
-  }
-
   set icon(icon: string) {
     if (this._icon === icon) {
       return;
     }
+    if (this._icon) {
+      this.node.querySelector('i').classList.remove(`fa-${this._icon}`);
+    }
     this._icon = icon;
-    this.node.querySelector('i').classList.add('fa', `fa-${icon}`);
+    this.node.querySelector('i').classList.add(`fa-${icon}`);
   }
 
   get icon(): string {

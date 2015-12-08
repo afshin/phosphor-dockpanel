@@ -52,7 +52,6 @@ import './dashboard.css';
 
 interface IWidgetSpec {
   type: string;
-  color: string;
   label: string;
   icon: string;
   dragStatus: string;
@@ -66,7 +65,6 @@ const INSTRUCTIONS = 'Drag items from the left side onto the right-hand panel.';
 const specs: IWidgetSpec[] = [
   {
     type: 'plot',
-    color: 'yellow',
     label: 'Elements',
     icon: 'table',
     dragStatus: 'Dragging periodic table of elements',
@@ -75,7 +73,6 @@ const specs: IWidgetSpec[] = [
   },
   {
     type: 'plot',
-    color: 'blue',
     label: 'Linked 1',
     icon: 'line-chart',
     dragStatus: 'Dragging first linked plot',
@@ -84,7 +81,6 @@ const specs: IWidgetSpec[] = [
   },
   {
     type: 'plot',
-    color: 'blue',
     label: 'Linked 2',
     icon: 'line-chart',
     dragStatus: 'Dragging second linked plot',
@@ -93,7 +89,6 @@ const specs: IWidgetSpec[] = [
   },
   {
     type: 'plot',
-    color: 'blue',
     label: 'Linked 3',
     icon: 'line-chart',
     dragStatus: 'Dragging third linked plot',
@@ -102,7 +97,6 @@ const specs: IWidgetSpec[] = [
   },
   {
     type: 'editor',
-    color: 'green',
     label: 'JS editor',
     icon: 'pencil',
     dragStatus: 'Dragging JS editor',
@@ -111,7 +105,6 @@ const specs: IWidgetSpec[] = [
   },
   {
     type: 'video',
-    color: 'red',
     label: 'Bokeh video',
     icon: 'television',
     dragStatus: 'Dragging Bokeh video',
@@ -155,6 +148,7 @@ function createPanel(instructions: Widget, list: Panel, dock: DockPanel, status:
 
   subpanel.direction = BoxPanel.LeftToRight;
   subpanel.children.assign([list, dock]);
+  subpanel.spacing = 0;
   BoxPanel.setSizeBasis(list, 150);
   BoxPanel.setStretch(list, 0);
 
@@ -169,10 +163,9 @@ function createPanel(instructions: Widget, list: Panel, dock: DockPanel, status:
 function populateList(list: Panel, dock: DockPanel): void {
   let plots = document.querySelectorAll('div.bk-plot');
   for (let index = 0; index < specs.length; ++index) {
-    let { color, label, icon, type } = specs[index];
+    let { label, icon, type } = specs[index];
     let { dragStatus, dropStatus, clearStatus } = specs[index];
     let item = new ListItem();
-    item.color = color;
     item.label = label;
     item.icon = icon;
     item.draggable = true;
