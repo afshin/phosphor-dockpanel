@@ -64,7 +64,7 @@ export
 function editorFactory(item: ListItem): () => Widget {
   return () => {
     let editor = new Editor(item);
-    editor.addClass('dashboard-content');
+    editor.addClass('d-content');
     editor.addClass(item.icon);
     return editor;
   }

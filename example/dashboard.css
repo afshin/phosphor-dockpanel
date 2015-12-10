@@ -27,35 +27,7 @@ body {
 }
 
 
-.dock {
-  background: #ffffff;
-  min-width: 50px;
-  min-height: 50px;
-  padding: 3px;
-}
-
-
-.list {
-  background: #f5f5f5;
-  border-right: 1px solid rgb(180, 180, 180);
-  min-width: 150px;
-  max-width: 150px;
-  min-height: 50px;
-}
-
-.list .header {
-  padding: 10px;
-}
-
-.list hr {
-  margin: 0;
-  padding: 0;
-  color: #e0e0e0;
-  background-color: #e0e0e0;
-}
-
-
-.instructions {
+.D-Header {
   background: url('../images/logo.png') no-repeat 2px 2px;
   border-bottom: 1px solid rgb(180, 180, 180);
   border-top: 1px solid rgb(180, 180, 180);
@@ -65,7 +37,7 @@ body {
   text-align: center;
 }
 
-.instructions:before {
+.D-Header:before {
   content: 'Workbench';
   position: absolute;
   left: 27px;
@@ -73,12 +45,33 @@ body {
 }
 
 
-.instructions .fa-lightbulb-o {
+.D-Header .fa-lightbulb-o {
   color: #F1C40F;
 }
 
 
-.status {
+.D-List {
+  background: #f5f5f5;
+  border-right: 1px solid rgb(180, 180, 180);
+  min-width: 150px;
+  max-width: 150px;
+  min-height: 50px;
+}
+
+.D-List .d-header {
+  padding: 10px;
+  text-align: center;
+}
+
+.D-List hr {
+  margin: 0;
+  padding: 0;
+  color: #e0e0e0;
+  background-color: #e0e0e0;
+}
+
+
+.D-Status {
   border-bottom: 1px solid rgb(180, 180, 180);
   border-top: 1px solid rgb(180, 180, 180);
   min-height: 19px;
@@ -88,32 +81,40 @@ body {
 }
 
 
-.dashboard-content {
+.D-Dock {
+  background: #ffffff;
+  min-width: 50px;
+  min-height: 50px;
+  padding: 3px;
+}
+
+
+.D-Dock .d-content {
   overflow: auto;
 }
 
 
-.dashboard-content.table {
+.D-Dock .d-content.table {
   min-width: 250px;
   min-height: 250px;
 }
 
 
-.dashboard-content.line-chart {
+.D-Dock .d-content.line-chart {
   overflow: hidden;
   min-width: 350px;
   min-height: 350px;
 }
 
 
-.dashboard-content.pencil {
+.D-Dock .d-content.pencil {
   padding: 0;
   min-width: 250px;
   min-height: 250px;
 }
 
 
-.dashboard-content.television {
+.D-Dashboard .d-content.television {
   margin: 0;
   padding: 0;
   min-width: 320px;
@@ -121,7 +122,7 @@ body {
 }
 
 
-.dashboard-content video {
+.D-Dock .d-content video {
   position: absolute;
   top: 0;
   left: 0;

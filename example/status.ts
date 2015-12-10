@@ -28,7 +28,7 @@ let timeout: number = null;
 export
 function createStatus(): Widget {
   status = new Widget();
-  status.addClass('status');
+  status.addClass('D-Status');
   status.node.textContent = IDLE_MESSAGE;
   BoxPanel.setSizeBasis(status, 20);
   BoxPanel.setStretch(status, 0);

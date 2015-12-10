@@ -36,8 +36,8 @@ class ListItem extends Widget {
     let icon = document.createElement('i');
     let description = document.createElement('div');
     icon.classList.add('fa');
-    node.classList.add('list-item');
-    description.classList.add('description');
+    node.classList.add('d-item');
+    description.classList.add('d-description');
     node.appendChild(icon);
     node.appendChild(space);
     node.appendChild(span);
@@ -50,7 +50,7 @@ class ListItem extends Widget {
       return;
     }
     this._description = description;
-    this.node.querySelector('.description').textContent = description;
+    this.node.querySelector('.d-description').textContent = description;
   }
 
   get description(): string {
@@ -157,8 +157,12 @@ class ListItem extends Widget {
     if (dx < DRAG_THRESHOLD && dy < DRAG_THRESHOLD) {
       return;
     }
+    let dragImage = this.node.cloneNode(true) as HTMLElement;
+    let rect = this.node.getBoundingClientRect();
+    dragImage.style.width = `${rect.width}px`;
+    dragImage.style.height = `${rect.height}px`;
     this._drag = new Drag({
-      dragImage: this.node.cloneNode(true) as HTMLElement,
+      dragImage: dragImage,
       mimeData: new MimeData(),
       supportedActions: this.supportedActions,
       proposedAction: this.proposedAction

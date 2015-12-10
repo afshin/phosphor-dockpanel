@@ -47,7 +47,7 @@ function plotFactory(item: ListItem, node: Node): () => Widget {
   return () => {
     let plot = new Plot(item, node);
     item.draggable = false;
-    plot.addClass('dashboard-content');
+    plot.addClass('d-content');
     plot.addClass(item.icon);
     plot.title.text = item.label;
     plot.title.closable = true;

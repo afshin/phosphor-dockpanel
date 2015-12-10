@@ -129,7 +129,7 @@ const specs: IWidgetSpec[] = [
 
 function createDock(): DockPanel {
   let dock = new DockPanel();
-  dock.addClass('dock');
+  dock.addClass('D-Dock');
   return dock;
 }
 
@@ -137,7 +137,7 @@ function createHeader(): Widget {
   let header = new Widget();
   let lightbulb = document.createElement('i');
   lightbulb.classList.add('fa', 'fa-lightbulb-o');
-  header.addClass('instructions');
+  header.addClass('D-Header');
   header.node.appendChild(lightbulb);
   header.node.appendChild(document.createTextNode(` ${INSTRUCTIONS}`));
   BoxPanel.setSizeBasis(header, 20);
@@ -151,7 +151,8 @@ function createList(): Panel {
   let angle = document.createElement('i');
   let ellipsis = document.createElement('i');
   let home = document.createElement('i');
-  header.classList.add('header');
+  panel.addClass('D-List');
+  header.classList.add('d-header');
   angle.classList.add('fa', 'fa-angle-right');
   ellipsis.classList.add('fa', 'fa-ellipsis-h');
   home.classList.add('fa', 'fa-home');
@@ -164,7 +165,6 @@ function createList(): Panel {
   header.appendChild(angle.cloneNode(true));
   header.appendChild(document.createTextNode(' '));
   header.appendChild(document.createTextNode('widgets'));
-  panel.addClass('list');
   panel.node.appendChild(header);
   panel.node.appendChild(document.createElement('hr'));
   return panel;
