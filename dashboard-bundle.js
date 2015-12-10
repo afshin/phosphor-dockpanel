@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  font-family: \"Helvetica Neue\", Helvetica;\n  font-size: 13px;\n  color: #757575;\n}\n#main {\n  box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.5);\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  right: 10px;\n  bottom: 10px;\n  border-left: 1px solid #e0e0e0;\n  border-right: 1px solid #e0e0e0;\n}\n.dock {\n  background: #ffffff;\n  min-width: 50px;\n  min-height: 50px;\n  padding: 3px;\n}\n.list {\n  background: #f5f5f5;\n  border-right: 1px solid rgb(180, 180, 180);\n  min-width: 150px;\n  max-width: 150px;\n  min-height: 50px;\n}\n.list .header {\n  padding: 10px;\n}\n.list hr {\n  margin: 0;\n  padding: 0;\n  color: #e0e0e0;\n  background-color: #e0e0e0;\n}\n.instructions {\n  background: url('images/logo.png') no-repeat 2px 2px;\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  min-height: 27px;\n  max-height: 27px;\n  padding: 4px 0 1px 2px;\n  text-align: center;\n}\n.instructions:before {\n  content: 'Workbench';\n  position: absolute;\n  left: 27px;\n  top: 5px;\n}\n.instructions .fa-lightbulb-o {\n  color: #F1C40F;\n}\n.status {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  min-height: 19px;\n  max-height: 19px;\n  padding: 2px 10px 1px 2px;\n  text-align: right;\n}\n.dashboard-content {\n  overflow: auto;\n}\n.dashboard-content.table {\n  min-width: 250px;\n  min-height: 250px;\n}\n.dashboard-content.line-chart {\n  overflow: hidden;\n  min-width: 350px;\n  min-height: 350px;\n}\n.dashboard-content.pencil {\n  padding: 0;\n  min-width: 250px;\n  min-height: 250px;\n}\n.dashboard-content.television {\n  margin: 0;\n  padding: 0;\n  min-width: 320px;\n  min-height: 240px;\n}\n.dashboard-content video {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-root-top,\n.p-DockPanelOverlay.p-mod-root-left,\n.p-DockPanelOverlay.p-mod-root-right,\n.p-DockPanelOverlay.p-mod-root-bottom,\n.p-DockPanelOverlay.p-mod-root-center {\n  border-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-body {\n  bottom: 1px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-TabBar-content {\n  align-items: flex-end;\n}\n.p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-Tab.p-mod-current {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-Tab:hover:not(.p-mod-current) {\n  background: #F0F0F0;\n}\n.p-Tab-icon,\n.p-Tab-text,\n.p-Tab-close {\n  line-height: 21px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-drag-image {\n  min-height: 24px;\n  min-width: 125px;\n  border: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n  transform: translateX(-40%) translateY(-58%);\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
+var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\nbody {\n  margin: 0;\n  padding: 0;\n  background: #F5F6F7;\n  font-family: \"Helvetica Neue\", Helvetica;\n  font-size: 13px;\n  color: #757575;\n}\n#main {\n  box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.5);\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  right: 10px;\n  bottom: 10px;\n  border-left: 1px solid #e0e0e0;\n  border-right: 1px solid #e0e0e0;\n}\n.D-Header {\n  background: url('images/logo.png') no-repeat 2px 2px;\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  min-height: 27px;\n  max-height: 27px;\n  padding: 4px 0 1px 2px;\n  text-align: center;\n}\n.D-Header:before {\n  content: 'Workbench';\n  position: absolute;\n  left: 27px;\n  top: 5px;\n}\n.D-Header .fa-lightbulb-o {\n  color: #F1C40F;\n}\n.D-List {\n  background: #f5f5f5;\n  border-right: 1px solid rgb(180, 180, 180);\n  min-width: 150px;\n  max-width: 150px;\n  min-height: 50px;\n}\n.D-List .d-header {\n  padding: 10px;\n  text-align: center;\n}\n.D-List hr {\n  margin: 0;\n  padding: 0;\n  color: #e0e0e0;\n  background-color: #e0e0e0;\n}\n.D-Status {\n  border-bottom: 1px solid rgb(180, 180, 180);\n  border-top: 1px solid rgb(180, 180, 180);\n  min-height: 19px;\n  max-height: 19px;\n  padding: 2px 10px 1px 2px;\n  text-align: right;\n}\n.D-Dock {\n  background: #ffffff;\n  min-width: 50px;\n  min-height: 50px;\n  padding: 3px;\n}\n.D-Dock .d-content {\n  overflow: auto;\n}\n.D-Dock .d-content.table {\n  min-width: 250px;\n  min-height: 250px;\n}\n.D-Dock .d-content.line-chart {\n  overflow: hidden;\n  min-width: 350px;\n  min-height: 350px;\n}\n.D-Dock .d-content.pencil {\n  padding: 0;\n  min-width: 250px;\n  min-height: 250px;\n}\n.D-Dashboard .d-content.television {\n  margin: 0;\n  padding: 0;\n  min-width: 320px;\n  min-height: 240px;\n}\n.D-Dock .d-content video {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.p-DockTabPanel {\n  padding-right: 2px;\n  padding-bottom: 2px;\n}\n.p-DockTabPanel > .p-StackedPanel {\n  padding: 10px;\n  background: white;\n  border: 1px solid #C0C0C0;\n  border-top: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);\n}\n.p-DockPanelOverlay {\n  background: rgba(255, 255, 255, 0.6);\n  border: 1px dashed black;\n}\n.p-DockPanelOverlay.p-mod-root-top,\n.p-DockPanelOverlay.p-mod-root-left,\n.p-DockPanelOverlay.p-mod-root-right,\n.p-DockPanelOverlay.p-mod-root-bottom,\n.p-DockPanelOverlay.p-mod-root-center {\n  border-width: 2px;\n}\n.p-TabBar {\n  min-height: 24px;\n}\n.p-TabBar-body {\n  bottom: 1px;\n}\n.p-TabBar-footer {\n  display: block;\n  height: 1px;\n  background: #C0C0C0;\n}\n.p-TabBar-content {\n  align-items: flex-end;\n}\n.p-Tab {\n  flex-basis: 125px;\n  max-height: 21px;\n  min-width: 35px;\n  margin-left: -1px;\n  border: 1px solid #C0C0C0;\n  border-bottom: none;\n  padding: 0px 10px;\n  background: #E5E5E5;\n  font: 12px Helvetica, Arial, sans-serif;\n}\n.p-Tab.p-mod-first {\n  margin-left: 0;\n}\n.p-Tab.p-mod-current {\n  min-height: 24px;\n  background: white;\n  transform: translateY(1px);\n}\n.p-Tab:hover:not(.p-mod-current) {\n  background: #F0F0F0;\n}\n.p-Tab-icon,\n.p-Tab-text,\n.p-Tab-close {\n  line-height: 21px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close {\n  margin-left: 4px;\n}\n.p-Tab.p-mod-closable > .p-Tab-close:before {\n  content: '\\f00d';\n  font-family: FontAwesome;\n}\n.p-Tab.p-mod-drag-image {\n  min-height: 24px;\n  min-width: 125px;\n  border: none;\n  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);\n  transform: translateX(-40%) translateY(-58%);\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/dashboard.css"})); module.exports = css;
 },{"browserify-css":11}],2:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
@@ -85,14 +85,14 @@ var specs = [
 ];
 function createDock() {
     var dock = new index_1.DockPanel();
-    dock.addClass('dock');
+    dock.addClass('D-Dock');
     return dock;
 }
 function createHeader() {
     var header = new phosphor_widget_1.Widget();
     var lightbulb = document.createElement('i');
     lightbulb.classList.add('fa', 'fa-lightbulb-o');
-    header.addClass('instructions');
+    header.addClass('D-Header');
     header.node.appendChild(lightbulb);
     header.node.appendChild(document.createTextNode(" " + INSTRUCTIONS));
     phosphor_boxpanel_1.BoxPanel.setSizeBasis(header, 20);
@@ -105,7 +105,8 @@ function createList() {
     var angle = document.createElement('i');
     var ellipsis = document.createElement('i');
     var home = document.createElement('i');
-    header.classList.add('header');
+    panel.addClass('D-List');
+    header.classList.add('d-header');
     angle.classList.add('fa', 'fa-angle-right');
     ellipsis.classList.add('fa', 'fa-ellipsis-h');
     home.classList.add('fa', 'fa-home');
@@ -118,7 +119,6 @@ function createList() {
     header.appendChild(angle.cloneNode(true));
     header.appendChild(document.createTextNode(' '));
     header.appendChild(document.createTextNode('widgets'));
-    panel.addClass('list');
     panel.node.appendChild(header);
     panel.node.appendChild(document.createElement('hr'));
     return panel;
@@ -252,7 +252,7 @@ var Editor = (function (_super) {
 function editorFactory(item) {
     return function () {
         var editor = new Editor(item);
-        editor.addClass('dashboard-content');
+        editor.addClass('d-content');
         editor.addClass(item.icon);
         return editor;
     };
@@ -260,7 +260,7 @@ function editorFactory(item) {
 exports.editorFactory = editorFactory;
 
 },{"./status":7,"phosphor-widget":35}],4:[function(require,module,exports){
-var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\n.list-item {\n  background: #eee;\n  margin: 0;\n  min-width: 150px;\n  max-width: 150px;\n  min-height: 1.3em;\n  font-size: 1em;\n  padding: 5px 5px 5px 15px;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.list-item:hover {\n  background: #2196f3;\n  color: #fff;\n}\n.list-item.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.list-item.p-mod-drag-image {\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.list-item .description {\n  color: #9e9e9e;\n  font-size: 10px;\n}\n.list-item:hover .description {\n  color: #ffffff;\n}\n.fa-line-chart {\n  color: #3498DB;\n}\n.fa-pencil {\n  color: #27AE60;\n}\n.fa-table {\n  color: #F1C40F;\n}\n.fa-television {\n  color: #E74C3C;\n}\n.list-item:hover .fa {\n  color: #fff;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/listitem.css"})); module.exports = css;
+var css = "/*-----------------------------------------------------------------------------\n| Copyright (c) 2014-2015, PhosphorJS Contributors\n|\n| Distributed under the terms of the BSD 3-Clause License.\n|\n| The full license is in the file LICENSE, distributed with this software.\n|----------------------------------------------------------------------------*/\n.D-List .d-item {\n  background: #eee;\n  margin: 0;\n  min-width: 150px;\n  max-width: 150px;\n  min-height: 1.3em;\n  font-size: 1em;\n  padding: 5px 5px 5px 15px;\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n.D-List .d-item:hover {\n  background: #2196f3;\n  color: #fff;\n}\n.D-List .d-item.draggable {\n  opacity: 1;\n  cursor: move;\n}\n.d-item.p-mod-drag-image {\n  border: 1px dashed #000;\n  opacity: 0.70;\n  transform: translateX(-10px) translateY(-10px);\n}\n.D-List .d-item .d-description {\n  color: #9e9e9e;\n  font-size: 10px;\n}\n.D-List .d-item:hover .d-description {\n  color: #ffffff;\n}\n.D-List .d-item:hover:hover .fa {\n  color: #fff;\n}\n.d-item .fa-line-chart {\n  color: #3498DB;\n}\n.d-item .fa-pencil {\n  color: #27AE60;\n}\n.d-item .fa-table {\n  color: #F1C40F;\n}\n.d-item .fa-television {\n  color: #E74C3C;\n}\n"; (require("browserify-css").createStyle(css, { "href": "example/listitem.css"})); module.exports = css;
 },{"browserify-css":11}],5:[function(require,module,exports){
 /*-----------------------------------------------------------------------------
 | Copyright (c) 2014-2015, PhosphorJS Contributors
@@ -302,8 +302,8 @@ var ListItem = (function (_super) {
         var icon = document.createElement('i');
         var description = document.createElement('div');
         icon.classList.add('fa');
-        node.classList.add('list-item');
-        description.classList.add('description');
+        node.classList.add('d-item');
+        description.classList.add('d-description');
         node.appendChild(icon);
         node.appendChild(space);
         node.appendChild(span);
@@ -319,7 +319,7 @@ var ListItem = (function (_super) {
                 return;
             }
             this._description = description;
-            this.node.querySelector('.description').textContent = description;
+            this.node.querySelector('.d-description').textContent = description;
         },
         enumerable: true,
         configurable: true
@@ -417,8 +417,12 @@ var ListItem = (function (_super) {
         if (dx < DRAG_THRESHOLD && dy < DRAG_THRESHOLD) {
             return;
         }
+        var dragImage = this.node.cloneNode(true);
+        var rect = this.node.getBoundingClientRect();
+        dragImage.style.width = rect.width + "px";
+        dragImage.style.height = rect.height + "px";
         this._drag = new phosphor_dragdrop_1.Drag({
-            dragImage: this.node.cloneNode(true),
+            dragImage: dragImage,
             mimeData: new phosphor_dragdrop_1.MimeData(),
             supportedActions: this.supportedActions,
             proposedAction: this.proposedAction
@@ -484,7 +488,7 @@ function plotFactory(item, node) {
     return function () {
         var plot = new Plot(item, node);
         item.draggable = false;
-        plot.addClass('dashboard-content');
+        plot.addClass('d-content');
         plot.addClass(item.icon);
         plot.title.text = item.label;
         plot.title.closable = true;
@@ -510,7 +514,7 @@ var status = null;
 var timeout = null;
 function createStatus() {
     status = new phosphor_widget_1.Widget();
-    status.addClass('status');
+    status.addClass('D-Status');
     status.node.textContent = IDLE_MESSAGE;
     phosphor_boxpanel_1.BoxPanel.setSizeBasis(status, 20);
     phosphor_boxpanel_1.BoxPanel.setStretch(status, 0);
